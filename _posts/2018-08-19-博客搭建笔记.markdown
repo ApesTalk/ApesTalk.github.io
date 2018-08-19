@@ -6,17 +6,17 @@ date: 2018-08-19 16:40:00.000000000
 
 > 本篇记录一下自己如何一步步利用GitHub Page和Jekyll以及喵神的vno-jekyll模板来搭建属于自己的博客的记录。
 
-# 一、首先GitHub上建一个username.github.io的仓库
+## 一、首先GitHub上建一个username.github.io的仓库
 
 注意username必须跟自己github用户名保持一致，包括大小写。然后你可以在仓库中新建一个index.html文件，简单写上点html代码，之后就可以通过``https://username.github.io``来访问自己的个人博客主页了，对，就是这么简单，其他一切GitHub都替你做了。
 
 但是我不太想些HTML代码（主要是不太会写），更喜欢用人性化的MarkDown来写文章。所以，我需要利用Jekyll这个利器来帮我。对应不属于Jekyll和HTML的朋友来说，搭建自己的博客主题也是比较麻烦的事情，我们可以借助开源的一些比较好的主题，把这一步也简化掉，剩下的就是我们好好写博客啦。
 
-# 二、下载喵神的vno-jekyll主题
+## 二、下载喵神的vno-jekyll主题
 
 克隆自己的GitHub Page仓库到本地目录，然后下载[vno-jekyll](https://github.com/onevcat/vno-jekyll)解压文件到该目录下。
 
-# 三、安装jekyll
+## 三、安装jekyll
 
 详细介绍请看[jekyll中文网](http://jekyllcn.com/)
 
@@ -31,16 +31,16 @@ bunde exec jekyll server
 //browse to http://localhost:4000
 ```
 
-# 四、修改_config.yml文件
+## 四、修改_config.yml文件
 
 阅读_config.yml文件，并将其修改成你期望的样式。
 
-# 五、预览
+## 五、预览
 
 通过``bunlde exec jekyll server``命令来把服务跑起来，然后你就可以通过``htpp://localhost:4000``这个地址来预览你的博客了。如果对修改不满意，可以通过``control+C``来停止服务的运行，再次修改相关文件，之后再重新运行服务并预览效果，直到修改的自己满意为止。
 
 
-# 六、问题备注
+## 六、问题备注
 
 1、要修改博客主页的样式（比如按钮个数、蒙层颜色）？
 
