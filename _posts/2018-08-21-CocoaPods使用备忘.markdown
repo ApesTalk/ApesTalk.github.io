@@ -375,5 +375,5 @@ https://github.com/cocoapods/cocoapods/search?q=[Xcodeproj]%20Unknown%20object%2
 
 解决办法：打开项目，在Project Document下将Project Format从Xcode 9.3-compatible修改为Xcode 8.0-compatible即可。
 
-[Xocde_project_format](/assets/BlogImages/Xocde_project_format.png)
+![Xocde_project_format](https://apestalk.github.io/assets/BlogImages/Xocde_project_format.png)
 
