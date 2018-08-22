@@ -271,7 +271,7 @@ s.pod_target_xcconfig = {
 }
 ```
 
-## 十一、`pod init``失败？
+## 十一、``pod init``失败？
 
 
 用Xcode9.4.1新建一个项目，然后执行``pod init``（Cocoapods1.4.0版本）时提示失败，错误提示如下：
@@ -284,9 +284,8 @@ s.pod_target_xcconfig = {
 
 ### Command
 
-```
 /usr/local/Cellar/cocoapods/1.4.0/libexec/bin/pod init
-```
+
 
 ### Report
 
@@ -299,7 +298,6 @@ s.pod_target_xcconfig = {
 
 ### Stack
 
-```
    CocoaPods : 1.4.0
         Ruby : ruby 2.3.3p222 (2016-11-21 revision 56859) [universal.x86_64-darwin17]
     RubyGems : 2.5.2
@@ -309,22 +307,22 @@ s.pod_target_xcconfig = {
 Ruby lib dir : /System/Library/Frameworks/Ruby.framework/Versions/2.3/usr/lib
 Repositories : ios-cocoapodsSpecs - http://git.zhihuishu.com/coder/ios-cocoapodsSpecs.git @ 4c4f38416c28d58d4dda2a706879956c5861a55e
                master - https://github.com/CocoaPods/Specs.git @ 1eab292c36f39ecb104af54e474b00f142e57d0f
-```
+
 
 ### Plugins
 
-```
+
 cocoapods-deintegrate : 1.0.2
 cocoapods-plugins     : 1.0.0
 cocoapods-search      : 1.0.0
 cocoapods-stats       : 1.0.0
 cocoapods-trunk       : 1.3.0
 cocoapods-try         : 1.1.0
-```
+
 
 ### Error
 
-```
+
 RuntimeError - [Xcodeproj] Unknown object version.
 /usr/local/Cellar/cocoapods/1.4.0/libexec/gems/xcodeproj-1.5.4/lib/xcodeproj/project.rb:217:in `initialize_from_file'
 /usr/local/Cellar/cocoapods/1.4.0/libexec/gems/xcodeproj-1.5.4/lib/xcodeproj/project.rb:102:in `open'
@@ -334,7 +332,7 @@ RuntimeError - [Xcodeproj] Unknown object version.
 /usr/local/Cellar/cocoapods/1.4.0/libexec/gems/cocoapods-1.4.0/bin/pod:55:in `<top (required)>'
 /usr/local/Cellar/cocoapods/1.4.0/libexec/bin/pod:22:in `load'
 /usr/local/Cellar/cocoapods/1.4.0/libexec/bin/pod:22:in `<main>'
-```
+
 
 ――― TEMPLATE END ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
 
@@ -366,6 +364,7 @@ Looking for related issues on cocoapods/cocoapods...
 
 and 42 more at:
 https://github.com/cocoapods/cocoapods/search?q=[Xcodeproj]%20Unknown%20object%20version.&type=Issues&utf8=✓
+
 ```
 
 这种失败原因是Cocoapods和xcodeproj版本兼容问题。
@@ -376,4 +375,3 @@ https://github.com/cocoapods/cocoapods/search?q=[Xcodeproj]%20Unknown%20object%2
 解决办法：打开项目，在Project Document下将Project Format从Xcode 9.3-compatible修改为Xcode 8.0-compatible即可。
 
 ![Xocde_project_format](https://apestalk.github.io/assets/BlogImages/Xocde_project_format.png)
-
