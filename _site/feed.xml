@@ -2,7 +2,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>ApesTalk</title>
-    <description>嗨，我是一枚来自中国的iOS开发者，目前还在不断修行中，欢迎持续关注。</description>
+    <description>鸟活着时，吃蚂蚁，
+        鸟死后，蚂蚁吃鸟。
+        一棵树可以制成一百万根火柴，
+        烧光一百万棵树只需一根火柴。
+        活着，低调做人。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
     <pubDate>Sun, 19 Aug 2018 17:38:32 +0800</pubDate>
