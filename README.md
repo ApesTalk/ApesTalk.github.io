@@ -1,6 +1,43 @@
 # Introduce
 
-我是来自中国的一枚iOS开发者，目前还在不断修行中，这是我的[GitHub Page 博客](https://apestalk.io) ，以后我将在这里更新我的最新文章，谢谢你的访问。
+鸟活着时，吃蚂蚁，
+
+鸟死后，蚂蚁吃鸟。
+
+一棵树可以制成一百万根火柴，
+
+烧光一百万棵树只需一根火柴。
+
+时间和环境随时改变。
+
+莫贬低或伤害任何人。
+
+这一次你强，
+
+谨记时间比你更强。
+
+所以，向善，行善。
+
+不要瞧不起任何人！
+
+你瞧不起别人的时候，
+
+别人可能更瞧不起你，
+
+只不过别人不暴露出来，
+
+不和你计较！
+
+一个人越炫耀什么，
+
+就越缺少什么。
+
+一个人越掩饰什么，
+
+就越自卑什么。
+
+活着，低调做人。
+
 
 This is [ApesTalk's GitHub Page blog](https://apestalk.githu.io), which use Vno-Jekyll theme. I'm a iOS engineer from China, i will post my newest articles at here, thanks for your visit.
 
