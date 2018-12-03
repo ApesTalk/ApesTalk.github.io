@@ -375,3 +375,10 @@ https://github.com/cocoapods/cocoapods/search?q=[Xcodeproj]%20Unknown%20object%2
 解决办法：打开项目，在Project Document下将Project Format从Xcode 9.3-compatible修改为Xcode 8.0-compatible即可。
 
 ![Xocde_project_format](https://apestalk.github.io/assets/BlogImages/Xocde_project_format.png)
+
+
+## 十二、在pod中引入项目文件报错（file not found）
+
+在开发中有时候需要在pod中import项目中的文件进行调试或测试（当然这种情况比较少见），但是当你输入import的时候会发现系统根本没法联想到你想用的项目中的文件，即使你手动写入，也会报file not found的错误。
+
+此时，可以在我们的Pods项目中的Build settings下找到 User Header Search Paths，添加一行，并设置``$(SRCROOT)/..``为recursive。注意有``/..``，意思是到当前目录的上级目录。意思是在上级目录下递归查找文件。
