@@ -1,0 +1,106 @@
+---
+layout: post
+title: iOS总结-最近遇到的问题及解决办法
+date: 2018-12-22 20:10:00.000000000
+tags: iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker
+---
+
+
+最近在Bugly上发现线上APP存在不少崩溃问题，经过分析和定位，解决了几个比较棘手的问题，总结如下。
+
+
+## 多线程问题 
+
+我们在APP中封装了一个记录业务日志的单例对象，主要代码如下：
+
+```
++ (instancetype)shareManager
+{
+static ATLogManager *manager = nil;
+static dispatch_once_t onceToken;
+dispatch_once(&onceToken, ^{
+manager = [[self alloc]init];
+});
+return manager;
+}
+
+- (FMDatabaseQueue *)logDBQueen
+{
+if(!_logDBQueen){
+NSLog(@"创建_logDBQueen");
+NSString *docsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+NSString *logPath = [docsDir stringByAppendingPathComponent:@"ATLogs"];
+NSFileManager *fm =[NSFileManager defaultManager];
+NSError *error;
+if (![fm fileExistsAtPath:logPath]) {
+[fm createDirectoryAtPath:logPath withIntermediateDirectories:NO attributes:nil error:&error];
+//禁止iCloud备份
+NSURL *downloadsUrl = [NSURL fileURLWithPath:logPath];
+NSDictionary *dic = [downloadsUrl resourceValuesForKeys:@[NSURLIsExcludedFromBackupKey] error:nil];
+if(!dic || ![[dic objectForKey:NSURLIsExcludedFromBackupKey] boolValue]){
+[downloadsUrl setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:nil];
+}
+}
+NSString *dbPath = [logPath stringByAppendingPathComponent:@"ATLog.sqlite"];
+_logDBQueen = [FMDatabaseQueue databaseQueueWithPath:dbPath];
+}
+return _logDBQueen;
+}
+
++ (BOOL)insertLogTableWithType:(NSString * )columnType moreHit:(NSString *)moreHit
+{
+ATLogManager *manager = [ATLogManager shareManager];
+[manager createTable:kFindSelectColumnDate];
+
+//insert code
+}
+
+```
+
+之前在用的时候都是在主线程中同步调用相关方法进行记录的，自从上个版本把部分触发比较频繁的记录改成异步的调用：
+
+```
+dispatch_async(dispatch_get_global_queue(0, 0), ^{
+[ATLogManager insertLogTableWithType:@"2" moreHit:@"1"];
+});
+```
+
+之后发现线上出现了比较多的崩溃，崩溃在了``[FMDatabaseQueue inDatabase:]``方法中。
+
+![fmdb_crash_issue](https://apestalk.github.io/assets/BlogImages/fmdb_crash_issue.png)
+
+
+
+起初以为是FMDatabaseQueue的问题或者我们用的FMDB的版本较低的问题。但是FMDatabaseQueue本身是线程安全的，在多线程中使用同一个FMDatabaseQueue对象是没有问题的。FMDB这个第三方库，这么多用户，用了这么多年，应该是不会存在这种问题的。程序崩溃在这里，而且是SEGV_ACCERR类型的崩溃，只能是在FMDatabaseQueue使用过程中被释放了造成的。
+
+在我们封装的记录业务日志的单例对象中，有一个FMDatabaseQueue对象是采用懒加载的方式创建的，经过一番排查，发现这个FMDatabaseQueue对象竟然被创建了多次。这下子就豁然开朗了，在多线程并发的情况下，第一次创建的FMDatabaseQueue对象正在执行相关代码时，第二次紧接着调用了懒加载的方法创建了一个新的FMDatabaseQueue对象把第一个创建的给覆盖掉了，这时第一次创建的FMDatabaseQueue对象就被释放了，这个时候就存在很多不安全的隐患了，比如我们这里就是导致访问了一个不合法的内存地址。
+
+解决办法就是把懒加载的方法给移除，单例创建时就把对应的FMDatabaseQueue对象给创建了，保证FMDatabaseQueue只会创建一个。
+
+这个事情给我了一个比较大的教训，在使用单例的时候，一定要小心通过懒加载方式创建的属性，在多线程下一定要注意懒加载方法被调用多次。在单例的初始化方法中最好将它的属性都一并给初始化了，这样能有效保障线程安全。
+
+## preferredMaxLayoutWidth
+
+在iOS10.2上某个页面总是点击进去就闪退，经过排查发现在计算某个UITableViewCell的高度时出现的crash，cell本身没有任何特别的，如果把cell上多行的UILabel给注释掉，就没有问题了。最后在UITableView-FDTemplateLayoutCell的[issue278](https://github.com/forkingdog/UITableView-FDTemplateLayoutCell/issues/278)找到了答案：多行UILabel如果不设置preferredMaxLayoutWidth，走到fittingHeight = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;会在iOS10.2的机器上卡死奔溃，应该属于系统问题。
+
+
+## block
+
+开发过程有个在多线程中处理数据时出现了数组越界的问题，经检查发现是我们犯了一个关于block的低级错误：
+
+```
+//不加__block打印i=0（捕获后外部的修改不影响内部使用）；加__block打印i=1（外部的修改对block内部生效）
+for(__block NSInteger i = 0; i < 1; i++){
+dispatch_async(dispatch_get_global_queue(0, 0), ^{
+dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+NSLog(@"i=%ld",i);
+});
+});
+}
+```
+
+## UIWebSelectSinglePicker的crash问题 
+
+另一个数组越界问题，但是查看奔溃堆栈信息，发现内容是包含UIWebSelectSinglePicker、UIPickerView、UIPickerTableView等关键字，据此猜测是我们项目中嵌入的H5页面调用系统的选择视图引起的崩溃。查资料发现，已经有人遇到这种情况了，重现步骤：H5唤起系统的UIPickerView，没有数据源的情况下，上下滑动一下再点击确定选择。详情可参考这篇文章：[UIWebSelectSinglePicker的crash问题](https://juejin.im/post/5b14cf376fb9a01e831463d6)。
+
+
