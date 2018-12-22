@@ -1,0 +1,46 @@
+---
+layout: post
+title: 关于符号表（dSYM）的误解与事实
+date: 2018-12-22 19:00:00.000000000
+tags: iOS 符号表 dSYM uuid
+---
+
+![misunderstand_truth](https://apestalk.github.io/assets/BlogImages/misunderstand_truth.jpg)
+
+
+我们在iOS开发过程中一定会跟符号表（dSYM文件）打交道，它是我们不可或缺的定位bug的小帮手。我们都知道，每次编译都会生成一个dSYM文件，当我们的应用程序出现奔溃时，dSYM文件能帮我们定位到应用程序的代码奔溃到哪里了。
+
+最近在开发过程中遇到这样一个问题：我们的团队中有的成员用的是Xcode9，有的成员用的是Xcode10，Xcode10在打包时如果把Debug Information Format设置为DWARF with dSYM File，在打包时会导致电脑内存耗尽关机。所以在开发过程中，我们把配置都改成了DWARF。最后在用Xcode9打包的时候，忘记了修改这项配置，没有生成符号表上传到Bugly，所以线上的奔溃信息没法解析出来。这件事情引发我们的思考，面对这种情况，到底有没有什么补救措施呢？
+
+## dSYM文件简介
+
+符号表是内存地址与函数名、文件名、行号的映射表。符号表元素如下所示：
+
+```
+<起始地址> <结束地址> <函数> [<文件名:行号>]
+```
+
+iOS应用crash时也有堆栈，release版的应用，crash时的堆栈信息，全是二进制的地址信息。如果利用这些二进制的地址信息来定位问题是不可能的，因此我们需要将这些二进制的地址信息还原成源代码种的函数以及行号，这时候就需要符号表了。
+
+## 误解与事实
+
+我们都有这样一个共识：“每次打包都会生成一个新的dSYM并生成一个新的uuid，线上app也有一个uuid，只有这两个uuid匹配，才能成功解析二进制地址信息为源码。” 很惭愧，以前由于本人思维定式（估计很多人跟我一样吧，我发现网上很多文章也是这么讲的）认为每次打包都会生成一个全新的唯一的uuid，所以，如果打版时忘记勾选生成dSYM文件，将毫无补救办法。官方也没有任何关于这个uuid的生成规则的说明。
+
+网上的一些文章关于这一块讲的要么模棱两可，要么讲的是错误的：
+
+![lead young people astray](https://apestalk.github.io/assets/BlogImages/lead young people astray.png)
+
+
+让我们再看看上面dSYM文件的介绍，它跟函数名、文件名和行号有关。**简单点说就是同一份代码，编译之后的符号表文件的uuid是一样的。** 
+
+所以这个时候我们只需要找到上一次打包的那个时间点（代码相同），再重新archive一下，导出dSYM文件，这个dSYM文件的uuid跟之前打包生成的app的uuid是一致的。
+
+下面是有图有真相，同一份代码，不同时间点打的包的uuid是一样的：
+
+![dSYM-uuid](https://apestalk.github.io/assets/BlogImages/dSYM-uuid.png)
+
+
+实践是检验真理的唯一标准。
+
+
+
