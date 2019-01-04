@@ -43,4 +43,7 @@ iOS应用crash时也有堆栈，release版的应用，crash时的堆栈信息，
 实践是检验真理的唯一标准。
 
 
+![欢迎关注支持](https://apestalk.github.io/assets/BlogImages/wx.jpeg)
+
+
 

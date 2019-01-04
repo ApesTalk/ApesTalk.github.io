@@ -55,3 +55,7 @@ bunde exec jekyll server
 3、修改背景图和头像？
 
 在assets文件夹下替换相关素材即可，如果后缀名发生了改变，你还需要修改_site/index.html文件中对图片素材的引用处。
+
+
+![欢迎关注支持](https://apestalk.github.io/assets/BlogImages/wx.jpeg)
+

@@ -104,3 +104,4 @@ NSLog(@"i=%ld",i);
 另一个数组越界问题，但是查看奔溃堆栈信息，发现内容是包含UIWebSelectSinglePicker、UIPickerView、UIPickerTableView等关键字，据此猜测是我们项目中嵌入的H5页面调用系统的选择视图引起的崩溃。查资料发现，已经有人遇到这种情况了，重现步骤：H5唤起系统的UIPickerView，没有数据源的情况下，上下滑动一下再点击确定选择。详情可参考这篇文章：[UIWebSelectSinglePicker的crash问题](https://juejin.im/post/5b14cf376fb9a01e831463d6)。
 
 
+![欢迎关注支持](https://apestalk.github.io/assets/BlogImages/wx.jpeg)
