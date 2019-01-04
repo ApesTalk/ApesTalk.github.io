@@ -385,4 +385,5 @@ https://github.com/cocoapods/cocoapods/search?q=[Xcodeproj]%20Unknown%20object%2
 
 
 ![欢迎关注支持](https://apestalk.github.io/assets/BlogImages/wx.jpeg)
+<center>感谢关注支持</center>
 
