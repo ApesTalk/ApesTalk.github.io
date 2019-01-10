@@ -139,19 +139,13 @@ NSDictionary * dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:newAge
 
 
 
-|Domain|State|
-
-|:----    |:---|
-
-|NSArgumentDomain|volatile|
-
-|Application|volatile|
-
-|NSGlobalDomain|persistent|
-
-|Languages|persistent|
-
-|NSRegistrationDomain|volatile|
+| Domain | State |
+| ----- | ----- |
+| NSArgumentDomain | volatile |
+| Application | volatile |
+| NSGlobalDomain | persistent |
+| Languages | persistent |
+| NSRegistrationDomain | volatile |
 
 
 
