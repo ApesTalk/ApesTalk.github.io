@@ -253,6 +253,9 @@ cd到要共享的目录下，执行``python -m SimpleHTTPServer 8000``，之后�
 
 ```
 
+获取本机IP地址的方法：按住Option的同时点下Mac菜单栏的无线网Icon，在下拉列表中即可看到IP地址。也可以在终端中输入``ifconfig en0``命令查看。
+
+
 ## 十、验证podspec时，报错 symbol(s) not found for architecture i386
 
 检查一下是否私有Pod中使用到的什么文件不支持i386架构，比如什么.a文件。
