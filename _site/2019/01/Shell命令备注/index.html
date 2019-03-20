@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Shell命令备注</title>
+  <meta name="description" content="">
+  <meta name="author" content="ApesTalk">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Shell命令备注">
+  <meta name="twitter:description" content="">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Shell命令备注">
+  <meta property="og:description" content="">
+
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2019/01/Shell%E5%91%BD%E4%BB%A4%E5%A4%87%E6%B3%A8/">
+  <link rel="alternate" type="application/rss+xml" title="ApesTalk" href="http://localhost:4000/feed.xml">
+
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 ApesTalk 的主页" class="blog-button"><img src="/assets/images/avatar.jpeg" width="80" alt="ApesTalk logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for ApesTalk" class="blog-button">ApesTalk</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">你必须非常努力，才能看起来毫不费力.欢迎关注微信公众号：猿故。</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">鸟活着时，吃蚂蚁，鸟死后，蚂蚁吃鸟。一棵树可以制成一百万根火柴，烧光一百万棵树只需一根火柴。活着，低调做人。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问我的博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="https://www.jianshu.com/u/4f2d3d978842" target="_blank" title="Code_Ninja">简书</a></li>
+                
+                  <li class="navigation__item"><a href="https://ApesTalk.github.io" target="_blank" title="about me">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/2406504374" title="@2406504374 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/ApesTalk" title="@ApesTalk 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:apestalk@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="panel-cover--overlay cover-orange"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-01-28 01:57:00 +0800" itemprop="datePublished" class="post-meta__date date">2019-01-28</time> &#8226; <span class="post-meta__tags tags">shell echo chmod</span>
+    </div>
+    <h1 class="post-title">Shell命令备注</h1>
+  </header>
+
+  <section class="post">
+    <p><img src="https://apestalk.github.io/assets/BlogImages/shell.png" alt="" /></p>
+
+<h2 id="chmod命令chmod-755到底是个什么鬼">chmod命令（chmod 755到底是个什么鬼？）</h2>
+
+<p>Linux/Unix 的文件调用权限分为三级 : 文件拥有者、群组、其他。利用 chmod 可以藉以控制文件如何被他人所调用。
+每个文件的权限呢，又分为读、写和执行。所以，可以用三位二进制来标识权限，当对应二进制位为0时表示没有对应的权限，当对应二进制位为1时表示有对应的权限。比如110，就表时可读可写不可执行。</p>
+
+<p>那么对应三个用户分组，就需要三组这样的三位二进制来标识权限了。比如111 101 101（rwxr-xr-x），分别（每三位）表示User、Group、及Other的权限。</p>
+
+<p>对应的，r=4，w=2，x=1
+若要rwx属性则4+2+1=7；
+若要rw-属性则4+2=6；
+若要r-x属性则4+1=5。</p>
+
+<p>所以755就是11110101（rwxr-xr-x）也就是说文件拥有者有读写和执行的权限，群组和其他用户拥有读和执行的权限。</p>
+
+<h2 id="shell命令实现各种进制转换">Shell命令实现各种进制转换</h2>
+
+<p>在终端中可以通过printf和echo命令加上表达式即可轻松实现各种进制数之间的互转。我们知道，八进制用o标识，十进制用d标识，十六进制用x标识。</p>
+
+<p>公式1：<code class="highlighter-rouge">printf %&lt;目标进制标识&gt; $((原进制标识#原进制数))  </code> 
+公式2：<code class="highlighter-rouge">echo "obase=目标进制;$((原进制#原进制数))”|bc </code> 实际上只需掌握这个公式即可！</p>
+
+<p>二进制转十进制：<code class="highlighter-rouge">printf %d $((2#1111)) </code>           或<code class="highlighter-rouge">echo "obase=10;$((2#1111))"|bc    </code> 
+十进制转二进制：<code class="highlighter-rouge">echo "obase=2;15"|bc</code> 或 <code class="highlighter-rouge">echo "obase=2;$((10#15))"|bc</code></p>
+
+<p>二进制转八进制：<code class="highlighter-rouge">printf %o $((2#1111))</code>  或   <code class="highlighter-rouge">echo "obase=8;$((2#1111))"|bc</code>
+八进制转二进制：<code class="highlighter-rouge">echo "obase=2;$((8#17))"|bc</code></p>
+
+<p>二进制转十六进制：<code class="highlighter-rouge">printf %x $((2#1111))</code> 或  <code class="highlighter-rouge">echo "obase=16;$((2#1111))"|bc</code>
+十六进制转二进制：<code class="highlighter-rouge">echo "obase=2;$((16#F))"|bc</code></p>
+
+<p>八进制转十进制：<code class="highlighter-rouge">printf %d $((8#17)) </code>或 <code class="highlighter-rouge">echo "obase=10;$((8#17))"|bc</code>
+十进制转八进制：<code class="highlighter-rouge">echo "obase=8;$((15))"|bc</code></p>
+
+<p>十六进制转十进制：<code class="highlighter-rouge">printf %d 0xF 或 echo $((16#F))</code> 或 <code class="highlighter-rouge">echo "obase=10;$((16#F))"|bc</code>
+十进制转十六进制：<code class="highlighter-rouge">printf %x 15</code>或 <code class="highlighter-rouge">echo "obase=16;15"|bc</code></p>
+
+<p>八进制转十六进制：<code class="highlighter-rouge">printf %x $((8#17)) </code>或 <code class="highlighter-rouge">echo "obase=16;$((8#17))"|bc</code>
+十六进制转八进制：<code class="highlighter-rouge">echo "obase=8;$((16#F))"|bc</code></p>
+
+<p><img src="https://apestalk.github.io/assets/BlogImages/wx.jpeg" alt="欢迎关注支持" /></p>
+<center>感谢关注支持</center>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2019/01/Anyway-%E6%88%91%E8%A2%ABUIWindow%E6%89%93%E8%84%B8%E4%BA%86/" title="link to Anyway，我被UIWindow打脸了">Anyway，我被UIWindow打脸了</a></h2>
+       <p class="excerpt">  需求好轮回，bug绕过谁。近日捕获一bug，经排查定位后发现，该bug属于通过[UIApplication sharedApplication].keyWindow.rootViewController方法拿到了错误的控制器，导致后面执行的代码异常。下面请听我细细为你讲述该bug的前世今生。因为是线上bug，奔溃在了广告业务加载完了之后，考虑到会影响大量用户，内心甚是恐慌。因为奔溃的地方是最近才改的代码，所以起初我一直在最近的两个业务需求里排查问题，因为最近另外一个需求也添加了一个wi...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2019-01-28 03:40:00 +0800" class="post-list__meta--date date">2019-01-28</time> &#8226; <span class="post-list__meta--tags tags">UIWindow makeKeyAndVisible hidden=NO</span><a class="btn-border-small" href=/2019/01/Anyway-%E6%88%91%E8%A2%ABUIWindow%E6%89%93%E8%84%B8%E4%BA%86/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2019/01/%E5%9B%9E%E9%A6%962018-%E6%88%91%E6%83%B3%E8%AF%B4%E7%9A%84%E8%AF%9D%E9%83%BD%E5%9C%A8%E8%BF%99%E9%87%8C/" title="link to 回首2018，我想说的话都在这里">回首2018，我想说的话都在这里</a></h2>
+       <p class="excerpt">年关将至，一直比较忙，没有抽出时间来写一篇年终总结，今天终于得空，我又要开始一个人的叨叨了。时间如白驹过隙，2019年已过去近一个月了，2018年的种种都还历历在目。回首2018，有失去父亲的大悲，也有喜得千金的大喜。有悲痛，有喜悦，有遗憾，有收获，也有成长。上半年的时候我的父亲病情还有所好转，谁知到了下半年就开始逐渐恶化，再后来，在我刚刚登上飞机的那一刻，我父亲就永远得闭上了双眼，匆匆忙忙赶回家，父亲已经静静地躺在了那口漆黑的棺材里，从此这个家就变成了一个残缺的家。从此阴阳两隔，“爸”这...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2019-01-27 06:20:00 +0800" class="post-list__meta--date date">2019-01-27</time> &#8226; <span class="post-list__meta--tags tags">life 总结</span><a class="btn-border-small" href=/2019/01/%E5%9B%9E%E9%A6%962018-%E6%88%91%E6%83%B3%E8%AF%B4%E7%9A%84%E8%AF%9D%E9%83%BD%E5%9C%A8%E8%BF%99%E9%87%8C/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "http://localhost:4000/2019/01/Shell%E5%91%BD%E4%BB%A4%E5%A4%87%E6%B3%A8/";
+        this.page.identifier = "/2019/01/Shell%E5%91%BD%E4%BB%A4%E5%A4%87%E6%B3%A8/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-03-20 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

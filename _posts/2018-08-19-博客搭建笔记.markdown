@@ -11,7 +11,7 @@ tags: GitHub jekyll vno-jekyll
 
 注意username必须跟自己github用户名保持一致，包括大小写。然后你可以在仓库中新建一个index.html文件，简单写上点HTML代码，之后就可以通过``https://username.github.io``来访问自己的个人博客主页了。对，就是这么简单，其他一切GitHub都替你做好了。
 
-但是我不太想写HTML代码（主要是不太会写），更喜欢用人性化的Markdown来写文章。所以，我需要利用jekyll这个利器来帮我。对于不属于jekyll和HTML的朋友来说，搭建自己的博客主题也是比较麻烦的事情，我们可以借助开源的一些比较好的主题，把这一步也简化掉，剩下的就是我们好好写博客啦。
+但是我不太想写HTML代码（主要是不太会写），更喜欢用人性化的Markdown来写文章。所以，我需要利用jekyll这个利器来帮我。对于不熟悉jekyll和HTML的朋友来说，搭建自己的博客主题也是比较麻烦的事情，我们可以借助开源的一些比较好的主题，把这一步也简化掉，剩下的就是我们好好写博客啦。
 
 ## 二、下载喵神的vno-jekyll主题
 
@@ -28,7 +28,7 @@ gem install jekyll
 jekyll new ApesTalk
 cd ApesTalk
 bundle install
-bunde exec jekyll server
+bundle exec jekyll server
 //browse to http://localhost:4000
 ```
 
@@ -59,4 +59,3 @@ bunde exec jekyll server
 
 ![欢迎关注支持](https://apestalk.github.io/assets/BlogImages/wx.jpeg)
 <center>感谢关注支持</center>
-

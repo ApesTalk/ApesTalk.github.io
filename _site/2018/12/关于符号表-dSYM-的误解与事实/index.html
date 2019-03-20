@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>关于符号表（dSYM）的误解与事实</title>
+  <meta name="description" content="">
+  <meta name="author" content="ApesTalk">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="关于符号表（dSYM）的误解与事实">
+  <meta name="twitter:description" content="">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="关于符号表（dSYM）的误解与事实">
+  <meta property="og:description" content="">
+
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/12/%E5%85%B3%E4%BA%8E%E7%AC%A6%E5%8F%B7%E8%A1%A8-dSYM-%E7%9A%84%E8%AF%AF%E8%A7%A3%E4%B8%8E%E4%BA%8B%E5%AE%9E/">
+  <link rel="alternate" type="application/rss+xml" title="ApesTalk" href="http://localhost:4000/feed.xml">
+
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 ApesTalk 的主页" class="blog-button"><img src="/assets/images/avatar.jpeg" width="80" alt="ApesTalk logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for ApesTalk" class="blog-button">ApesTalk</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">你必须非常努力，才能看起来毫不费力.欢迎关注微信公众号：猿故。</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">鸟活着时，吃蚂蚁，鸟死后，蚂蚁吃鸟。一棵树可以制成一百万根火柴，烧光一百万棵树只需一根火柴。活着，低调做人。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问我的博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="https://www.jianshu.com/u/4f2d3d978842" target="_blank" title="Code_Ninja">简书</a></li>
+                
+                  <li class="navigation__item"><a href="https://ApesTalk.github.io" target="_blank" title="about me">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/2406504374" title="@2406504374 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/ApesTalk" title="@ApesTalk 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:apestalk@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="panel-cover--overlay cover-orange"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-12-23 03:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2018-12-23</time> &#8226; <span class="post-meta__tags tags">iOS 符号表 dSYM uuid</span>
+    </div>
+    <h1 class="post-title">关于符号表（dSYM）的误解与事实</h1>
+  </header>
+
+  <section class="post">
+    <p><img src="https://apestalk.github.io/assets/BlogImages/misunderstand_truth.jpg" alt="misunderstand_truth" /></p>
+
+<p>我们在iOS开发过程中一定会跟符号表（dSYM文件）打交道，它是我们不可或缺的定位bug的小帮手。我们都知道，每次编译都会生成一个dSYM文件，当我们的应用程序出现奔溃时，dSYM文件能帮我们定位到应用程序的代码奔溃到哪里了。</p>
+
+<p>最近在开发过程中遇到这样一个问题：我们的团队中有的成员用的是Xcode9，有的成员用的是Xcode10，Xcode10在打包时如果把Debug Information Format设置为DWARF with dSYM File，在打包时会导致电脑内存耗尽关机。所以在开发过程中，我们把配置都改成了DWARF。最后在用Xcode9打包的时候，忘记了修改这项配置，没有生成符号表上传到Bugly，所以线上的奔溃信息没法解析出来。这件事情引发我们的思考，面对这种情况，到底有没有什么补救措施呢？</p>
+
+<h2 id="dsym文件简介">dSYM文件简介</h2>
+
+<p>符号表是内存地址与函数名、文件名、行号的映射表。符号表元素如下所示：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;起始地址&gt; &lt;结束地址&gt; &lt;函数&gt; [&lt;文件名:行号&gt;]
+</code></pre></div></div>
+
+<p>iOS应用crash时也有堆栈，release版的应用，crash时的堆栈信息，全是二进制的地址信息。如果利用这些二进制的地址信息来定位问题是不可能的，因此我们需要将这些二进制的地址信息还原成源代码种的函数以及行号，这时候就需要符号表了。</p>
+
+<h2 id="误解与事实">误解与事实</h2>
+
+<p>我们都有这样一个共识：“每次打包都会生成一个新的dSYM并生成一个新的uuid，线上app也有一个uuid，只有这两个uuid匹配，才能成功解析二进制地址信息为源码。” 很惭愧，以前由于本人思维定式（估计很多人跟我一样吧，我发现网上很多文章也是这么讲的）认为每次打包都会生成一个全新的唯一的uuid，所以，如果打版时忘记勾选生成dSYM文件，将毫无补救办法。官方也没有任何关于这个uuid的生成规则的说明。</p>
+
+<p>网上的一些文章关于这一块讲的要么模棱两可，要么讲的是错误的：</p>
+
+<p><img src="https://apestalk.github.io/assets/BlogImages/lead young people astray.png" alt="lead young people astray" /></p>
+
+<p>让我们再看看上面dSYM文件的介绍，它跟函数名、文件名和行号有关。<strong>简单点说就是同一份代码，编译之后的符号表文件的uuid是一样的。</strong></p>
+
+<p>所以这个时候我们只需要找到上一次打包的那个时间点（代码相同），再重新archive一下，导出dSYM文件，这个dSYM文件的uuid跟之前打包生成的app的uuid是一致的。</p>
+
+<p>下面是有图有真相，同一份代码，不同时间点打的包的uuid是一样的：</p>
+
+<p><img src="https://apestalk.github.io/assets/BlogImages/dSYM-uuid.png" alt="dSYM-uuid" /></p>
+
+<p>实践是检验真理的唯一标准。</p>
+
+<p><img src="https://apestalk.github.io/assets/BlogImages/wx.jpeg" alt="欢迎关注支持" /></p>
+<center>感谢关注支持</center>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/12/iOS%E6%80%BB%E7%BB%93-%E6%9C%80%E8%BF%91%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" title="link to iOS总结-最近遇到的问题及解决办法">iOS总结-最近遇到的问题及解决办法</a></h2>
+       <p class="excerpt">最近在Bugly上发现线上APP存在不少崩溃问题，经过分析和定位，解决了几个比较棘手的问题，总结如下。多线程问题我们在APP中封装了一个记录业务日志的单例对象，主要代码如下：+ (instancetype)shareManager{static ATLogManager *manager = nil;static dispatch_once_t onceToken;dispatch_once(&amp;onceToken, ^{manager = [[self alloc]init];})...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-12-23 04:10:00 +0800" class="post-list__meta--date date">2018-12-23</time> &#8226; <span class="post-list__meta--tags tags">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</span><a class="btn-border-small" href=/2018/12/iOS%E6%80%BB%E7%BB%93-%E6%9C%80%E8%BF%91%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/11/%E7%BC%85%E6%80%80%E6%88%91%E7%9A%84%E8%80%81%E7%88%B6%E4%BA%B2/" title="link to 缅怀我的老父亲">缅怀我的老父亲</a></h2>
+       <p class="excerpt">穷山恶水，白手起家我的父亲出生于1956年，不久后我爷爷就去世了，家里一贫如洗，家里的重担一下子全压在包了小脚的奶奶。在那个人情淡薄的年代，我奶奶差点被爷爷的堂兄弟给卖掉。由于从小家里条件就差，时常吃不饱饭，大饥荒留下的阴影还时常笼罩在人们的心头，让父亲养成了一粒米掉地上都要捡起来吃掉的习惯。在那个贫穷和饥饿的年代，农民没有太多出去工作的机会，大家只能守在家里的一亩三分地里，谁家里地多谁家条件就好一些，至少没有那么饥饿。而且种地还要上缴一部分给国家，剩下的才是自己的，大家都是靠天吃饭，如果...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-11-13 03:30:00 +0800" class="post-list__meta--date date">2018-11-13</time> &#8226; <span class="post-list__meta--tags tags">父亲 情感 个人</span><a class="btn-border-small" href=/2018/11/%E7%BC%85%E6%80%80%E6%88%91%E7%9A%84%E8%80%81%E7%88%B6%E4%BA%B2/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "http://localhost:4000/2018/12/%E5%85%B3%E4%BA%8E%E7%AC%A6%E5%8F%B7%E8%A1%A8-dSYM-%E7%9A%84%E8%AF%AF%E8%A7%A3%E4%B8%8E%E4%BA%8B%E5%AE%9E/";
+        this.page.identifier = "/2018/12/%E5%85%B3%E4%BA%8E%E7%AC%A6%E5%8F%B7%E8%A1%A8-dSYM-%E7%9A%84%E8%AF%AF%E8%A7%A3%E4%B8%8E%E4%BA%8B%E5%AE%9E/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-03-20 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

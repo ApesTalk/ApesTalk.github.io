@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>阿里API网关使用总结</title>
+  <meta name="description" content="  最近大半年的时间里，为了加强公司API的安全性，公司尝试了接入阿里API网关的服务。在这期间，由我调研和宣贯阿里API网关的使用并基于AFNetworking封装一个方便我们内部使用的带阿里API网关的网络请求框架。本篇介绍一下API网关的使用流程和我们在使用期间遇到的各种问题以及解决方案。">
+  <meta name="author" content="ApesTalk">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="阿里API网关使用总结">
+  <meta name="twitter:description" content="  最近大半年的时间里，为了加强公司API的安全性，公司尝试了接入阿里API网关的服务。在这期间，由我调研和宣贯阿里API网关的使用并基于AFNetworking封装一个方便我们内部使用的带阿里API网关的网络请求框架。本篇介绍一下API网关的使用流程和我们在使用期间遇到的各种问题以及解决方案。">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="阿里API网关使用总结">
+  <meta property="og:description" content="  最近大半年的时间里，为了加强公司API的安全性，公司尝试了接入阿里API网关的服务。在这期间，由我调研和宣贯阿里API网关的使用并基于AFNetworking封装一个方便我们内部使用的带阿里API网关的网络请求框架。本篇介绍一下API网关的使用流程和我们在使用期间遇到的各种问题以及解决方案。">
+
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/09/%E9%98%BF%E9%87%8CAPI%E7%BD%91%E5%85%B3%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/">
+  <link rel="alternate" type="application/rss+xml" title="ApesTalk" href="http://localhost:4000/feed.xml">
+
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 ApesTalk 的主页" class="blog-button"><img src="/assets/images/avatar.jpeg" width="80" alt="ApesTalk logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for ApesTalk" class="blog-button">ApesTalk</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">你必须非常努力，才能看起来毫不费力.欢迎关注微信公众号：猿故。</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">鸟活着时，吃蚂蚁，鸟死后，蚂蚁吃鸟。一棵树可以制成一百万根火柴，烧光一百万棵树只需一根火柴。活着，低调做人。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问我的博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="https://www.jianshu.com/u/4f2d3d978842" target="_blank" title="Code_Ninja">简书</a></li>
+                
+                  <li class="navigation__item"><a href="https://ApesTalk.github.io" target="_blank" title="about me">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/2406504374" title="@2406504374 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/ApesTalk" title="@ApesTalk 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:apestalk@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="panel-cover--overlay cover-orange"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-09-09 21:10:00 +0800" itemprop="datePublished" class="post-meta__date date">2018-09-09</time> &#8226; <span class="post-meta__tags tags">阿里 API网关 网关 API GateWay</span>
+    </div>
+    <h1 class="post-title">阿里API网关使用总结</h1>
+  </header>
+
+  <section class="post">
+    <blockquote>
+  <p>最近大半年的时间里，为了加强公司API的安全性，公司尝试了接入阿里API网关的服务。在这期间，由我调研和宣贯阿里API网关的使用并基于AFNetworking封装一个方便我们内部使用的带阿里API网关的网络请求框架。本篇介绍一下API网关的使用流程和我们在使用期间遇到的各种问题以及解决方案。</p>
+</blockquote>
+
+<p><a href="https://help.aliyun.com/product/29462.html?spm=a2c4g.750001.3.46.4cc17b13RVNrsQ">API网关</a> API Gateway）提供高性能、高可用的 API 托管服务，帮助用户对外开放其部署在 ECS、容器服务等阿里云产品上的应用，提供完整的 API 发布、管理、维护生命周期管理。用户只需进行简单的操作，即可快速、低成本、低风险地开放数据或服务。</p>
+
+<p>利用API网关你可以提高自己公司API安全性，也可以上架到API云市场，供用户购买和使用。</p>
+
+<h2 id="一阿里api网关的基本使用流程">一、阿里API网关的基本使用流程</h2>
+
+<h3 id="1创建应用获取appkey和appsecrect">1、创建应用获取AppKey和AppSecrect</h3>
+
+<p>这个没什么可说的，主要是你要想办法尽可能安全地存储你的AppKey和AppSecrect。</p>
+
+<h3 id="2创建api分组">2、创建API分组</h3>
+
+<p>所属分组是API的基本属性，所以需要先创建分组，再在分组下创建API。每个账号默认最多可创建100个分组，如需更多分组需要提交工单。分组有所属区域（Region）的概念，比如华东上海区，选择之后就不能修改了。创建完分组之后，系统会给该分组分配一个二级域名，供测试使用，不过，每个二级域名每天最多可访问1000次。</p>
+
+<h3 id="3为api分组绑定域名和证书">3、为API分组绑定域名和证书</h3>
+
+<p>如果你的API支持HTTPS协议，还需要为该独立域名上传 SSL 证书。我们需要把我们的域名解析到该分组上，之后才能绑定到该分组上。绑定的域名需要现在阿里云系统备案。绑定域名之后，该分组下的API就可以通过该域名来访问了，不再需要调用系统分配的二级域名了。</p>
+
+<h3 id="4环境管理可选">4、环境管理（可选）</h3>
+
+<p>在API分组的环境管理中，你可以自定义环境变量，同一个变量可以再在线上、预发和测试三个环境下对应不同的值，这样在API的定义中就可以使用这里定义好的环境变量了。可以在Path、入参默认值和后端服务服务地址中加入环境变量，在API的定义中使用环境变量需要以<code class="highlighter-rouge">#变量名#</code>的方式使用。<strong>如果要修改已发布的API用到的环境变量，先把老的环境变量给删掉，再重新定义一个新的同名环境变量赋上新值之后再把全部对应的API重新发布一遍，这个是异步生效的，一般发布后1分钟内生效。</strong></p>
+
+<h3 id="5创建api">5、创建API</h3>
+
+<p>这里的内容还是蛮多的，包括基本配置，前端和后端地址，请求参数配置等，详细文档可以看阿里API的官方文档，这里说几点重要的：</p>
+<ul>
+  <li>API名字虽然可以随便取，但建议保持跟API的实际名字保持一致，方便搜索和管理；</li>
+  <li>入参映射与入参透传的区别：入参映射需要你根据实际API需要参数，逐一录入API网关，通过映射关系，可以将参数映射到服务端上，一般情况下，比如我们请求的时候放在Query中，服务端也去Query中拿值，通过入参映射，我们可以实现请求的时候参数放在Header中，阿里API网关在转发到我们服务端的时候可以帮我们转发到Query中。入参映射可以实现阿里网关层的参数合法性校验（网关会参照校验规则对请求做初步校验，如果入参不合法
+，则不会到达您的后端服务，大大的降低了后端服务的压力），因为我们可以在每个参数后面“编辑更多”中指定参数的限制规则，比如长度限制、验证正则表达式等。入参透传的话不需要我们定义参数，阿里网关在收到我们请求的时候直接转发给我们的服务端。我们一般使用入参映射，因为这样对于我们的API需要的参数一目了然，而且以后如要加什么参数限制规则，也是很方便的。</li>
+  <li>通过阿里API网关，我们还能实现请求的地址跟后端服务地址不一样的效果。比如我们请求的地址可以定义成“https://yourdomain.com/fake/fakeSaveUserInfo”，后端服务地址写上我们真正的服务端请求地址“https://yourdomain.com/real/realSaveUserInfo”，网关在收到我们的服务请求时会自动帮我们转发到真正的后端服务。</li>
+</ul>
+
+<h3 id="6api授权">6、API授权</h3>
+
+<p>创建好API之后，就可以对应用进行授权了，点击API的“授权”就可以在指定环境下授权某个APP可以访问该API了，如果你在调用API的过程中控制台打印了x-ca-message中包含了Unauthorized错误，你应该想到你的API还未对该APP进行授权访问。</p>
+
+<h3 id="7api发布">7、API发布</h3>
+
+<p>API编辑完成之后就可以发布到指定环境上去了，发布之后就立马生效了。可以多次编辑然后发布到不同的环境下，如果你编辑完了忘记发布到指定环境下了，是不会生效的。在分组API列表下，直接点击API名字进入的是当前API最后一次编辑保存的状态，不一定跟发布的状态一直哦。点击API右边的线上、预发或测试后面的”运行中”可以看到在该环境下最后一次编辑发布后的状态哦。</p>
+
+<h2 id="二签名规则">二、签名规则</h2>
+
+<p>网关会在请求的时候加上日期、时间戳、nonce、userAgent、Host、AppKey、version等参数值，如果是POST请求的话，需要对参数值进行urlEncode。如果有body值的话，需要对body值，将body中的内容MD5算法加密后再采用BASE64方法Encode成字符串，放入HTTP头中。最后再通过将httpMethod、headers、path、queryParam、formParam经过一系列的运算，合成一个字符串用hmacSha256算法双向加密进行签名。</p>
+
+<h2 id="四环境的区分">四、环境的区分</h2>
+
+<p>在我们分组上绑定好了域名之后，我们不管是预发还是线上环境都可以通过这同一个域名进行访问，那网关是怎么帮我们区分环境的呢？这个时候就用到上面的环境变量管理了，我们通过在环境变量中定义一个变量在不同环境下不同的值达到区分环境的效果。在网络请求的时候，我们可以在头部指定<code class="highlighter-rouge">X-Ca-Stage</code>参数值来让网关帮我们转发到对应环境的后端服务上，对应的值分别是：线上（RELEASE）默认、预发（PRE）和测试（TEST）。</p>
+
+<h2 id="三参数位置和emoji">三、参数位置和emoji</h2>
+
+<p>这里重点说一下参数位置下可选的Body选项，这个地方坑了我们蛮久。我们知道在我们客户端发起POST请求时，我们会在头部指定“Content-Type”为“application/x-www-form-urlencoded”，然后把请求的参数组装成”key1=value1&amp;key2=value2”的字符串，然后在编码成二进制，放在请求的Body里，以Form表单的形式提交的。所以呢，我们在定义API的参数时，应该把参数位置选择为Body选项。但是我们在很长一段时间里，创建API时或编辑API时，参数位置处下拉一直没有Body选项，我们就把参数定义成了Query类型的了。在使用时也没有啥问题，但是一旦当我们的参数值非常长时，比如一个json字符串，这个是就报错了“414 Request-URI Too Large”，这个时候呢，网关就不会再帮我们把请求转发到服务端了。排查了很久终于找到了罪魁祸首在这里等着呢，通过把参数位置改成Body就可以了。这个可能是阿里API网关前端页面上的一个bug，有时候根本选不到Body选项，这个时候你可以先把“请求Body（非Form表单数据，比如JSON字符串、文件二进制数据等）”选项给勾选上，然后再取消勾选，再下拉展开“参数位置”就可以看到Body选项了。（该文发布时是如此，我已经将该问题反馈给阿里API网关，可能后面会修复该bug。）</p>
+
+<p>另外一个问题是如果你的参数值中包含了emoji表情，需要对参数值进行urlEncode，服务端在收到请求时需要对参数值进行urlDecode。否则用的过程中会出现各种奇怪的问题。问了阿里网关的服务人员，他们的解释是，如果不进行urlEncode，参数在传到网关时可能会丢失。可以对所有Post请求的参数值统一urlEncode，服务端对收到的参数值统一进行urlDecode。</p>
+
+<h2 id="四timestamp和nonce防重放攻击">四、timestamp和nonce防重放攻击</h2>
+
+<p>在使用网关时，timestamp和nonce这两个header参数值是可选的，如果加上这两个值，网关层会对请求进行校验，防止重放攻击。不过有个问题：在当前时间的前后15分钟的时间戳都是可以的，一旦超过15分钟就会请求失败，所以，如果用户修改了客户端的系统时间的话，API就会调不通了。这个校验有点严格，如果不知道这一点的话，用户反馈客户端不能用，而你这里测试又没有任何问题，那就泪奔了，哈哈。当然这个是可选的校验，如果不传这两个值的话，就不会校验，这个时候防重放攻击的工作就需要我们自己的服务端做了。</p>
+
+<h2 id="五上传文件">五、上传文件</h2>
+
+<p>目前网关不支持multipart形式的上传，所以一般我们的上传API不太适合录入网关，阿里的说法是现在大家的做法普遍是先将文件上传到文件服务器，然后通过调用接口把文件地址等信息报错到服务器的方式，所以，目测以后也不大可能支持定义multipart形式的上传API。</p>
+
+<h2 id="六qps与流量控制策略">六、QPS与流量控制策略</h2>
+
+<p>每个 API 分组的默认流控上限是500QPS，如果你要调大QPS，需要提交工单并支付相应费用。另外网关有个“流量控制策略”的功能，它是针对API的，也就是说定好策略之后，选中对哪些API生效，这些API就会单独的受这个流量控制策略的控制。但是，需要注意的是，如果你要调大流量控制策略，也必须先调大API所在分组的QPS才会生效，否则流量控制策略可以创建但不会实际生效。</p>
+
+<h2 id="七建议">七、建议</h2>
+
+<ul>
+  <li>1、一个API分组对应一个我们真正的服务域名</li>
+</ul>
+
+<p>虽然我们可以在分组的环境管理中添加不同的环境变量来实现同一个API分组下可以定义不同服务域名的API，这样我们客户端在发起请求的时候，域名只需要配一个就可以了，非常方便。但是，一旦网关这一层瘫痪（尽管是小概率事件，但不排除），这个时候我们就心有余而力不足了，只能等网关尽快恢复了。如果我们一个分组对应一个我们真正的服务域名的话，一旦网关出问题，我们可以快速把该分组绑定的域名指向我们真正的该分组的服务上。</p>
+
+<ul>
+  <li>
+    <p>2、POST请求一定要把参数位置选为Body</p>
+  </li>
+  <li>
+    <p>3、考虑到分组的QPS，每个分组内的API不应过多。</p>
+  </li>
+  <li>
+    <p>4、没有参数的API必须定义成GET方式的请求。</p>
+  </li>
+  <li>
+    <p>5、网关控制台定义的API名字最好跟后端实际使用的API名字保持一致，因为网关控制台的API搜索功能只能搜索定义的API名字，不能搜索后端真实的API名字。如果你定义的不一致，后期将很难维护。</p>
+  </li>
+  <li>
+    <p>6、API的参数一定要跟实际的保持一致，不能把实际可选参数定义成了必选参数，这种情况在请求时会直接被网关过滤掉。</p>
+  </li>
+</ul>
+
+<p><img src="https://apestalk.github.io/assets/BlogImages/wx.jpeg" alt="欢迎关注支持" /></p>
+<center>感谢关注支持</center>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/11/%E7%BC%85%E6%80%80%E6%88%91%E7%9A%84%E8%80%81%E7%88%B6%E4%BA%B2/" title="link to 缅怀我的老父亲">缅怀我的老父亲</a></h2>
+       <p class="excerpt">穷山恶水，白手起家我的父亲出生于1956年，不久后我爷爷就去世了，家里一贫如洗，家里的重担一下子全压在包了小脚的奶奶。在那个人情淡薄的年代，我奶奶差点被爷爷的堂兄弟给卖掉。由于从小家里条件就差，时常吃不饱饭，大饥荒留下的阴影还时常笼罩在人们的心头，让父亲养成了一粒米掉地上都要捡起来吃掉的习惯。在那个贫穷和饥饿的年代，农民没有太多出去工作的机会，大家只能守在家里的一亩三分地里，谁家里地多谁家条件就好一些，至少没有那么饥饿。而且种地还要上缴一部分给国家，剩下的才是自己的，大家都是靠天吃饭，如果...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-11-13 03:30:00 +0800" class="post-list__meta--date date">2018-11-13</time> &#8226; <span class="post-list__meta--tags tags">父亲 情感 个人</span><a class="btn-border-small" href=/2018/11/%E7%BC%85%E6%80%80%E6%88%91%E7%9A%84%E8%80%81%E7%88%B6%E4%BA%B2/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/08/CocoaPods%E4%BD%BF%E7%94%A8%E5%A4%87%E5%BF%98/" title="link to CocoaPods使用备忘">CocoaPods使用备忘</a></h2>
+       <p class="excerpt">  使用CocoaPods也有很长一段时间了，最近几个月的时间里也主导了公司私有Pods的创建和使用。在此期间踩过了不少坑，在踩坑的过程中也收获了不少经验，更加熟练地掌握了CocoaPods的一些指令的使用。本篇作为这段时间收获的备忘。一、CocoaPods简介CocoaPods是专门为iOS工程提供第三方依赖库的管理工具，通过CocoaPods，我们可以更方便地管理每个第三方库的版本，而且不需要我们做太多的配置，就可以直观、集中和自动化地管理我们项目的第三方库。CocoaPods将所有依...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-08-22 06:30:00 +0800" class="post-list__meta--date date">2018-08-22</time> &#8226; <span class="post-list__meta--tags tags">Xcode CocoaPods 私有Pod Podfile pod-install pod-update</span><a class="btn-border-small" href=/2018/08/CocoaPods%E4%BD%BF%E7%94%A8%E5%A4%87%E5%BF%98/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "http://localhost:4000/2018/09/%E9%98%BF%E9%87%8CAPI%E7%BD%91%E5%85%B3%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/";
+        this.page.identifier = "/2018/09/%E9%98%BF%E9%87%8CAPI%E7%BD%91%E5%85%B3%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-03-20 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

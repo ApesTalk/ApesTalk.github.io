@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>也谈使用NSUserDefaults处理默认值</title>
+  <meta name="description" content="">
+  <meta name="author" content="ApesTalk">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="也谈使用NSUserDefaults处理默认值">
+  <meta name="twitter:description" content="">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="也谈使用NSUserDefaults处理默认值">
+  <meta property="og:description" content="">
+
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2019/01/%E4%B9%9F%E8%B0%88%E4%BD%BF%E7%94%A8NSUserDefaults%E5%A4%84%E7%90%86%E9%BB%98%E8%AE%A4%E5%80%BCmarkdown/">
+  <link rel="alternate" type="application/rss+xml" title="ApesTalk" href="http://localhost:4000/feed.xml">
+
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 ApesTalk 的主页" class="blog-button"><img src="/assets/images/avatar.jpeg" width="80" alt="ApesTalk logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for ApesTalk" class="blog-button">ApesTalk</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">你必须非常努力，才能看起来毫不费力.欢迎关注微信公众号：猿故。</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">鸟活着时，吃蚂蚁，鸟死后，蚂蚁吃鸟。一棵树可以制成一百万根火柴，烧光一百万棵树只需一根火柴。活着，低调做人。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+
+        
+
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="访问我的博客" class="blog-button">博客</a></li>
+                
+                  <li class="navigation__item"><a href="https://www.jianshu.com/u/4f2d3d978842" target="_blank" title="Code_Ninja">简书</a></li>
+                
+                  <li class="navigation__item"><a href="https://ApesTalk.github.io" target="_blank" title="about me">关于我</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/2406504374" title="@2406504374 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/ApesTalk" title="@ApesTalk 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:apestalk@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="panel-cover--overlay cover-orange"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-01-11 02:30:00 +0800" itemprop="datePublished" class="post-meta__date date">2019-01-11</time> &#8226; <span class="post-meta__tags tags">iOS NSUserDefaults UserAgent registerDefaults</span>
+    </div>
+    <h1 class="post-title">也谈使用NSUserDefaults处理默认值</h1>
+  </header>
+
+  <section class="post">
+    <p><img src="https://apestalk.github.io/assets/BlogImages/buildings-clouds-dusk.jpg" alt="欢迎关注支持" /></p>
+
+<blockquote>
+  <p>在Cocoa中，NSUserDefaults类的API用于存储和获取用户偏好设置。最近在了解设置webview的UserAgent时第一次用到了NSUserDefaults的<code class="highlighter-rouge">registerDefaults:</code>方法，顺带了解一下该方法。</p>
+</blockquote>
+
+<h2 id="始终使用objectforkey方法">始终使用<code class="highlighter-rouge">objectForKey:</code>方法</h2>
+
+<p>我一直建议大家使用<code class="highlighter-rouge">objectForKey:</code>方法来获取值，而不是直接使用诸如<code class="highlighter-rouge">boolForKey:</code>、<code class="highlighter-rouge">integerForKey:</code>、<code class="highlighter-rouge">stringForKey:</code>之类的方法。因为通过<code class="highlighter-rouge">-[NSUserDefaults objectForKey:]</code>方法来获取值并加上类型判断，可以增强我们程序的健壮性。看下面的例子：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+BOOL showTutorial = [[NSUserDefaults standardUserDefaults] boolForKey:@"ShowTutorial"];
+</code></pre></div></div>
+
+<p>此时你没有办法判断到底存的值是NO还是没有存过值，如果想做类型区分就很难了，换成下面这样就好区分好理解了：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+NSNumber *showTutorial = [[NSUserDefaults standardUserDefaults] objectForKey:@"ShowTutorial"];
+BOOL shouldShowTutorial = NO;
+if(!showTutorial){
+//no set yet, put some Extra logic
+shouldShowTutorial = YES;
+}else{
+shouldShowTutorial = [showTutorial boolValue];
+}
+</code></pre></div></div>
+
+<h2 id="关于registerdefaults方法">关于<code class="highlighter-rouge">registerDefaults:</code>方法</h2>
+
+<p><code class="highlighter-rouge">registerDefaults:</code>方法可以注册一个包含APP偏好设置默认值的字典，设置之后，在APP中通过<code class="highlighter-rouge">objectForKey:</code>方法获取值时，如果之前没有保存过值，则返回通过<code class="highlighter-rouge">registerDefaults:</code>方法注册的默认值。你必须记住的一点是：<strong><code class="highlighter-rouge">registerDefaults:</code>方法注册的默认值不会存储到硬盘，只在程序生命周期中有效，所以，你必须每次在程序启动时调用该方法去配置，通常在<code class="highlighter-rouge">application:didFinishLaunchingWithOptions:</code>方法中配置。</strong></p>
+
+<p>例子胜千言：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+
+//重新启动，之前通过registerDefaults设置的值不存在，说明没有做永久存储。
+NSDictionary *rep = [ud dictionaryRepresentation];
+NSLog(@"rep=%@", rep);    
+
+
+[ud removeObjectForKey:@"name"];
+[ud setObject:@"Apes" forKey:@"name"];
+[ud registerDefaults:@{@"Apes Talk": @"male"}];
+NSLog(@"name=%@",[ud objectForKey:@"name"]);//Apes
+[ud removeObjectForKey:@"name"];
+NSLog(@"name=%@",[ud objectForKey:@"name"]);//ApesTalk
+
+
+
+
+[ud removeObjectForKey:@"twiceKey"];
+[ud registerDefaults:@{@"twiceKey": @"Apes"}];
+[ud registerDefaults:@{@"twiceKey": @"ApesTalk"}];
+NSLog(@"twiceKey=%@", [ud objectForKey:@"twiceKey"]);//ApesTalk
+[ud synchronize];
+
+
+rep = [ud dictionaryRepresentation];
+NSLog(@"rep=%@", rep);
+</code></pre></div></div>
+
+<p>一个常见的使用<code class="highlighter-rouge">registerDefaults:</code>方法的例子是设置webview的userAgent，客户端通过在userAgent中加入特殊标识，HTML页面通过这个标识来判断该页面是在APP中加载的还是在浏览器中加载的，以此可以做一些定制化的功能。这里以UIWebView为例，WKWebView在iOS9之后有一个新的设置userAgent的属性customUserAgent。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+//获取webview的默认userAgent
+UIWebView *tmpWebView = [[UIWebView alloc] initWithFrame:CGRectZero];
+NSString *oldAgent = [tmpWebView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
+//这里以简单的在旧的userAgent后面新增特殊标志为例
+NSString * newAgent = [oldAgent stringByAppendingString:@" isInApp"];
+//注册
+NSDictionary * dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:newAgent, @"UserAgent", nil];
+[[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
+[[NSUserDefaults standardUserDefaults] synchronize];
+</code></pre></div></div>
+
+<p>这个配置是怎么生效的呢？为什么通过NSUserDefaults设置的默认值为什么会影响到webview？webview在加载的时候是怎么读取userAgent的值的呢？</p>
+
+<p>实际上，NSUserDefaults有个域domain（由不同级别的层次组成）的概念，每当你获取key对应的value时，NSUserDefaults会在这个域下由上到下查找对应的key，返回第一个找到的值，有点像响应链。域可以持久化存储在硬盘中或只是存储在内存中。</p>
+
+<p>最重要的一个域是应用程序域（application domain），这里存储着调用<code class="highlighter-rouge">set...ForKey:</code>保存的APP设置信息。相对的，通过调用<code class="highlighter-rouge">registerDefaults:</code>方法保存的信息存储在低优先级的内存中的registration domain中，作为在应用程序域中找不到的任何值的一个后备（fallback）。</p>
+
+<p>还有一个全局的域，存储系统范围的设置。特定语言的域存储地区偏好，如每个地区的月名称或日期格式。</p>
+
+<p>最后但并非不重要的是，苹果使用相同的技术使我们能够通过命令行参数覆盖用户默认值。每个Cocoa应用程序自动检查命令行参数的键/值对，并将这些添加到适当命名的参数域（argument domain）下。由于参数域（argument domain）的优先级最高，我们可以使用它来临时覆盖任何偏好值。</p>
+
+<p>看到这里我们再回过头想想设置UserAgent的问题，实际上，我们通过高优先级的参数域（argument domain）来临时修改了APP的偏好设置。然后我们可以大胆的猜测一下，UIWebView在加载的时候内部会自动从APP的偏好设置中读取UserAgent的值，所以我们设置的UserAgent才会生效。</p>
+
+<p>完整的NSUserDefaults的域搜索顺序如下：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Domain</th>
+      <th>State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NSArgumentDomain</td>
+      <td>volatile</td>
+    </tr>
+    <tr>
+      <td>Application</td>
+      <td>volatile</td>
+    </tr>
+    <tr>
+      <td>NSGlobalDomain</td>
+      <td>persistent</td>
+    </tr>
+    <tr>
+      <td>Languages</td>
+      <td>persistent</td>
+    </tr>
+    <tr>
+      <td>NSRegistrationDomain</td>
+      <td>volatile</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>另外，通过Settings.bunlde设置的偏好设置信息也需要在程序启动时通过<code class="highlighter-rouge">registerDefaults:</code>方法注册才有效的。Settings.bunlde是个有意思的话题，不过目前使用该技术的APP较少，感兴趣的朋友可以看下这篇文章：<a href="https://blog.devzeng.com/blog/ios-settings-bundle.html">iOS开发中Settings.bundle的使用</a>。</p>
+
+<p>参考：</p>
+
+<p><a href="https://oleb.net/blog/2014/02/nsuserdefaults-handling-default-values/">Handling Default Values With NSUserDefaults</a></p>
+
+<p><a href="https://blog.devzeng.com/blog/ios-settings-bundle.html">iOS开发中Settings.bundle的使用</a></p>
+
+<p><img src="https://apestalk.github.io/assets/BlogImages/wx.jpeg" alt="欢迎关注支持" /></p>
+<center>感谢关注支持</center>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2019/01/%E5%9B%9E%E9%A6%962018-%E6%88%91%E6%83%B3%E8%AF%B4%E7%9A%84%E8%AF%9D%E9%83%BD%E5%9C%A8%E8%BF%99%E9%87%8C/" title="link to 回首2018，我想说的话都在这里">回首2018，我想说的话都在这里</a></h2>
+       <p class="excerpt">年关将至，一直比较忙，没有抽出时间来写一篇年终总结，今天终于得空，我又要开始一个人的叨叨了。时间如白驹过隙，2019年已过去近一个月了，2018年的种种都还历历在目。回首2018，有失去父亲的大悲，也有喜得千金的大喜。有悲痛，有喜悦，有遗憾，有收获，也有成长。上半年的时候我的父亲病情还有所好转，谁知到了下半年就开始逐渐恶化，再后来，在我刚刚登上飞机的那一刻，我父亲就永远得闭上了双眼，匆匆忙忙赶回家，父亲已经静静地躺在了那口漆黑的棺材里，从此这个家就变成了一个残缺的家。从此阴阳两隔，“爸”这...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2019-01-27 06:20:00 +0800" class="post-list__meta--date date">2019-01-27</time> &#8226; <span class="post-list__meta--tags tags">life 总结</span><a class="btn-border-small" href=/2019/01/%E5%9B%9E%E9%A6%962018-%E6%88%91%E6%83%B3%E8%AF%B4%E7%9A%84%E8%AF%9D%E9%83%BD%E5%9C%A8%E8%BF%99%E9%87%8C/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/12/iOS%E6%80%BB%E7%BB%93-%E6%9C%80%E8%BF%91%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" title="link to iOS总结-最近遇到的问题及解决办法">iOS总结-最近遇到的问题及解决办法</a></h2>
+       <p class="excerpt">最近在Bugly上发现线上APP存在不少崩溃问题，经过分析和定位，解决了几个比较棘手的问题，总结如下。多线程问题我们在APP中封装了一个记录业务日志的单例对象，主要代码如下：+ (instancetype)shareManager{static ATLogManager *manager = nil;static dispatch_once_t onceToken;dispatch_once(&amp;onceToken, ^{manager = [[self alloc]init];})...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-12-23 04:10:00 +0800" class="post-list__meta--date date">2018-12-23</time> &#8226; <span class="post-list__meta--tags tags">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</span><a class="btn-border-small" href=/2018/12/iOS%E6%80%BB%E7%BB%93-%E6%9C%80%E8%BF%91%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "http://localhost:4000/2019/01/%E4%B9%9F%E8%B0%88%E4%BD%BF%E7%94%A8NSUserDefaults%E5%A4%84%E7%90%86%E9%BB%98%E8%AE%A4%E5%80%BCmarkdown/";
+        this.page.identifier = "/2019/01/%E4%B9%9F%E8%B0%88%E4%BD%BF%E7%94%A8NSUserDefaults%E5%A4%84%E7%90%86%E9%BB%98%E8%AE%A4%E5%80%BCmarkdown/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2019-03-20 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2019</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>
