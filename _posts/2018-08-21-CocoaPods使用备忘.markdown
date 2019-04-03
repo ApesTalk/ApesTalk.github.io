@@ -274,6 +274,9 @@ s.pod_target_xcconfig = {
 }
 ```
 
+同样的，如果在验证过程中遇到xcodebuild: Returned an unsuccessful exit code.却不报具体的错，去看看NOTE类型的信息，如果看到missing required architecture i386 in file此类消息，说明某个.a或者frawork不支持i386架构，需要在podspec文件中写明改pod支持哪些架构。
+
+
 ## 十一、``pod init``失败？
 
 
