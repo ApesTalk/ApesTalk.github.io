@@ -1,10 +1,6 @@
 # Introduce
 
-鸟活着时，吃蚂蚁，
-鸟死后，蚂蚁吃鸟。
-一棵树可以制成一百万根火柴，
-烧光一百万棵树只需一根火柴。
-活着，低调做人。
+这里是我的博客内容。
 
 
 This is [ApesTalk's GitHub Page blog](https://apestalk.githu.io), which use Vno-Jekyll theme. I'm a iOS engineer from China, i will post my newest articles at here, thanks for your visit.
