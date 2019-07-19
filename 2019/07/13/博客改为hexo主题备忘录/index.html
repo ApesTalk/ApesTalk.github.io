@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="ApesTalk的博客">
 <meta property="og:description" content="原本博客是用的喵神的jekyll模板，但最近爱上了Hexo风格，主要是想要一个比较简单的博文汇总功能。于是就开始折腾，这里我使用了比较简洁的yilia主题。 主要步骤 安装Homebrew 安装git brew install git 安装Node.js brew install node 安装Hexo npm install hexo -g (-g全局安装) 创建博客文件夹 hexo init">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-07-19T08:12:15.109Z">
+<meta property="og:updated_time" content="2019-07-19T08:48:48.534Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="博客改为hexo主题备忘录">
 <meta name="twitter:description" content="原本博客是用的喵神的jekyll模板，但最近爱上了Hexo风格，主要是想要一个比较简单的博文汇总功能。于是就开始折腾，这里我使用了比较简洁的yilia主题。 主要步骤 安装Homebrew 安装git brew install git 安装Node.js brew install node 安装Hexo npm install hexo -g (-g全局安装) 创建博客文件夹 hexo init">
@@ -190,17 +190,16 @@ var _hmt = _hmt || [];
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jsonContent:</span></span><br><span class="line"><span class="attr">meta:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">pages:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">posts:</span></span><br><span class="line"><span class="attr">title:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">date:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">path:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">text:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">raw:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">content:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">slug:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">updated:</span> <span class="literal">true</span> <span class="comment">#博文时间倒序</span></span><br><span class="line"><span class="attr">comments:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">link:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">excerpt:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">categories:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">tags:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><p>主题配置，修改themes/yilia目录下的_config.yml文件，详细介绍可参考<a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="noopener">yilla</a>的说明。这里重点说一下图片的配置，因为我在这里饶了点弯路。自己在站点的source目录下新建放图片文件的文件夹，比如我这里是assets，那么在博文中可以用相对路径来引入<code>[xxx](/assets/apestalk.png)</code>即可。</p>
+<li>主题配置，修改themes/yilia目录下的_config.yml文件，详细介绍可参考<a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="noopener">yilla</a>的说明。这里重点说一下图片的配置，因为我在这里饶了点弯路。自己在站点的source目录下新建放图片文件的文件夹，比如我这里是assets，那么在博文中可以用相对路径来引入<code>[xxx](/assets/apestalk.png)</code>即可。</li>
+<li>创建博文 <code>hexo new blog_tile</code> 博文是放在source/_posts目录下的md文件</li>
+<li>生成静态网页 <code>hexo g</code>，这一步会把md文件生成对应的html文件</li>
+<li>运行本地服务 <code>hexo s</code>，在浏览器输入<code>http://localhost:4000</code>如果能正常看到博文就表示成功了。</li>
+<li>配置git账号 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git<span class="built_in"> config </span>--global user.email <span class="string">"your_git_email_address"</span></span><br><span class="line">git<span class="built_in"> config </span>--global user.name <span class="string">"you_git_username"</span></span><br></pre></td></tr></table></figure>
+
 </li>
-<li><p>创建博文 <code>hexo new blog_tile</code> 博文是放在source/_posts目录下的md文件</p>
-</li>
-<li><p>生成静态网页 <code>hexo g</code>，这一步会把md文件生成对应的html文件</p>
-</li>
-<li><p>运行本地服务 <code>hexo s</code>，在浏览器输入<code>http://localhost:4000</code>如果能正常看到博文就表示成功了。</p>
-</li>
-<li><p>配置git账号 </p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git<span class="built_in"> config </span>--global user.email <span class="string">"your_git_email_address"</span></span><br><span class="line">git<span class="built_in"> config </span>--global user.name <span class="string">"you_git_username"</span></span><br></pre></td></tr></table></figure>
-</li>
+</ul>
+<p><strong>注意：这里由于加了global参数，会覆盖掉全局的git账号设置，不利于同一台设备同时使用公司账号和个人账号，这里如果全局设置了个人账号，那在提交公司代码时作者会变成个人账号。这里需要先删除<code>.deploy_git</code>文件夹，然后在_config.yml文件中的deploy下配置name和email字段为个人Git账号后重新部署即可，在部署的时候会忽略Git全局配置，使用这里配置的信息提交。</strong></p>
+<ul>
 <li><p>克隆github.io仓库到站点目录下 <code>git clone git@github.com:your_git_username/your_git_username.github.io.git</code></p>
 </li>
 <li><p>配置ssh</p>
@@ -473,15 +472,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo yilia 备忘录</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">iOS 符号表 dSYM uuid</a>
+                <a href="javascript:void(0)" class="js-tag color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -489,11 +484,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
+                <a href="javascript:void(0)" class="js-tag color3">iOS 符号表 dSYM uuid</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod Podfile pod-install pod-update</a>
+                <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -502,6 +497,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">父亲 情感 个人</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod Podfile pod-install pod-update</a>
               </li>
             
             <div class="clearfix"></div>
