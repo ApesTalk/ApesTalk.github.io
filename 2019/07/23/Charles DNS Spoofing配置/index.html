@@ -6,19 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://ApesTalk.github.com">
-  <title>ApesTalk的博客</title>
+  <title>Charles DNS Spoofing配置 | ApesTalk的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
-<meta name="keywords" content="ApesTalk,简书Code_Ninja,Code_Ninja,Objective-C,OC,Swift,Shell,java,html,js,iOS,iOSer,Coder,Porgrammer,代码,编程,程序猿,程序,Developer,Git,Github,开发,开源,分享,博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ApesTalk的博客">
-<meta property="og:url" content="https://ApesTalk.github.com/index.html">
+  <meta name="description" content="在我们开发过程中难免会遇到需要配置hosts的场景，在Mac上比较容易修改hosts，也可以借助一些软件进行配置。在越狱手机上可以直接修改etc/hosts文件即可，在未越狱手机上比较麻烦，常见的做法要么连接公司指定WiFi配置对应DNS，要么自己配置一个HTTP代理。下面分享一下怎么用Charles配置一个代理，怎么将hosts文件中大量的域名和IP转成Charles能识别的XML文件然后批量">
+<meta name="keywords" content="Charles hosts DNS spoofing xml 抓包 代理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Charles DNS Spoofing配置">
+<meta property="og:url" content="https://ApesTalk.github.com/2019/07/23/Charles DNS Spoofing配置/index.html">
 <meta property="og:site_name" content="ApesTalk的博客">
-<meta property="og:description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
+<meta property="og:description" content="在我们开发过程中难免会遇到需要配置hosts的场景，在Mac上比较容易修改hosts，也可以借助一些软件进行配置。在越狱手机上可以直接修改etc/hosts文件即可，在未越狱手机上比较麻烦，常见的做法要么连接公司指定WiFi配置对应DNS，要么自己配置一个HTTP代理。下面分享一下怎么用Charles配置一个代理，怎么将hosts文件中大量的域名和IP转成Charles能识别的XML文件然后批量">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://apestalk.github.com/assets/BlogImages/charles.png">
+<meta property="og:updated_time" content="2019-07-23T08:39:32.714Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ApesTalk的博客">
-<meta name="twitter:description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
+<meta name="twitter:title" content="Charles DNS Spoofing配置">
+<meta name="twitter:description" content="在我们开发过程中难免会遇到需要配置hosts的场景，在Mac上比较容易修改hosts，也可以借助一些软件进行配置。在越狱手机上可以直接修改etc/hosts文件即可，在未越狱手机上比较麻烦，常见的做法要么连接公司指定WiFi配置对应DNS，要么自己配置一个HTTP代理。下面分享一下怎么用Charles配置一个代理，怎么将hosts文件中大量的域名和IP转成Charles能识别的XML文件然后批量">
+<meta name="twitter:image" content="https://apestalk.github.com/assets/BlogImages/charles.png">
   
   
     <link rel="icon" href="/assets/images/favicon.png">
@@ -152,16 +155,14 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-Charles DNS Spoofing配置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-Charles DNS Spoofing配置" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/23/Charles DNS Spoofing配置/">Charles DNS Spoofing配置</a>
+    <h1 class="article-title" itemprop="name">
+      Charles DNS Spoofing配置
     </h1>
   
 
@@ -191,6 +192,37 @@ var _hmt = _hmt || [];
       
 
       
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/images/alipay.png">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/images/wechat.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
     </div>
     <div class="article-info article-info-index">
       
@@ -209,16 +241,75 @@ var _hmt = _hmt || [];
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/23/Charles DNS Spoofing配置/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://ApesTalk.github.com/2019/07/23/Charles DNS Spoofing配置/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2019/07/13/博客改为hexo主题备忘录/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">博客改为hexo主题备忘录</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -238,950 +329,14 @@ var _hmt = _hmt || [];
 
 
 
-
-  
-    <article id="post-博客改为hexo主题备忘录" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/13/博客改为hexo主题备忘录/">博客改为hexo主题备忘录</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/13/博客改为hexo主题备忘录/" class="archive-article-date">
-  	<time datetime="2019-07-13T07:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>原本博客是用的喵神的jekyll模板，但最近爱上了Hexo风格，主要是想要一个比较简单的博文汇总功能。于是就开始折腾，这里我使用了比较简洁的<a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="noopener">yilia主题</a>。</p>
-<h2 id="主要步骤"><a href="#主要步骤" class="headerlink" title="主要步骤"></a>主要步骤</h2><ul>
-<li>安装Homebrew</li>
-<li>安装git <code>brew install git</code></li>
-<li>安装Node.js <code>brew install node</code></li>
-<li>安装Hexo <code>npm install hexo -g</code> (-g全局安装)</li>
-<li>创建博客文件夹 <code>hexo init Blog</code> (Blog是指定的博客目录)</li>
-<li>cd到站点目录，以下操作都在站点目录下</li>
-<li>安装主题 <code>git clone https://github.com/litten/hexo-theme-yilia.git themes/yilia</code>，安装成功后会在themes目录下看到yilia</li>
-<li>修改站点的_config.yml文件，编辑相关展示信息以及修改主题<code>theme: yilia</code>，部署配置：</li>
-</ul>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">deploy</span>:</span><br><span class="line"><span class="attribute">type</span>: git</span><br><span class="line"><span class="attribute">repository</span>: git<span class="variable">@github</span>.<span class="attribute">com</span>:ApesTalk/ApesTalk.github.io.git</span><br><span class="line"><span class="attribute">branch</span>: master</span><br></pre></td></tr></table></figure>
-
-<p>添加目录相关配置：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jsonContent:</span></span><br><span class="line"><span class="attr">meta:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">pages:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">posts:</span></span><br><span class="line"><span class="attr">title:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">date:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">path:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">text:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">raw:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">content:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">slug:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">updated:</span> <span class="literal">true</span> <span class="comment">#博文时间倒序</span></span><br><span class="line"><span class="attr">comments:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">link:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">excerpt:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">categories:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">tags:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>主题配置，修改themes/yilia目录下的_config.yml文件，详细介绍可参考<a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="noopener">yilla</a>的说明。这里重点说一下图片的配置，因为我在这里饶了点弯路。自己在站点的source目录下新建放图片文件的文件夹，比如我这里是assets，那么在博文中可以用相对路径来引入<code>[xxx](/assets/apestalk.png)</code>即可。</li>
-<li>创建博文 <code>hexo new blog_tile</code> 博文是放在source/_posts目录下的md文件</li>
-<li>生成静态网页 <code>hexo g</code>，这一步会把md文件生成对应的html文件</li>
-<li>运行本地服务 <code>hexo s</code>，在浏览器输入<code>http://localhost:4000</code>如果能正常看到博文就表示成功了。</li>
-<li>配置git账号 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git<span class="built_in"> config </span>--global user.email <span class="string">"your_git_email_address"</span></span><br><span class="line">git<span class="built_in"> config </span>--global user.name <span class="string">"you_git_username"</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p><strong>注意：这里由于加了global参数，会覆盖掉全局的git账号设置，不利于同一台设备同时使用公司账号和个人账号，这里如果全局设置了个人账号，那在提交公司代码时作者会变成个人账号。这里需要先删除<code>.deploy_git</code>文件夹，然后在_config.yml文件中的deploy下配置name和email字段为个人Git账号后重新部署即可，在部署的时候会忽略Git全局配置，使用这里配置的信息提交。</strong></p>
-<ul>
-<li><p>克隆github.io仓库到站点目录下 <code>git clone git@github.com:your_git_username/your_git_username.github.io.git</code></p>
-</li>
-<li><p>配置ssh</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//生成rsa key</span></span><br><span class="line">ssh-keygen -t rsa -C <span class="string">"your_git_email_address"</span></span><br><span class="line"><span class="comment">//会提示你输入密码，生成后找到id_rsa.pub文件，复制到github头像 -&gt; Settings -&gt; SSH and GPG keys -&gt; New SSH key的文本框中</span></span><br><span class="line"><span class="comment">//测试SSH连接是否成功</span></span><br><span class="line">ssh -T git@github.com</span><br><span class="line"><span class="comment">//如果提示“You've successfully authenticated, but GitHub does not provide shell access”就表示是成功的</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装hexo-deployer-git插件 <code>npm install hexo-deployer-git --save</code>（否则会在部署的时候提示找不到git）</p>
-</li>
-<li><p>部署到github <code>hexo d</code> </p>
-</li>
-<li><p>部署成功后就可以通过apestalk.github.io来访问博客了</p>
-</li>
-<li><p>更新博客</p>
-<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean <span class="comment">//清除之前的静态网页</span></span><br><span class="line">hexo g <span class="comment">//重新生成静态网页</span></span><br><span class="line">hexo d <span class="comment">//部署</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>因为我们修改了yilia主题的_config.yml文件，如果后续我们想更新yilia主题 (到yilia目录下执行<code>git pull</code>)，需要先备份以下这个_config.yml文件。</p>
-<p>参考：</p>
-<p><a href="https://hexo.io/zh-cn/docs/commands.html" target="_blank" rel="noopener">Hexo指令</a></p>
-<p><a href="https://joakimliu.github.io/2015/04/19/Github&&Hexo-%3EPersonal%20Blog%20for%20Mac%20OS/" target="_blank" rel="noopener">Github &amp;&amp; Hexo -&gt; 个人博客 for Mac OS</a></p>
-<p><a href="https://blog.csdn.net/qq_21808961/article/details/84476504" target="_blank" rel="noopener">hexo d命令报错 ERROR Deployer not found: git</a></p>
-<p><a href="https://yanyinhong.github.io/2017/05/02/How-to-insert-image-in-hexo-post/" target="_blank" rel="noopener">Hexo博客搭建之在文章中插入图片</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo yilia 备忘录</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/13/博客改为hexo主题备忘录/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-clang是如何查找头文件的" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/01/clang是如何查找头文件的/">clang是如何查找头文件的</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/01/clang是如何查找头文件的/" class="archive-article-date">
-  	<time datetime="2019-07-01T11:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/assets/BlogImages/clang/question-mark.jpg" alt></p>
-<p>我们知道，如果在项目中存在两个同名的类文件（即使所处文件夹不同），会报错“duplicate symbols”。但是如果在不同的文件夹下创建同一个类的扩展并且扩展名相同却是可以的。</p>
-<p>这是因为编译器不允许我们在同一个项目中创建两个同名的类，编译时就会主动检查。而对于Category，编译器并不关心是否存在同名扩展或同名方法，Category检查是放在运行期的。Category的使用依赖于开发者按约定来自我规范从而避免造成一些奇怪的问题，一般建议Category中的方法加上前缀和下划线来避免方法重复。</p>
-<p>如果我们项目中不小心造成了存在多个同名的扩展会怎样呢？</p>
-<p><img src="/assets/BlogImages/clang/DuplicateCategoryName.png" alt="Duplicate Category"></p>
-<p>其中①处的扩展有<code>+log</code>方法，②处的扩展有<code>+log</code>和<code>+upload</code>方法。</p>
-<p>使用的时候却发现会提示找不到upload方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;NSObject+Log.h&quot;</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    [NSObject log];//找得到方法</span><br><span class="line">    [NSObject upload];//找不到方法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>是不是编译顺序导致的呢？在Build phases -&gt; Compile Sources中修改两个同名文件的顺序后发现还是找不到upload方法。</p>
-<p>如果把import语句修改为<code>#import &quot;AnotherLog/NSObject+Log.h&quot;</code>就可以改变实际引入的扩展为②处的扩展，就能找到upload方法了。</p>
-<p>那么<code>#import &quot;NSObject+Log.h&quot;</code>到底是怎么查找目标文件的呢？</p>
-<p><code>#import &lt;file&gt;</code>用于引入系统头文件，它在一个标准文件系统目录列表中寻找名为file的文件。你可以用<code>-I</code>选项在预处理阶段往目录列表前面添加其他目录（对应Xcode中配置Header Search Paths中添加的目录，编译时就会自动在前面加上<code>-I</code>选项）。<br><code>#importt &quot;file&quot;</code>用于引入用户头文件，它首先在包含当前文件的目录下寻找file文件，如果找不到，接着在引用目录下寻找，如果还是找不到，使用与<code>#import &lt;file&gt;</code>方式相同的查找方式寻找。你可以用<code>-iquote</code>选项在预处理阶段往引用目录列表前面添加其他目录（对应Xcode中设置Use Header Maps为NO以及配置User Header Search Paths）。</p>
-<p><code>#import &lt;file&gt;</code> 在 Always Search User Paths 为YES的情况下，User Header Search Paths 中目录的扫描顺序排在 Header Search Paths 之前。而 <code>#import &quot;file&quot;</code> 无论 Always Search User Paths 是否 YES，都是如此。</p>
-<p>比如有这样的目录结构：<br><img src="/assets/BlogImages/clang/import_search.png" alt="目录结构"></p>
-<p>三个目录下分别定义同名的头文件TestClass.h，每个头文件中都定义一个同名字符串dir，但具体的值不同：<code>static NSString *dir = @&quot;directory/TestClass.h&quot;;</code>。在Header Search Paths中添加三个目录：<br><img src="/assets/BlogImages/clang/header_search_path.png" alt="Header Search Paths"></p>
-<p>在ViewController中添加代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;ViewController.h&quot;</span><br><span class="line">#import &lt;TestClass.h&gt;</span><br><span class="line"></span><br><span class="line">@implementation ViewController</span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    NSLog(@&quot;TestClass.h at: %@&quot;, dir);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-
-<p>这里会输出：TestClass.h at: directory3/TestClass.h。是因为在Header Search Paths中，我们把directory3放在了第一位。</p>
-<p>如果我们在Xcode中选中ViewController.m，然后执行Product -&gt; Perform Action -&gt; Preprocess “ViewController.m” 会看到如下结果：</p>
-<p><img src="/assets/BlogImages/clang/Xcode_preprocess_viewcontroller.png" alt="Xcode_preprocess_viewcontroller.png"></p>
-<p>因为我们import命令在编译时把引用的文件插入到import所在的位置。说明编译器找到了directory3下的TestClass文件。</p>
-<p>编译后，在Report Navigator中可以看到在编译ViewController时会自动在添加的目录前面加上<code>-I</code>选项：</p>
-<p><img src="/assets/BlogImages/clang/%E7%BC%96%E8%AF%91-I%E9%80%89%E9%A1%B9.png" alt="编译-I选项.png"></p>
-<p>如果把build后编译ViewController的指令拷贝出来放在终端中，在后面加上<code>-v</code>选项来打印详细信息，会看到clang是如何查找目标文件的：</p>
-<p><img src="/assets/BlogImages/clang/copy_build_code.png" alt></p>
-<p><img src="/assets/BlogImages/clang/clang%E6%98%AF%E5%A6%82%E4%BD%95%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E7%9A%84.png" alt="clang是如何查找文件的"></p>
-<p>如果改为<code>#import &quot;TestClass.h&quot;</code>，则输出：TestClass.h at: directory/TestClass.h，因为在包含当前的目录下找到了TestClass文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;ViewController.h&quot;</span><br><span class="line">#import &quot;TestClass.h&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@implementation ViewController</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    NSLog(@&quot;TestClass.h at: %@&quot;, dir);</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
-
-<p>如果把当前目录下的TestClass文件重命名，然后设置Use Header Maps为NO，把directory3目录添加到User Header Search Paths中，此时会输出TestClass.h at: directory3/TestClass.h。因为这个时候在包含当前文件的目录下找不到TestClass文件，就在引用目录下查找，就找到了directory3中。</p>
-<p><img src="/assets/BlogImages/clang/user_header_search_paths_notuseHeaderMaps.png" alt="User Header Search Paths"></p>
-<p>此时再看编译ViewController时，会发现编译器在directory3的前面加上了<code>-iquote</code>选项：<br><img src="/assets/BlogImages/clang/-iquote%E9%80%89%E9%A1%B9.png" alt="-iquote选项"></p>
-<p>另外，如果在System Header Search Paths中添加了目录，那么在编译时会自动在目录前面加上<code>-isystem</code>选项，指定<code>-isystem</code>选项的目录会优先于系统目录前被查找。<code>-isysroot</code>选项指定系统目录。</p>
-<p>其他概念：</p>
-<p>Use Header Maps：这个选项开启后，会为编译器提供一份文本的文件名和相对路径的映射(.hmap文件)，我们可以直接引用工程中的文件，而不需要在 Header Search Path 中配置。选项关闭后，你需要把每一个包含头文件的路径添加到目标的header search paths中。</p>
-<p>Framework/Library Search Paths：<br>1、Framework Search Paths<br>附加到项目中的framework(.framework bundles)的搜索路径，在iOS开发中使用的不是特别多，通常对于iOS的开发来说一般使用系统内置的framework。<br>2、Library Search Paths<br>附加到项目中的第三方Library(.a files)的搜索路径，Xcode会自动设置拖拽到Xcode中的.a文件的路径，为了便于移植或者是多人协作开发一般会手动设置。<br>比如对于设置百度的地图的SDK，我们会设置如下：<br><code>$(SRCROOT)/../libs/Release$(EFFECTIVE_PLATFORM_NAME)</code>，其中<code>$(SRCROOT)</code>宏代表您的工程文件目录，<code>$(EFFECTIVE_PLATFORM_NAME)</code>宏代表当前配置是OS还是simulator。</p>
-<p>Header Search Path：<br>1、C/C++头文件引用<br>在C/C++中，include是变异指令，在编译时，编译器会将相对路径替换成绝对路径，因此，头文件的绝对路径等同于搜索路径+相对路径。<br>(1)<code>#include &lt;iostream.h&gt;</code>：引用编译器的类库路径下的头文件<br>(2)<code>#include &quot;hello.h&quot;</code>：引用工程目录的相对路径的头文件<br>2、(User) Header Search Path<br>（1）Header Search Path指的是头文件的搜索路径。<br>（2）User Header Search Paths指的是用户自定义的头文件的搜索路径<br>3、Always Search User Paths(废弃了)<br>如果设置了Always Search User Paths为YES，编译器会优先搜索User Header Search Paths配置的路径，在这种情况下<code>#include &lt;string.h&gt;</code>，User Header Search Paths搜索目录下面的文件会覆盖系统的头文件。</p>
-<p><code>$(PODS_ROOT)</code><br><code>$(SRCROOT)</code>代表的是项目根目录下<br><code>$(PROJECT_DIR)</code>代表的是整个项目<br><code>/../</code>上级目录<br><code>$(inherited)</code> （target在设置自己路径的时候如果加了这个，那么就是继承project里设置的路径，默认不继承。）</p>
-<p>参考：</p>
-<p><a href="https://web.archive.org/web/20160827070103/https://developer.apple.com/library/mac/documentation/DeveloperTools/Reference/XcodeBuildSettingRef/1-Build_Setting_Reference/build_setting_ref.html" target="_blank" rel="noopener">Build settings reference官方解释</a></p>
-<p><a href="https://blog.devzeng.com/blog/ios-xcode-search-paths.html" target="_blank" rel="noopener">iOS开发中的Search Paths设置</a></p>
-<p><a href="https://www.jianshu.com/p/75e18591ca24" target="_blank" rel="noopener">Objective-C 中的 import 和 Search Paths</a></p>
-<p><a href="http://gcc.gnu.org/onlinedocs/cpp/Include-Syntax.html" target="_blank" rel="noopener">2.1 Include Syntax</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">clang import headermap hmap</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/01/clang是如何查找头文件的/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Anyway，我被UIWindow打脸了" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/27/Anyway，我被UIWindow打脸了/">Anyway，我被UIWindow打脸了</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/27/Anyway，我被UIWindow打脸了/" class="archive-article-date">
-  	<time datetime="2019-01-27T11:40:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/assets/BlogImages/window.png" alt></p>
-<blockquote>
-<p>需求好轮回，bug绕过谁。</p>
-</blockquote>
-<p>近日捕获一bug，经排查定位后发现，该bug属于通过<code>[UIApplication sharedApplication].keyWindow.rootViewController</code>方法拿到了错误的控制器，导致后面执行的代码异常。下面请听我细细为你讲述该bug的前世今生。</p>
-<p>因为是线上bug，奔溃在了广告业务加载完了之后，考虑到会影响大量用户，内心甚是恐慌。因为奔溃的地方是最近才改的代码，所以起初我一直在最近的两个业务需求里排查问题，因为最近另外一个需求也添加了一个window。事实上，我被狠狠的打脸了，脸好疼。。。</p>
-<p><img src="/assets/BlogImages/ohshit.jpg" alt></p>
-<p>经过测试和分析，最近新增的这个window并不会导致这个问题。确定启动的时候也没有类似UIAlertView这种弹窗会弹出来，那为什么通过<code>[UIApplication sharedApplication].keyWindow</code>拿到了错误的window呢？不找到问题点实在是难以饶恕自己啊！</p>
-<p>到后来，再看线上更新最近这个版本的用户很多，但是这个崩溃只有一例，再加上确认不是因为启动时和其他业务互相影响导致的启动就崩的严重bug。我的内心稍微平复了一些，没那么慌了，能够静下心来理性地分析问题了。</p>
-<p>回归到问题源头，首先，我们知道当我们调用UIWindow的<code>makeKeyAndVisible</code>时，系统会调用它的<code>hidden = NO</code>让它显示出来，另外会帮我们把它加入<code>[UIApplication sharedApplication].windows</code>数组中。当我们调用<code>[UIApplication sharedApplication].keyWindow</code>时，系统给我们返回一个最近调用了<code>makeKeyAndVisible</code>方法的window。一般正常情况下我们一个APP只有一个window，通过<code>[UIApplication sharedApplication].keyWindow</code>拿我们的主window是没有问题的，只有当我们程序中出现多个window的时候才可能会出现问题。那么第二个问题来了，什么时候回出现多个window呢，也就是<code>[UIApplication sharedApplication].windows</code>数组长度不为1，那必须是显式或隐式地调用了window的<code>makeKeyAndVisible</code>方法才会出现这种情况。</p>
-<p>然后，我在项目中搜<code>makeKeyAndVisible</code>方法，找到了一个很早之前的业务需求处用到了一个window并调用了<code>makeKeyAndVisible</code>方法，当时是为了解决其他问题。实在是没有想到会是跟这里的业务相互影响了。一把辛酸泪啊，突然想说一句“不是你的代码没有bug，而是你的bug需要点时间。”</p>
-<p>另外需要注意的是，项目中有历史遗留的<code>UIAlertView</code>和<code>UIActionSheet</code>的，要尽快把它们改掉了，因为随着业务的不断增长，在有这些弹窗的时候如果去调用<code>[UIApplication sharedApplication].keyWindow</code>拿到的会是一个<code>_UIAlertControllerShimPresenterWindow</code>，它的rootViewController是一个<code>UIApplicationRotationFollowingController</code>。很明显，在它们弹出来的时候，系统会新建一个UIWindow，并且为了在不管当前视图层级结构是怎样的，都将弹窗置为最上层让用户能看到，所以不得不调用了window的<code>makeKeyAndVisible</code>方法。这是一个隐患，我猜测苹果新推出<code>UIAlertController</code>来替代<code>UIAlertView</code>和<code>UIActionSheet</code>有这方面的考量。</p>
-<p>所以，这里有三个建议：</p>
-<p>1、建议是尽快把项目中的<code>UIAlertView</code>和<code>UIActionSheet</code>换成<code>UIAlertController</code>。</p>
-<p>2、在拿主window的时候通过<code>[UIApplication sharedApplication].delegate.window</code>方式拿。</p>
-<p>3、在使用除主UIWindow外的其他window时，如果你只是想把它展示出来，直接调用<code>window.hidden = NO</code>即可，如果没有强制要将该window置为最上层，就不要去调用<code>makeKeyAndVisible</code>。</p>
-<p>这次被UIWinow打脸呢，有点意外，幸好没有酿成重大必陷bug。这件事又给我了一个大教训，那就是遇事不要慌张，不要一上来就凭借自己的经验随便下结论，一定要静下心来理性地思考，先仔细分析bug，先摸清bug的来龙去脉，再顺藤摸瓜就很简单了。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">UIWindow makeKeyAndVisible hidden=NO</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/27/Anyway，我被UIWindow打脸了/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Shell命令备注" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/27/Shell命令备注/">Shell命令备注</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/27/Shell命令备注/" class="archive-article-date">
-  	<time datetime="2019-01-27T09:57:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/assets/BlogImages/shell.png" alt></p>
-<h2 id="chmod命令（chmod-755到底是个什么鬼？）"><a href="#chmod命令（chmod-755到底是个什么鬼？）" class="headerlink" title="chmod命令（chmod 755到底是个什么鬼？）"></a>chmod命令（chmod 755到底是个什么鬼？）</h2><p>Linux/Unix 的文件调用权限分为三级 : 文件拥有者、群组、其他。利用 chmod 可以藉以控制文件如何被他人所调用。<br>每个文件的权限呢，又分为读、写和执行。所以，可以用三位二进制来标识权限，当对应二进制位为0时表示没有对应的权限，当对应二进制位为1时表示有对应的权限。比如110，就表时可读可写不可执行。</p>
-<p>那么对应三个用户分组，就需要三组这样的三位二进制来标识权限了。比如111 101 101（rwxr-xr-x），分别（每三位）表示User、Group、及Other的权限。</p>
-<p>对应的，r=4，w=2，x=1<br>若要rwx属性则4+2+1=7；<br>若要rw-属性则4+2=6；<br>若要r-x属性则4+1=5。</p>
-<p>所以755就是11110101（rwxr-xr-x）也就是说文件拥有者有读写和执行的权限，群组和其他用户拥有读和执行的权限。</p>
-<h2 id="Shell命令实现各种进制转换"><a href="#Shell命令实现各种进制转换" class="headerlink" title="Shell命令实现各种进制转换"></a>Shell命令实现各种进制转换</h2><p>在终端中可以通过printf和echo命令加上表达式即可轻松实现各种进制数之间的互转。我们知道，八进制用o标识，十进制用d标识，十六进制用x标识。</p>
-<p>公式1：<code>printf %&lt;目标进制标识&gt; $((原进制标识#原进制数))</code><br>公式2：<code>echo &quot;obase=目标进制;$((原进制#原进制数))”|bc</code> 实际上只需掌握这个公式即可！</p>
-<p>二进制转十进制：<code>printf %d $((2#1111))</code>           或<code>echo &quot;obase=10;$((2#1111))&quot;|bc</code><br>十进制转二进制：<code>echo &quot;obase=2;15&quot;|bc</code> 或 <code>echo &quot;obase=2;$((10#15))&quot;|bc</code></p>
-<p>二进制转八进制：<code>printf %o $((2#1111))</code>  或   <code>echo &quot;obase=8;$((2#1111))&quot;|bc</code><br>八进制转二进制：<code>echo &quot;obase=2;$((8#17))&quot;|bc</code></p>
-<p>二进制转十六进制：<code>printf %x $((2#1111))</code> 或  <code>echo &quot;obase=16;$((2#1111))&quot;|bc</code><br>十六进制转二进制：<code>echo &quot;obase=2;$((16#F))&quot;|bc</code></p>
-<p>八进制转十进制：<code>printf %d $((8#17))</code>或 <code>echo &quot;obase=10;$((8#17))&quot;|bc</code><br>十进制转八进制：<code>echo &quot;obase=8;$((15))&quot;|bc</code></p>
-<p>十六进制转十进制：<code>printf %d 0xF 或 echo $((16#F))</code> 或 <code>echo &quot;obase=10;$((16#F))&quot;|bc</code><br>十进制转十六进制：<code>printf %x 15</code>或 <code>echo &quot;obase=16;15&quot;|bc</code></p>
-<p>八进制转十六进制：<code>printf %x $((8#17))</code>或 <code>echo &quot;obase=16;$((8#17))&quot;|bc</code><br>十六进制转八进制：<code>echo &quot;obase=8;$((16#F))&quot;|bc</code></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">shell echo chmod</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/27/Shell命令备注/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-也谈使用NSUserDefaults处理默认值" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/10/也谈使用NSUserDefaults处理默认值/">也谈使用NSUserDefaults处理默认值</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/10/也谈使用NSUserDefaults处理默认值/" class="archive-article-date">
-  	<time datetime="2019-01-10T10:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/assets/BlogImages/buildings-clouds-dusk.jpg" alt="欢迎关注支持"></p>
-<blockquote>
-<p>在Cocoa中，NSUserDefaults类的API用于存储和获取用户偏好设置。最近在了解设置webview的UserAgent时第一次用到了NSUserDefaults的<code>registerDefaults:</code>方法，顺带了解一下该方法。</p>
-</blockquote>
-<h2 id="始终使用objectForKey-方法"><a href="#始终使用objectForKey-方法" class="headerlink" title="始终使用objectForKey:方法"></a>始终使用<code>objectForKey:</code>方法</h2><p>我一直建议大家使用<code>objectForKey:</code>方法来获取值，而不是直接使用诸如<code>boolForKey:</code>、<code>integerForKey:</code>、<code>stringForKey:</code>之类的方法。因为通过<code>-[NSUserDefaults objectForKey:]</code>方法来获取值并加上类型判断，可以增强我们程序的健壮性。看下面的例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BOOL showTutorial = [[NSUserDefaults standardUserDefaults] boolForKey:@&quot;ShowTutorial&quot;];</span><br></pre></td></tr></table></figure>
-
-<p>此时你没有办法判断到底存的值是NO还是没有存过值，如果想做类型区分就很难了，换成下面这样就好区分好理解了：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NSNumber *showTutorial = [[NSUserDefaults standardUserDefaults] objectForKey:@&quot;ShowTutorial&quot;];</span><br><span class="line">BOOL shouldShowTutorial = NO;</span><br><span class="line">if(!showTutorial)&#123;</span><br><span class="line">//no set yet, put some Extra logic</span><br><span class="line">    shouldShowTutorial = YES;</span><br><span class="line">&#125;else&#123;</span><br><span class="line">    shouldShowTutorial = [showTutorial boolValue];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="关于registerDefaults-方法"><a href="#关于registerDefaults-方法" class="headerlink" title="关于registerDefaults:方法"></a>关于<code>registerDefaults:</code>方法</h2><p><code>registerDefaults:</code>方法可以注册一个包含APP偏好设置默认值的字典，设置之后，在APP中通过<code>objectForKey:</code>方法获取值时，如果之前没有保存过值，则返回通过<code>registerDefaults:</code>方法注册的默认值。你必须记住的一点是：<strong><code>registerDefaults:</code>方法注册的默认值不会存储到硬盘，只在程序生命周期中有效，所以，你必须每次在程序启动时调用该方法去配置，通常在<code>application:didFinishLaunchingWithOptions:</code>方法中配置。</strong>  </p>
-<p>例子胜千言：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];</span><br><span class="line"></span><br><span class="line">//重新启动，之前通过registerDefaults设置的值不存在，说明没有做永久存储。</span><br><span class="line">NSDictionary *rep = [ud dictionaryRepresentation];</span><br><span class="line">NSLog(@&quot;rep=%@&quot;, rep);    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[ud removeObjectForKey:@&quot;name&quot;];</span><br><span class="line">[ud setObject:@&quot;Apes&quot; forKey:@&quot;name&quot;];</span><br><span class="line">[ud registerDefaults:@&#123;@&quot;Apes Talk&quot;: @&quot;male&quot;&#125;];</span><br><span class="line">NSLog(@&quot;name=%@&quot;,[ud objectForKey:@&quot;name&quot;]);//Apes</span><br><span class="line">[ud removeObjectForKey:@&quot;name&quot;];</span><br><span class="line">NSLog(@&quot;name=%@&quot;,[ud objectForKey:@&quot;name&quot;]);//ApesTalk</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[ud removeObjectForKey:@&quot;twiceKey&quot;];</span><br><span class="line">[ud registerDefaults:@&#123;@&quot;twiceKey&quot;: @&quot;Apes&quot;&#125;];</span><br><span class="line">[ud registerDefaults:@&#123;@&quot;twiceKey&quot;: @&quot;ApesTalk&quot;&#125;];</span><br><span class="line">NSLog(@&quot;twiceKey=%@&quot;, [ud objectForKey:@&quot;twiceKey&quot;]);//ApesTalk</span><br><span class="line">[ud synchronize];</span><br><span class="line"></span><br><span class="line">rep = [ud dictionaryRepresentation];</span><br><span class="line">NSLog(@&quot;rep=%@&quot;, rep);</span><br></pre></td></tr></table></figure>
-
-<p>一个常见的使用<code>registerDefaults:</code>方法的例子是设置webview的userAgent，客户端通过在userAgent中加入特殊标识，HTML页面通过这个标识来判断该页面是在APP中加载的还是在浏览器中加载的，以此可以做一些定制化的功能。这里以UIWebView为例，WKWebView在iOS9之后有一个新的设置userAgent的属性customUserAgent。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//获取webview的默认userAgent</span><br><span class="line">UIWebView *tmpWebView = [[UIWebView alloc] initWithFrame:CGRectZero];</span><br><span class="line">NSString *oldAgent = [tmpWebView stringByEvaluatingJavaScriptFromString:@&quot;navigator.userAgent&quot;];</span><br><span class="line">//这里以简单的在旧的userAgent后面新增特殊标志为例</span><br><span class="line">NSString * newAgent = [oldAgent stringByAppendingString:@&quot; isInApp&quot;];</span><br><span class="line">//注册</span><br><span class="line">NSDictionary * dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:newAgent, @&quot;UserAgent&quot;, nil];</span><br><span class="line">[[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];</span><br><span class="line">[[NSUserDefaults standardUserDefaults] synchronize];</span><br></pre></td></tr></table></figure>
-
-<p>这个配置是怎么生效的呢？为什么通过NSUserDefaults设置的默认值为什么会影响到webview？webview在加载的时候是怎么读取userAgent的值的呢？</p>
-<p>实际上，NSUserDefaults有个域domain（由不同级别的层次组成）的概念，每当你获取key对应的value时，NSUserDefaults会在这个域下由上到下查找对应的key，返回第一个找到的值，有点像响应链。域可以持久化存储在硬盘中或只是存储在内存中。</p>
-<p>最重要的一个域是应用程序域（application domain），这里存储着调用<code>set...ForKey:</code>保存的APP设置信息。相对的，通过调用<code>registerDefaults:</code>方法保存的信息存储在低优先级的内存中的registration domain中，作为在应用程序域中找不到的任何值的一个后备（fallback）。</p>
-<p>还有一个全局的域，存储系统范围的设置。特定语言的域存储地区偏好，如每个地区的月名称或日期格式。</p>
-<p>最后但并非不重要的是，苹果使用相同的技术使我们能够通过命令行参数覆盖用户默认值。每个Cocoa应用程序自动检查命令行参数的键/值对，并将这些添加到适当命名的参数域（argument domain）下。由于参数域（argument domain）的优先级最高，我们可以使用它来临时覆盖任何偏好值。</p>
-<p>看到这里我们再回过头想想设置UserAgent的问题，实际上，我们通过高优先级的参数域（argument domain）来临时修改了APP的偏好设置。然后我们可以大胆的猜测一下，UIWebView在加载的时候内部会自动从APP的偏好设置中读取UserAgent的值，所以我们设置的UserAgent才会生效。</p>
-<p>完整的NSUserDefaults的域搜索顺序如下：</p>
-<table>
-<thead>
-<tr>
-<th>Domain</th>
-<th>State</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>NSArgumentDomain</td>
-<td>volatile</td>
-</tr>
-<tr>
-<td>Application</td>
-<td>volatile</td>
-</tr>
-<tr>
-<td>NSGlobalDomain</td>
-<td>persistent</td>
-</tr>
-<tr>
-<td>Languages</td>
-<td>persistent</td>
-</tr>
-<tr>
-<td>NSRegistrationDomain</td>
-<td>volatile</td>
-</tr>
-</tbody></table>
-<p>另外，通过Settings.bunlde设置的偏好设置信息也需要在程序启动时通过<code>registerDefaults:</code>方法注册才有效的。Settings.bunlde是个有意思的话题，不过目前使用该技术的APP较少，感兴趣的朋友可以看下这篇文章：<a href="https://blog.devzeng.com/blog/ios-settings-bundle.html" target="_blank" rel="noopener">iOS开发中Settings.bundle的使用</a>。</p>
-<p>参考：</p>
-<p><a href="https://oleb.net/blog/2014/02/nsuserdefaults-handling-default-values/" target="_blank" rel="noopener">Handling Default Values With NSUserDefaults</a></p>
-<p><a href="https://blog.devzeng.com/blog/ios-settings-bundle.html" target="_blank" rel="noopener">iOS开发中Settings.bundle的使用</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">iOS NSUserDefaults UserAgent registerDefaults</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/10/也谈使用NSUserDefaults处理默认值/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-iOS总结-最近遇到的问题及解决办法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/22/iOS总结-最近遇到的问题及解决办法/">iOS总结-最近遇到的问题及解决办法</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/22/iOS总结-最近遇到的问题及解决办法/" class="archive-article-date">
-  	<time datetime="2018-12-22T12:10:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在Bugly上发现线上APP存在不少崩溃问题，经过分析和定位，解决了几个比较棘手的问题，总结如下。</p>
-<h2 id="多线程问题"><a href="#多线程问题" class="headerlink" title="多线程问题"></a>多线程问题</h2><p>我们在APP中封装了一个记录业务日志的单例对象，主要代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">+ (instancetype)shareManager</span><br><span class="line">&#123;</span><br><span class="line">    static ATLogManager *manager = nil;</span><br><span class="line">    static dispatch_once_t onceToken;</span><br><span class="line">    dispatch_once(&amp;onceToken, ^&#123;</span><br><span class="line">        manager = [[self alloc]init];</span><br><span class="line">    &#125;);</span><br><span class="line">    return manager;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (FMDatabaseQueue *)logDBQueen</span><br><span class="line">&#123;</span><br><span class="line">    if(!_logDBQueen)&#123;</span><br><span class="line">        NSLog(@&quot;创建_logDBQueen&quot;);</span><br><span class="line">        NSString *docsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];</span><br><span class="line">        NSString *logPath = [docsDir stringByAppendingPathComponent:@&quot;ATLogs&quot;];</span><br><span class="line">        NSFileManager *fm =[NSFileManager defaultManager];  </span><br><span class="line">        NSError *error;</span><br><span class="line">        if (![fm fileExistsAtPath:logPath]) &#123;</span><br><span class="line">            [fm createDirectoryAtPath:logPath withIntermediateDirectories:NO attributes:nil error:&amp;error];</span><br><span class="line">            //禁止iCloud备份</span><br><span class="line">            NSURL *downloadsUrl = [NSURL fileURLWithPath:logPath];</span><br><span class="line">            NSDictionary *dic = [downloadsUrl resourceValuesForKeys:@[NSURLIsExcludedFromBackupKey] error:nil];</span><br><span class="line">            if(!dic || ![[dic objectForKey:NSURLIsExcludedFromBackupKey] boolValue])&#123;</span><br><span class="line">                [downloadsUrl setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:nil];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        NSString *dbPath = [logPath stringByAppendingPathComponent:@&quot;ATLog.sqlite&quot;];</span><br><span class="line">        _logDBQueen = [FMDatabaseQueue databaseQueueWithPath:dbPath];</span><br><span class="line">    &#125;</span><br><span class="line">    return _logDBQueen;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (BOOL)insertLogTableWithType:(NSString * )columnType moreHit:(NSString *)moreHit</span><br><span class="line">&#123;</span><br><span class="line">    ATLogManager *manager = [ATLogManager shareManager];</span><br><span class="line">    [manager createTable:kFindSelectColumnDate];</span><br><span class="line"></span><br><span class="line">    //insert code</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>之前在用的时候都是在主线程中同步调用相关方法进行记录的，自从上个版本把部分触发比较频繁的记录改成异步的调用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(dispatch_get_global_queue(0, 0), ^&#123;</span><br><span class="line">    [ATLogManager insertLogTableWithType:@&quot;2&quot; moreHit:@&quot;1&quot;];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>之后发现线上出现了比较多的崩溃，崩溃在了<code>[FMDatabaseQueue inDatabase:]</code>方法中。</p>
-<p><img src="/assets/BlogImages/fmdb_crash_issue.png" alt="fmdb_crash_issue"></p>
-<p>起初以为是FMDatabaseQueue的问题或者我们用的FMDB的版本较低的问题。但是FMDatabaseQueue本身是线程安全的，在多线程中使用同一个FMDatabaseQueue对象是没有问题的。FMDB这个第三方库，这么多用户，用了这么多年，应该是不会存在这种问题的。程序崩溃在这里，而且是SEGV_ACCERR类型的崩溃，只能是在FMDatabaseQueue使用过程中被释放了造成的。</p>
-<p>在我们封装的记录业务日志的单例对象中，有一个FMDatabaseQueue对象是采用懒加载的方式创建的，经过一番排查，发现这个FMDatabaseQueue对象竟然被创建了多次。这下子就豁然开朗了，在多线程并发的情况下，第一次创建的FMDatabaseQueue对象正在执行相关代码时，第二次紧接着调用了懒加载的方法创建了一个新的FMDatabaseQueue对象把第一个创建的给覆盖掉了，这时第一次创建的FMDatabaseQueue对象就被释放了，这个时候就存在很多不安全的隐患了，比如我们这里就是导致访问了一个不合法的内存地址。</p>
-<p>解决办法就是把懒加载的方法给移除，单例创建时就把对应的FMDatabaseQueue对象给创建了，保证FMDatabaseQueue只会创建一个。</p>
-<p>这个事情给我了一个比较大的教训，在使用单例的时候，一定要小心通过懒加载方式创建的属性，在多线程下一定要注意懒加载方法被调用多次。在单例的初始化方法中最好将它的属性都一并给初始化了，这样能有效保障线程安全。</p>
-<h2 id="preferredMaxLayoutWidth"><a href="#preferredMaxLayoutWidth" class="headerlink" title="preferredMaxLayoutWidth"></a>preferredMaxLayoutWidth</h2><p>在iOS10.2上某个页面总是点击进去就闪退，经过排查发现在计算某个UITableViewCell的高度时出现的crash，cell本身没有任何特别的，如果把cell上多行的UILabel给注释掉，就没有问题了。最后在UITableView-FDTemplateLayoutCell的<a href="https://github.com/forkingdog/UITableView-FDTemplateLayoutCell/issues/278" target="_blank" rel="noopener">issue278</a>找到了答案：多行UILabel如果不设置preferredMaxLayoutWidth，走到fittingHeight = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;会在iOS10.2的机器上卡死奔溃，应该属于系统问题。</p>
-<h2 id="block"><a href="#block" class="headerlink" title="block"></a>block</h2><p>开发过程有个在多线程中处理数据时出现了数组越界的问题，经检查发现是我们犯了一个关于block的低级错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//不加__block打印i=0（捕获后外部的修改不影响内部使用）；加__block打印i=1（外部的修改对block内部生效）</span><br><span class="line">for(__block NSInteger i = 0; i &lt; 1; i++)&#123;</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(0, 0), ^&#123;</span><br><span class="line">        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            NSLog(@&quot;i=%ld&quot;,i);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="UIWebSelectSinglePicker的crash问题"><a href="#UIWebSelectSinglePicker的crash问题" class="headerlink" title="UIWebSelectSinglePicker的crash问题"></a>UIWebSelectSinglePicker的crash问题</h2><p>另一个数组越界问题，但是查看奔溃堆栈信息，发现内容是包含UIWebSelectSinglePicker、UIPickerView、UIPickerTableView等关键字，据此猜测是我们项目中嵌入的H5页面调用系统的选择视图引起的崩溃。查资料发现，已经有人遇到这种情况了，重现步骤：H5唤起系统的UIPickerView，没有数据源的情况下，上下滑动一下再点击确定选择。详情可参考这篇文章：<a href="https://juejin.im/post/5b14cf376fb9a01e831463d6" target="_blank" rel="noopener">UIWebSelectSinglePicker的crash问题</a>。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/22/iOS总结-最近遇到的问题及解决办法/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-关于符号表（dSYM）的误解与事实" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/22/关于符号表（dSYM）的误解与事实/">关于符号表（dSYM）的误解与事实</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/22/关于符号表（dSYM）的误解与事实/" class="archive-article-date">
-  	<time datetime="2018-12-22T11:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/assets/BlogImages/misunderstand_truth.jpg" alt="misunderstand_truth"></p>
-<p>我们在iOS开发过程中一定会跟符号表（dSYM文件）打交道，它是我们不可或缺的定位bug的小帮手。我们都知道，每次编译都会生成一个dSYM文件，当我们的应用程序出现奔溃时，dSYM文件能帮我们定位到应用程序的代码奔溃到哪里了。</p>
-<p>最近在开发过程中遇到这样一个问题：我们的团队中有的成员用的是Xcode9，有的成员用的是Xcode10，Xcode10在打包时如果把Debug Information Format设置为DWARF with dSYM File，在打包时会导致电脑内存耗尽关机。所以在开发过程中，我们把配置都改成了DWARF。最后在用Xcode9打包的时候，忘记了修改这项配置，没有生成符号表上传到Bugly，所以线上的奔溃信息没法解析出来。这件事情引发我们的思考，面对这种情况，到底有没有什么补救措施呢？</p>
-<h2 id="dSYM文件简介"><a href="#dSYM文件简介" class="headerlink" title="dSYM文件简介"></a>dSYM文件简介</h2><p>符号表是内存地址与函数名、文件名、行号的映射表。符号表元素如下所示：</p>
-<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;起始地址&gt; &lt;结束地址&gt; &lt;函数&gt; <span class="meta">[&lt;文件名:行号&gt;]</span></span><br></pre></td></tr></table></figure>
-
-<p>iOS应用crash时也有堆栈，release版的应用，crash时的堆栈信息，全是二进制的地址信息。如果利用这些二进制的地址信息来定位问题是不可能的，因此我们需要将这些二进制的地址信息还原成源代码种的函数以及行号，这时候就需要符号表了。</p>
-<h2 id="误解与事实"><a href="#误解与事实" class="headerlink" title="误解与事实"></a>误解与事实</h2><p>我们都有这样一个共识：“每次打包都会生成一个新的dSYM并生成一个新的uuid，线上app也有一个uuid，只有这两个uuid匹配，才能成功解析二进制地址信息为源码。” 很惭愧，以前由于本人思维定式（估计很多人跟我一样吧，我发现网上很多文章也是这么讲的）认为每次打包都会生成一个全新的唯一的uuid，所以，如果打版时忘记勾选生成dSYM文件，将毫无补救办法。官方也没有任何关于这个uuid的生成规则的说明。</p>
-<p>网上的一些文章关于这一块讲的要么模棱两可，要么讲的是错误的：</p>
-<p>![lead young people astray](<a href="https://apestalk.github.io/assets/BlogImages/lead" target="_blank" rel="noopener">https://apestalk.github.io/assets/BlogImages/lead</a> young people astray.png)</p>
-<p>让我们再看看上面dSYM文件的介绍，它跟函数名、文件名和行号有关。<strong>简单点说就是同一份代码，编译之后的符号表文件的uuid是一样的。</strong> </p>
-<p>所以这个时候我们只需要找到上一次打包的那个时间点（代码相同），再重新archive一下，导出dSYM文件，这个dSYM文件的uuid跟之前打包生成的app的uuid是一致的。</p>
-<p>下面是有图有真相，同一份代码，不同时间点打的包的uuid是一样的：</p>
-<p><img src="/assets/BlogImages/dSYM-uuid.png" alt="dSYM-uuid"></p>
-<p>实践是检验真理的唯一标准。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">iOS 符号表 dSYM uuid</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/22/关于符号表（dSYM）的误解与事实/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-缅怀我的老父亲" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/12/缅怀我的老父亲/">缅怀我的老父亲</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/12/缅怀我的老父亲/" class="archive-article-date">
-  	<time datetime="2018-11-12T11:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/assets/BlogImages/I_miss_you_dad.jpg" alt="I miss you, dad"></p>
-<h2 id="穷山恶水，白手起家"><a href="#穷山恶水，白手起家" class="headerlink" title="穷山恶水，白手起家"></a>穷山恶水，白手起家</h2><p>我的父亲出生于1956年，不久后我爷爷就去世了，家里一贫如洗，家里的重担一下子全压在包了小脚的奶奶身上。在那个人情淡薄的年代，我奶奶差点被爷爷的堂兄弟给卖掉。由于从小家里条件就差，时常吃不饱饭，大饥荒留下的阴影还时常笼罩在人们的心头，让父亲养成了一粒米掉地上都要捡起来吃掉的习惯。</p>
-<p>在那个贫穷和饥饿的年代，农民没有太多出去工作的机会，大家只能守在家里的一亩三分地里，谁家里地多谁家条件就好一些，至少没有那么饥饿。而且种地还要上缴一部分给国家，剩下的才是自己的，大家都是靠天吃饭，如果年景不好，可能就会导致自己一家子饿肚子不说还被国家催着缴粮。地，是大家的宝，谁家地多，谁家就没那么饥饿。但是我们家那时候劳动力少，分到的地也就少，家里的粮食经常上茬接不住下茬。</p>
-<p>这些经历让父亲非常害怕饿肚子，直到现在，他也不允许把家里的粮食卖完了，家里一定要囤粮食，以防再遇到天灾全家人饿肚子。家里有粮，他才过得踏实。</p>
-<p>到了父亲正值身强力壮的青年时期，家里孩子多，地还是少，日子还是过得紧巴巴的。为了能获得更多的粮食，父母经常自己家地里活干完了去帮别人地多的人家干活，有时候能换回来一点点粮食。如果换回来次一点的花生，从中挑一点稍微好点的做种子种到自己的地里。为了省下粮食，平常做饭上面父母也很有自己的一套，白米细面不够，就拿粗粮凑。比如煮一锅红薯，里面放几根面条；煮一锅米饭就上面一层米下面大半的红薯或酸菜。只有过年的时候父母才会很讲究的煮一大锅白米饭，里面不加任何粗粮，有时候如果母亲习惯性的放了点粗粮会被父亲凶。这样做的目的就是给新年一个好兆头，期盼家里米足面足，每天都能吃到纯白米饭的日子快点到来。</p>
-<p>这种紧巴巴的日子就这么一天天的过着，到后面可以去外面打工的年代，母亲守在家里种地带孩子，父亲跟着别人去砖厂、去建筑队干活，全是出力气的重活累活。从跟父亲一起打工的人那里得知，父亲不管在哪，不管干什么重活，都舍不得吃舍不得喝，往往都是开水泡白馒头糊弄一下，就为省下更多的钱，让这个家的日子早点过得好起来。</p>
-<p>在没有任何家底的情况下，父亲带着我们一家熬了过来。在没有其他经济来源的情况下，是父亲一边打工，一边勒紧自己的裤腰带，从自己牙缝里抠出来的一点点钱慢慢为家庭积累财富。为了摆脱土房子，防止以后自己孩子找不到老婆，父母在2002年鼓起勇气把楼房给盖起来了。之后父亲又辛辛苦苦打了很多年的工才把欠下的账给还清。</p>
-<p>我们这个家能走到现在，父亲吃了太多的苦头，个头不高的父亲顶起了这个家庭的天，是他用自己的血汗为我们筑起了一个遮风挡雨的温暖的家。</p>
-<h2 id="战争的摧残"><a href="#战争的摧残" class="headerlink" title="战争的摧残"></a>战争的摧残</h2><p>“好男人当兵去，当出个样儿来给爹娘看”。当兵，大概是父亲他们那代人年轻时可选的一条好路子。当年的父亲雄心壮志，浑身是胆，誓为报效祖国奉献自己。由于我爷爷走的时候只留下一座茅草屋，父亲不得不自己挖一个屋宅地并盖起了一座土胚房，土房子盖好之后父亲就在全村敲锣打鼓的欢送中怀着一片赤子之心从军去了。1979年，父亲从军的第四个年头，爆发了对越自卫还击战，父亲所在的尖刀连被抽调到了前线。在全民皆兵的越南战场上，在枪林弹雨下父亲跟战友们和敌军进行了殊死搏斗。在一次双军交战的过程中，父亲被落在附近的炸弹炸伤，之后带着军队上的表彰退役回家，庆幸父亲能从战场上捡回一条命。父亲是一个话不多的人，一直以来也没从他口中听到太多关于当年战争的细节部分，只听父亲讲过在全民皆兵的越南战场上非常危险，不仅要随时准备和突然冒出来的敌军展开搏斗，还要提防越南民兵设下的陷阱和埋下的地雷，稍有不慎就会断送掉性命。</p>
-<p>处在和平时代的我们，对战争已经没有了什么概念，我们今天的幸福是千千万万个像父亲一样伟大的军人为我们打下来的，有句话说得好，“哪有什么岁月静好，只不过有人替你负重前行”。</p>
-<p>听说，当时部队上曾经讲过会给他们这些立过功的退役军人一个“交代”，但父亲回家之后一直得不到什么“交代”，哪怕是安排进厂子当工人。在我朦胧的记忆里，父亲有在母亲的怂恿下提着土鸡去送给相关领导，鸡送没送出去我不记得了，只记得父亲回来时很气愤。我能体会得到这种送礼的事情让一位刚正不阿的老战士去做，对父亲来说太难为情了。</p>
-<p>也许是战场上血淋淋的残酷，也许是退伍后现实中的各种不如意，父亲变了，曾经母亲提议让孩子们去当兵，父亲说当兵太苦，坚决不同意。</p>
-<h2 id="两根银针治惊风"><a href="#两根银针治惊风" class="headerlink" title="两根银针治惊风"></a>两根银针治惊风</h2><p>小时候，农村医学提交非常贫乏，那时候小孩子很容易患惊风，四肢抽搐、口吐白沫、翻白眼，时有患了急性惊风而没来得及医治的孩子夭折。我们家孩子又多，孩子一翻白眼就把父母吓个半死。除了惊风，小孩子玩水还容易肚子疼，俗称“伤水”。总之，小时候生病了是个比较麻烦的事情，记忆中在月黑风高的晚上，在父母的背上迷迷糊糊的睡，父母得把我们背着走好几里路，翻过几个山丘才能找到一个郎中帮忙看一看。</p>
-<p>已经不记得是从什么时候开始，父亲不知道从哪里买到两根细如麦芒的银针，摇身一变，成了一个会针灸还会给别人弄中药的土郎中。自那以后，我们再患惊风或者肚子疼，父亲拿起银针一扎就好了。同村的也时常带着孩子来让父亲帮忙医治，曾经有几个患上急性惊风的孩子被父亲救了下来。虽然家里穷，但是父亲给人看病从不收钱，父亲平时遇到可用的中药就会采回来放在窗子上晒干囤着，有时候孩子感冒或者常见的头疼发热，父亲就配一点中药送给别人。父亲就是这么个为人，他一般不愿意麻烦别人，别人有事找上他，他会不遗余力帮助别人。</p>
-<h2 id="玩转篾刀"><a href="#玩转篾刀" class="headerlink" title="玩转篾刀"></a>玩转篾刀</h2><p>在农村，竹制品一直是用的比较多的，比如箩筐、竹篮、饭筐、晒席、睡席、竹筛子、竹耙子、篱笆栅栏等等。不知不觉间，父亲又弄了一套篾匠用的工具：篾刀、度篾齿、卷尺、小锯子……用的最多的就是篾刀，篾刀很重，它看起来很笨重，但是在父亲的手上却显得很轻巧很灵活。一根根竹子经过父亲的双手，变成了青篾和黄篾，青篾韧性好，用于制作需要弯曲的工具；黄篾韧性差，一般做篱笆栅栏。制作不同的竹制品需要不同的竹篾，有的宽，有的细，有的长，有的短。篾刀在父亲的手上就像一把魔术刀，不一会就能把竹子劈成各种需要的尺寸，再经过一番编制就变成了有模有样的各种精巧的竹制品。从小到大，家里用的装粮食的竹篮竹筐、装饭菜的饭筐、竹筛子、竹耙子都是父亲亲手编制的，为家里省下来不少钱。</p>
-<p>别人家看到我们家的竹制品制作的比较精致好用，经常趁父亲在家有空的时候找父亲帮忙编。同样的父亲也是从来不收钱的，一般亲戚和邻居从家里扛点竹子过来就可以了。</p>
-<h2 id="计划生育之伤"><a href="#计划生育之伤" class="headerlink" title="计划生育之伤"></a>计划生育之伤</h2><p>我们家孩子多，那时候赶上计划生育政策很严的年代，父母因为我们吃了不少苦头。我们小时候为了躲避罚款，每每听到计划生育的人来了，赶紧往树林里跑。有时候不得不在远方的亲戚家住很长时间。那是个人情淡薄的年代，那时候负责计划生育的人就跟现在的城管一样，时常有暴力执法的事情发生，比如拆房子、拉牲口、拉家里的家具，很难想象历史是如此的相似。有的人会看在父亲曾经上过战场的份上不动我们家的东西，有的人不会。有一次，我们家的缝纫机被抬走了，老黄牛差点被牵走，这件事真是激怒了父亲，父亲差点拿起铁锹起来反抗。可以想象父亲当时是多么的愤怒，一个曾经在战场上奋勇杀敌的老战士，在战场上不惜抛头颅撒热血的军人，回到农村却不能安居乐业，要被这帮手上有小小权利的人欺负到地缝里。</p>
-<p>孩子们渐渐长大，终究是躲不过上户口这一关的，父亲为了给我们上户口差点跑断腿，要各种找关系、要低头哈腰、要强颜欢笑。能脸不红心不跳地做这种事情的人是父亲非常鄙视的人，身为军人，军队曾经教会他要忠于国家忠于党和人民，要为人正直、刚正不阿。然后在现实中，这套逻辑却输给了现实，输得那么干净。现实，给了父亲当头一棒，让他不得不去做违心的事情，不得不去做他非常厌恶的事情。现实，让多少像父亲这样的英雄流血又流泪。</p>
-<h2 id="癌症之痛"><a href="#癌症之痛" class="headerlink" title="癌症之痛"></a>癌症之痛</h2><p>时光飞逝，转眼父亲到了中老年，家里的日子眼看一天天变好了，没有了吃不饱穿不暖的苦日子和计划生育。每顿都可以炒俩菜喝点小酒，每天都可以吃到白米细面。然而，好景不长，我们谁也想不到，癌症会突然强行闯入父亲的晚年生活。</p>
-<p>2016年下半年，父亲吃饭开始有点噎，去医院检查说是胃癌，当时把父亲都吓哭了。是啊，心疼我那可怜的老父亲呐，辛苦劳累了一辈子，白手起家，终于把日子过出了个名堂，小时候是没得吃，年轻的时候是勒紧裤腰带舍不得吃，好不容易熬到可以放开了吃的年代，上天却无情地把吃这扇窗关上了。</p>
-<p>几十年的苦和累把父亲这位军人强壮的身体变得疾病累累，肩周炎、腰椎间盘突出一直折磨着父亲。刚开始我们想通过中医调理的方式抑制父亲的癌症，但眼看不做手术不行，2017年初，父亲做了手术，把多半的胃切除了。之后又做了几次放疗和化疗，父亲的身体变得越来越虚弱了，虚弱得经不起再放疗化疗了。因为一直吃不下喝不下，营养一直跟不上，父亲的身体一天天的消瘦下去，腹部完全坍塌下去，前胸贴到了后背上。</p>
-<p>2018年，父亲的情况更加恶化了，去医院检查发现癌细胞已经扩散到了肺部，医生建议做造瘘手术，父亲觉得自己已经经不起再做手术了，父亲想要保留一个完整的身体，不同意再做手术。我们不得不尊重父亲的意愿，把父亲从医院里带回家。在家里坚持了几天，饿得受不了了，不得不再次转到离家近的镇医院里打营养液维持生命。 看着父亲的身体饱受癌症的摧残，我们的内心同样饱受折磨。曾经，父亲可以为我们付出一切，为我们撑起一片天，如今我们能为父亲做的却非常有限，我们不能分担父亲的疼痛，不能让父亲想吃啥吃啥想喝啥喝啥。</p>
-<p>在最后的一个半月里，是父亲十分煎熬的一段时间，吃什么都往外吐。到了最后，感觉器官都在腐烂，隔三差五吐出一些带着血腥味的东西，黑红黑红的，尿都变红了。父亲可能感觉到自己时间不多了，主动要求要吃点红薯、吃点柿子、吃点罐头，虽然都是吃了又吐出来，只是过过嘴瘾罢了。</p>
-<p>2018年10月30日我坐上了回家的飞机，等到了中午下飞机后我打开手机的时候发现10:08，我刚坐上飞机关机那会，哥哥们就已经给我发消息说父亲已驾仙鹤去。当时我的眼泪就歘歘的下来了，最终还是没赶上见父亲最后一面，喊父亲最后一声，苍天啊，你为什么要这么捉弄我，明明当天我就能赶回家，为什么不能让父亲再等我几个小时，为什么要给我这一生留下这么大一个遗憾。以前回家，是父亲坐在门口等着我回来，这次回家，等我的是一口漆黑冰冷的棺材和一张黑白照片，内心的崩溃无以言表。在父亲的棺材前守了两晚上的灵，一直等到在最后一次开棺供大家见最后一面的时候我才再次见到父亲的面容，枯瘦的身材已经撑不起年轻时穿的尺寸的军装，眼睛凹陷，颧骨高高凸起，嘴巴饿得长得大大的露出一口白牙。看在眼里痛在心里，母亲和我们哭成一团，我的苍天呐，你为什么这么地不公啊，为什么不能给像父亲这样善良而又伟大的人一个善终啊。</p>
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>父亲，您是儿子的山，你为儿子顶着天；您是儿子的海，不管什么时候你都包容着儿子的错；您是儿子的灯，为儿子指明前进的方向。</p>
-<p>是您，进可上阵杀敌保家卫国，退可自学成才救死扶伤。是您，像变魔术一样，家里需要什么您就变出什么。是您，用自己的节省，给我们省出了房子，省出了读书的机会。是您，像蜡烛一样燃尽自己最后一丝能量，为我们带来光明和温暖。是您，在平凡中铸就伟大，您永远是我们心中的英雄。</p>
-<p>父亲，感谢您一生的无私奉献和付出，感谢您的养育之恩，感谢您陪我们长大。如果有来生，我希望能成为可以走进您内心的、懂您的女儿，我一定会记得提醒您不要为了省钱亏待了自己的胃，不要那么固执，对自己好点；我一定会记得缠着您让您把心里话说出来，别憋在心里生闷气；我一定会记得在家附近找份工作，这样就可以多点时间陪伴您。</p>
-<p>愿父亲大人一路走好，愿天堂没有癌症！</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">父亲 情感 个人</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/12/缅怀我的老父亲/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-阿里API网关使用总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/09/阿里API网关使用总结/">阿里API网关使用总结</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/09/阿里API网关使用总结/" class="archive-article-date">
-  	<time datetime="2018-09-09T05:10:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>最近大半年的时间里，为了加强公司API的安全性，公司尝试了接入阿里API网关的服务。在这期间，由我调研和宣贯阿里API网关的使用并基于AFNetworking封装一个方便我们内部使用的带阿里API网关的网络请求框架。本篇介绍一下API网关的使用流程和我们在使用期间遇到的各种问题以及解决方案。</p>
-</blockquote>
-<p><a href="https://help.aliyun.com/product/29462.html?spm=a2c4g.750001.3.46.4cc17b13RVNrsQ" target="_blank" rel="noopener">API网关</a> API Gateway 提供高性能、高可用的 API 托管服务，帮助用户对外开放其部署在 ECS、容器服务等阿里云产品上的应用，提供完整的 API 发布、管理、维护生命周期管理。用户只需进行简单的操作，即可快速、低成本、低风险地开放数据或服务。</p>
-<p>利用API网关你可以提高自己公司API安全性，也可以上架到API云市场，供用户购买和使用。</p>
-<h2 id="一、阿里API网关的基本使用流程"><a href="#一、阿里API网关的基本使用流程" class="headerlink" title="一、阿里API网关的基本使用流程"></a>一、阿里API网关的基本使用流程</h2><h3 id="1、创建应用获取AppKey和AppSecrect"><a href="#1、创建应用获取AppKey和AppSecrect" class="headerlink" title="1、创建应用获取AppKey和AppSecrect"></a>1、创建应用获取AppKey和AppSecrect</h3><p>这个没什么可说的，主要是你要想办法尽可能安全地存储你的AppKey和AppSecrect。</p>
-<h3 id="2、创建API分组"><a href="#2、创建API分组" class="headerlink" title="2、创建API分组"></a>2、创建API分组</h3><p>所属分组是API的基本属性，所以需要先创建分组，再在分组下创建API。每个账号默认最多可创建100个分组，如需更多分组需要提交工单。分组有所属区域（Region）的概念，比如华东上海区，选择之后就不能修改了。创建完分组之后，系统会给该分组分配一个二级域名，供测试使用，不过，每个二级域名每天最多可访问1000次。</p>
-<h3 id="3、为API分组绑定域名和证书"><a href="#3、为API分组绑定域名和证书" class="headerlink" title="3、为API分组绑定域名和证书"></a>3、为API分组绑定域名和证书</h3><p>如果你的API支持HTTPS协议，还需要为该独立域名上传 SSL 证书。我们需要把我们的域名解析到该分组上，之后才能绑定到该分组上。绑定的域名需要现在阿里云系统备案。绑定域名之后，该分组下的API就可以通过该域名来访问了，不再需要调用系统分配的二级域名了。</p>
-<h3 id="4、环境管理（可选）"><a href="#4、环境管理（可选）" class="headerlink" title="4、环境管理（可选）"></a>4、环境管理（可选）</h3><p>在API分组的环境管理中，你可以自定义环境变量，同一个变量可以再在线上、预发和测试三个环境下对应不同的值，这样在API的定义中就可以使用这里定义好的环境变量了。可以在Path、入参默认值和后端服务服务地址中加入环境变量，在API的定义中使用环境变量需要以<code>#变量名#</code>的方式使用。<strong>如果要修改已发布的API用到的环境变量，先把老的环境变量给删掉，再重新定义一个新的同名环境变量赋上新值之后再把全部对应的API重新发布一遍，这个是异步生效的，一般发布后1分钟内生效。</strong></p>
-<h3 id="5、创建API"><a href="#5、创建API" class="headerlink" title="5、创建API"></a>5、创建API</h3><p>这里的内容还是蛮多的，包括基本配置，前端和后端地址，请求参数配置等，详细文档可以看阿里API的官方文档，这里说几点重要的：</p>
-<ul>
-<li>API名字虽然可以随便取，但建议保持跟API的实际名字保持一致，方便搜索和管理；</li>
-<li>入参映射与入参透传的区别：入参映射需要你根据实际API需要参数，逐一录入API网关，通过映射关系，可以将参数映射到服务端上，一般情况下，比如我们请求的时候放在Query中，服务端也去Query中拿值，通过入参映射，我们可以实现请求的时候参数放在Header中，阿里API网关在转发到我们服务端的时候可以帮我们转发到Query中。入参映射可以实现阿里网关层的参数合法性校验（网关会参照校验规则对请求做初步校验，如果入参不合法<br>，则不会到达您的后端服务，大大的降低了后端服务的压力），因为我们可以在每个参数后面“编辑更多”中指定参数的限制规则，比如长度限制、验证正则表达式等。入参透传的话不需要我们定义参数，阿里网关在收到我们请求的时候直接转发给我们的服务端。我们一般使用入参映射，因为这样对于我们的API需要的参数一目了然，而且以后如要加什么参数限制规则，也是很方便的。</li>
-<li>通过阿里API网关，我们还能实现请求的地址跟后端服务地址不一样的效果。比如我们请求的地址可以定义成“<a href="https://yourdomain.com/fake/fakeSaveUserInfo”，后端服务地址写上我们真正的服务端请求地址“https://yourdomain.com/real/realSaveUserInfo”，网关在收到我们的服务请求时会自动帮我们转发到真正的后端服务。" target="_blank" rel="noopener">https://yourdomain.com/fake/fakeSaveUserInfo”，后端服务地址写上我们真正的服务端请求地址“https://yourdomain.com/real/realSaveUserInfo”，网关在收到我们的服务请求时会自动帮我们转发到真正的后端服务。</a></li>
-</ul>
-<h3 id="6、API授权"><a href="#6、API授权" class="headerlink" title="6、API授权"></a>6、API授权</h3><p>创建好API之后，就可以对应用进行授权了，点击API的“授权”就可以在指定环境下授权某个APP可以访问该API了，如果你在调用API的过程中控制台打印了x-ca-message中包含了Unauthorized错误，你应该想到你的API还未对该APP进行授权访问。</p>
-<h3 id="7、API发布"><a href="#7、API发布" class="headerlink" title="7、API发布"></a>7、API发布</h3><p>API编辑完成之后就可以发布到指定环境上去了，发布之后就立马生效了。可以多次编辑然后发布到不同的环境下，如果你编辑完了忘记发布到指定环境下了，是不会生效的。在分组API列表下，直接点击API名字进入的是当前API最后一次编辑保存的状态，不一定跟发布的状态一直哦。点击API右边的线上、预发或测试后面的”运行中”可以看到在该环境下最后一次编辑发布后的状态哦。</p>
-<h2 id="二、签名规则"><a href="#二、签名规则" class="headerlink" title="二、签名规则"></a>二、签名规则</h2><p>网关会在请求的时候加上日期、时间戳、nonce、userAgent、Host、AppKey、version等参数值，如果是POST请求的话，需要对参数值进行urlEncode。如果有body值的话，需要对body值，将body中的内容MD5算法加密后再采用BASE64方法Encode成字符串，放入HTTP头中。最后再通过将httpMethod、headers、path、queryParam、formParam经过一系列的运算，合成一个字符串用hmacSha256算法双向加密进行签名。</p>
-<h2 id="四、环境的区分"><a href="#四、环境的区分" class="headerlink" title="四、环境的区分"></a>四、环境的区分</h2><p>在我们分组上绑定好了域名之后，我们不管是预发还是线上环境都可以通过这同一个域名进行访问，那网关是怎么帮我们区分环境的呢？这个时候就用到上面的环境变量管理了，我们通过在环境变量中定义一个变量在不同环境下不同的值达到区分环境的效果。在网络请求的时候，我们可以在头部指定<code>X-Ca-Stage</code>参数值来让网关帮我们转发到对应环境的后端服务上，对应的值分别是：线上（RELEASE）默认、预发（PRE）和测试（TEST）。</p>
-<h2 id="三、参数位置和emoji"><a href="#三、参数位置和emoji" class="headerlink" title="三、参数位置和emoji"></a>三、参数位置和emoji</h2><p>这里重点说一下参数位置下可选的Body选项，这个地方坑了我们蛮久。我们知道在我们客户端发起POST请求时，我们会在头部指定“Content-Type”为“application/x-www-form-urlencoded”，然后把请求的参数组装成”key1=value1&amp;key2=value2”的字符串，然后在编码成二进制，放在请求的Body里，以Form表单的形式提交的。所以呢，我们在定义API的参数时，应该把参数位置选择为Body选项。但是我们在很长一段时间里，创建API时或编辑API时，参数位置处下拉一直没有Body选项，我们就把参数定义成了Query类型的了。在使用时也没有啥问题，但是一旦当我们的参数值非常长时，比如一个json字符串，这个是就报错了“414 Request-URI Too Large”，这个时候呢，网关就不会再帮我们把请求转发到服务端了。排查了很久终于找到了罪魁祸首在这里等着呢，通过把参数位置改成Body就可以了。这个可能是阿里API网关前端页面上的一个bug，有时候根本选不到Body选项，这个时候你可以先把“请求Body（非Form表单数据，比如JSON字符串、文件二进制数据等）”选项给勾选上，然后再取消勾选，再下拉展开“参数位置”就可以看到Body选项了。（该文发布时是如此，我已经将该问题反馈给阿里API网关，可能后面会修复该bug。）</p>
-<p>另外一个问题是如果你的参数值中包含了emoji表情，需要对参数值进行urlEncode，服务端在收到请求时需要对参数值进行urlDecode。否则用的过程中会出现各种奇怪的问题。问了阿里网关的服务人员，他们的解释是，如果不进行urlEncode，参数在传到网关时可能会丢失。可以对所有Post请求的参数值统一urlEncode，服务端对收到的参数值统一进行urlDecode。</p>
-<h2 id="四、timestamp和nonce防重放攻击"><a href="#四、timestamp和nonce防重放攻击" class="headerlink" title="四、timestamp和nonce防重放攻击"></a>四、timestamp和nonce防重放攻击</h2><p>在使用网关时，timestamp和nonce这两个header参数值是可选的，如果加上这两个值，网关层会对请求进行校验，防止重放攻击。不过有个问题：在当前时间的前后15分钟的时间戳都是可以的，一旦超过15分钟就会请求失败，所以，如果用户修改了客户端的系统时间的话，API就会调不通了。这个校验有点严格，如果不知道这一点的话，用户反馈客户端不能用，而你这里测试又没有任何问题，那就泪奔了，哈哈。当然这个是可选的校验，如果不传这两个值的话，就不会校验，这个时候防重放攻击的工作就需要我们自己的服务端做了。</p>
-<h2 id="五、上传文件"><a href="#五、上传文件" class="headerlink" title="五、上传文件"></a>五、上传文件</h2><p>目前网关不支持multipart形式的上传，所以一般我们的上传API不太适合录入网关，阿里的说法是现在大家的做法普遍是先将文件上传到文件服务器，然后通过调用接口把文件地址等信息报错到服务器的方式，所以，目测以后也不大可能支持定义multipart形式的上传API。</p>
-<h2 id="六、QPS与流量控制策略"><a href="#六、QPS与流量控制策略" class="headerlink" title="六、QPS与流量控制策略"></a>六、QPS与流量控制策略</h2><p>每个 API 分组的默认流控上限是500QPS，如果你要调大QPS，需要提交工单并支付相应费用。另外网关有个“流量控制策略”的功能，它是针对API的，也就是说定好策略之后，选中对哪些API生效，这些API就会单独的受这个流量控制策略的控制。但是，需要注意的是，如果你要调大流量控制策略，也必须先调大API所在分组的QPS才会生效，否则流量控制策略可以创建但不会实际生效。</p>
-<h2 id="七、建议"><a href="#七、建议" class="headerlink" title="七、建议"></a>七、建议</h2><ul>
-<li>1、一个API分组对应一个我们真正的服务域名</li>
-</ul>
-<p>虽然我们可以在分组的环境管理中添加不同的环境变量来实现同一个API分组下可以定义不同服务域名的API，这样我们客户端在发起请求的时候，域名只需要配一个就可以了，非常方便。但是，一旦网关这一层瘫痪（尽管是小概率事件，但不排除），这个时候我们就心有余而力不足了，只能等网关尽快恢复了。如果我们一个分组对应一个我们真正的服务域名的话，一旦网关出问题，我们可以快速把该分组绑定的域名指向我们真正的该分组的服务上。</p>
-<ul>
-<li><p>2、POST请求一定要把参数位置选为Body</p>
-</li>
-<li><p>3、考虑到分组的QPS，每个分组内的API不应过多。</p>
-</li>
-<li><p>4、没有参数的API必须定义成GET方式的请求。</p>
-</li>
-<li><p>5、网关控制台定义的API名字最好跟后端实际使用的API名字保持一致，因为网关控制台的API搜索功能只能搜索定义的API名字，不能搜索后端真实的API名字。如果你定义的不一致，后期将很难维护。</p>
-</li>
-<li><p>6、API的参数一定要跟实际的保持一致，不能把实际可选参数定义成了必选参数，这种情况在请求时会直接被网关过滤掉。</p>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">阿里 API网关 网关 API GateWay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/09/阿里API网关使用总结/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -1204,8 +359,8 @@ var _hmt = _hmt || [];
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
