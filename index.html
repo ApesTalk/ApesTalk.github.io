@@ -154,6 +154,99 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/07/25/UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配/">UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配</a>
+    </h1>
+  
+
+        
+        <a href="/2019/07/25/UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配/" class="archive-article-date">
+  	<time datetime="2019-07-25T08:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/assets/BlogImages/UIScrollView_perfect_match.jpg" alt></p>
+<p>在日常开发中经常遇到UIScrollView的自动布局问题，比如：<br>1、在有文本框的页面，如果在viewDidLoad中唤起键盘，会发现一进入页面有个奇怪的动画效果；<br>2、在有UITextField的页面，如果在viewDidLoad中设置text并立马唤起键盘，如果text刚好超出UITextField宽度一点点，会发现光标怎么都都移动不到最末尾处；<br>3、在有UITableView或UICollectionView的页面，reloadData后里面让其滚动到指定位置，结果却滚不动指定位置。<br>……</p>
+<p>这个时候，如果我们在唤起键盘或滚动之前调用如下代码来强制布局完成</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[self.view setNeedsLayout]</span><span class="comment">;</span></span><br><span class="line"><span class="section">[self.view layoutIfNeeded]</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p>就会发现这些问题都解决了，不得不感叹一下setNeedsLayout和layoutIfNeeded就像是专门为UIScrollView而生的一样。</p>
+<p>对于上面的第一种情况，是因为页面还没布局完成就唤起了键盘，键盘唤起时UITextFiled或UITextView内部会触发一个UIScrollView的布局从而形成动画效果。就像我们先更新UI的约束，然后执行以下代码来简单实现动画效果一样。</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="name">UIView</span> animateWithDuration:0.25 animations:^&#123;</span><br><span class="line">    [<span class="name">self.view</span> layoutIfNeeded]<span class="comment">;</span></span><br><span class="line">&#125;]<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于上面第二种情况，同样是UIScrollView的问题，因为UITextFiled在编辑状态下，内部有一个UIFieldEditor控件，它是UIScrollView的子类，可以左右滚动，在唤起键盘时，默认会将光标一定到文本的末尾，也就是要修改这个UIFieldEditor的contentOffset。但是当UIScrollView还没布局完成就尝试去修改它的contentOffset是无效的。</p>
+<p>viewDidLoad中设置text后立马唤起键盘，会看到此时的contentOffset: {0, 0}，这个时候因为状态和contentOffset不对（理论上光标应该在末尾的，但是contentOffset跟它的状态却不一致），所以尝试长按移动光标到末尾总是失败：</p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">UIFieldEditor:</span> <span class="attr">0x7fbceb20c000</span>; <span class="attr">frame</span> = <span class="string">(0</span> <span class="attr">0</span>; <span class="attr">318</span> <span class="attr">60</span>); <span class="attr">text</span> = <span class="string">'一二三四五六七八九十一二三四五六七八九十'</span>; <span class="attr">opaque</span> = <span class="string">NO;</span> <span class="attr">gestureRecognizers</span> = &lt;<span class="attr">NSArray:</span> <span class="attr">0x600002fa28e0</span>&gt;</span>; layer = <span class="tag">&lt;<span class="name">CALayer:</span> <span class="attr">0x600002041060</span>&gt;</span>; contentOffset: </span><span class="template-variable">&#123;0, 0&#125;</span><span class="xml">; contentSize: </span><span class="template-variable">&#123;335, 71&#125;</span><span class="xml">; adjustedContentInset: </span><span class="template-variable">&#123;0, 0, 0, 0&#125;</span><span class="xml">&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>viewDidLoad中设置text后，先强制布局完成，再唤起键盘，会看到此时的contentOffset: {37.333333333333336, 0}：</p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">UIFieldEditor:</span> <span class="attr">0x7f9a21117800</span>; <span class="attr">frame</span> = <span class="string">(0</span> <span class="attr">0</span>; <span class="attr">318</span> <span class="attr">60</span>); <span class="attr">text</span> = <span class="string">'一二三四五六七八九十一二三四五六七八九十'</span>; <span class="attr">opaque</span> = <span class="string">NO;</span> <span class="attr">gestureRecognizers</span> = &lt;<span class="attr">NSArray:</span> <span class="attr">0x600000aa5d70</span>&gt;</span>; layer = <span class="tag">&lt;<span class="name">CALayer:</span> <span class="attr">0x600000402b80</span>&gt;</span>; contentOffset: </span><span class="template-variable">&#123;37.333333333333336, 0&#125;</span><span class="xml">; contentSize: </span><span class="template-variable">&#123;395, 71&#125;</span><span class="xml">; adjustedContentInset: </span><span class="template-variable">&#123;0, 0, 0, 0&#125;</span><span class="xml">&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于前两种情况，我们还可以使用如下代码解决，将唤起键盘的操作放在下次循环中：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dispatch_after(0.1, </span><span class="keyword">dispatch_get_main_queue(), </span>^&#123;</span><br><span class="line">    [self.textField <span class="keyword">becomeFirstResponder];</span></span><br><span class="line"><span class="keyword">&#125;);</span></span><br></pre></td></tr></table></figure>
+
+<p>对于第三种情况，跟第二种情况类似的，UITableView和UICollectionView也是在未布局完成的情况下尝试让其滚动到指定位置也是无效的。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/07/25/UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Charles DNS Spoofing配置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -280,7 +373,7 @@ var _hmt = _hmt || [];
 <li>主题配置，修改themes/yilia目录下的_config.yml文件，详细介绍可参考<a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="noopener">yilla</a>的说明。这里重点说一下图片的配置，因为我在这里饶了点弯路。自己在站点的source目录下新建放图片文件的文件夹，比如我这里是assets，那么在博文中可以用相对路径来引入<code>[xxx](/assets/apestalk.png)</code>即可。</li>
 <li>创建博文 <code>hexo new blog_tile</code> 博文是放在source/_posts目录下的md文件</li>
 <li>生成静态网页 <code>hexo g</code>，这一步会把md文件生成对应的html文件</li>
-<li>运行本地服务 <code>hexo s</code>，在浏览器输入<code>http://localhost:4000</code>如果能正常看到博文就表示成功了。</li>
+<li>运行本地服务 <code>hexo s</code>，在浏览器输入<code>http://localhost:4000</code>如果能正常看到博文就表示成功了。（这里之后如果不用记得<code>Control+C</code>关闭hexo本地服务器，否则一直运行，在浏览器打开其他人的github.io也会显示<code>It works</code>🤣，如果操作之后忘记关闭本地服务器了，先执行一下<code>hexo s</code>再执行<code>Control+C</code>即可。）</li>
 <li>配置git账号 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git<span class="built_in"> config </span>--global user.email <span class="string">"your_git_email_address"</span></span><br><span class="line">git<span class="built_in"> config </span>--global user.name <span class="string">"you_git_username"</span></span><br></pre></td></tr></table></figure>
 
 </li>
@@ -1065,119 +1158,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-阿里API网关使用总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/09/阿里API网关使用总结/">阿里API网关使用总结</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/09/阿里API网关使用总结/" class="archive-article-date">
-  	<time datetime="2018-09-09T05:10:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>最近大半年的时间里，为了加强公司API的安全性，公司尝试了接入阿里API网关的服务。在这期间，由我调研和宣贯阿里API网关的使用并基于AFNetworking封装一个方便我们内部使用的带阿里API网关的网络请求框架。本篇介绍一下API网关的使用流程和我们在使用期间遇到的各种问题以及解决方案。</p>
-</blockquote>
-<p><a href="https://help.aliyun.com/product/29462.html?spm=a2c4g.750001.3.46.4cc17b13RVNrsQ" target="_blank" rel="noopener">API网关</a> API Gateway 提供高性能、高可用的 API 托管服务，帮助用户对外开放其部署在 ECS、容器服务等阿里云产品上的应用，提供完整的 API 发布、管理、维护生命周期管理。用户只需进行简单的操作，即可快速、低成本、低风险地开放数据或服务。</p>
-<p>利用API网关你可以提高自己公司API安全性，也可以上架到API云市场，供用户购买和使用。</p>
-<h2 id="一、阿里API网关的基本使用流程"><a href="#一、阿里API网关的基本使用流程" class="headerlink" title="一、阿里API网关的基本使用流程"></a>一、阿里API网关的基本使用流程</h2><h3 id="1、创建应用获取AppKey和AppSecrect"><a href="#1、创建应用获取AppKey和AppSecrect" class="headerlink" title="1、创建应用获取AppKey和AppSecrect"></a>1、创建应用获取AppKey和AppSecrect</h3><p>这个没什么可说的，主要是你要想办法尽可能安全地存储你的AppKey和AppSecrect。</p>
-<h3 id="2、创建API分组"><a href="#2、创建API分组" class="headerlink" title="2、创建API分组"></a>2、创建API分组</h3><p>所属分组是API的基本属性，所以需要先创建分组，再在分组下创建API。每个账号默认最多可创建100个分组，如需更多分组需要提交工单。分组有所属区域（Region）的概念，比如华东上海区，选择之后就不能修改了。创建完分组之后，系统会给该分组分配一个二级域名，供测试使用，不过，每个二级域名每天最多可访问1000次。</p>
-<h3 id="3、为API分组绑定域名和证书"><a href="#3、为API分组绑定域名和证书" class="headerlink" title="3、为API分组绑定域名和证书"></a>3、为API分组绑定域名和证书</h3><p>如果你的API支持HTTPS协议，还需要为该独立域名上传 SSL 证书。我们需要把我们的域名解析到该分组上，之后才能绑定到该分组上。绑定的域名需要现在阿里云系统备案。绑定域名之后，该分组下的API就可以通过该域名来访问了，不再需要调用系统分配的二级域名了。</p>
-<h3 id="4、环境管理（可选）"><a href="#4、环境管理（可选）" class="headerlink" title="4、环境管理（可选）"></a>4、环境管理（可选）</h3><p>在API分组的环境管理中，你可以自定义环境变量，同一个变量可以再在线上、预发和测试三个环境下对应不同的值，这样在API的定义中就可以使用这里定义好的环境变量了。可以在Path、入参默认值和后端服务服务地址中加入环境变量，在API的定义中使用环境变量需要以<code>#变量名#</code>的方式使用。<strong>如果要修改已发布的API用到的环境变量，先把老的环境变量给删掉，再重新定义一个新的同名环境变量赋上新值之后再把全部对应的API重新发布一遍，这个是异步生效的，一般发布后1分钟内生效。</strong></p>
-<h3 id="5、创建API"><a href="#5、创建API" class="headerlink" title="5、创建API"></a>5、创建API</h3><p>这里的内容还是蛮多的，包括基本配置，前端和后端地址，请求参数配置等，详细文档可以看阿里API的官方文档，这里说几点重要的：</p>
-<ul>
-<li>API名字虽然可以随便取，但建议保持跟API的实际名字保持一致，方便搜索和管理；</li>
-<li>入参映射与入参透传的区别：入参映射需要你根据实际API需要参数，逐一录入API网关，通过映射关系，可以将参数映射到服务端上，一般情况下，比如我们请求的时候放在Query中，服务端也去Query中拿值，通过入参映射，我们可以实现请求的时候参数放在Header中，阿里API网关在转发到我们服务端的时候可以帮我们转发到Query中。入参映射可以实现阿里网关层的参数合法性校验（网关会参照校验规则对请求做初步校验，如果入参不合法<br>，则不会到达您的后端服务，大大的降低了后端服务的压力），因为我们可以在每个参数后面“编辑更多”中指定参数的限制规则，比如长度限制、验证正则表达式等。入参透传的话不需要我们定义参数，阿里网关在收到我们请求的时候直接转发给我们的服务端。我们一般使用入参映射，因为这样对于我们的API需要的参数一目了然，而且以后如要加什么参数限制规则，也是很方便的。</li>
-<li>通过阿里API网关，我们还能实现请求的地址跟后端服务地址不一样的效果。比如我们请求的地址可以定义成“<a href="https://yourdomain.com/fake/fakeSaveUserInfo”，后端服务地址写上我们真正的服务端请求地址“https://yourdomain.com/real/realSaveUserInfo”，网关在收到我们的服务请求时会自动帮我们转发到真正的后端服务。" target="_blank" rel="noopener">https://yourdomain.com/fake/fakeSaveUserInfo”，后端服务地址写上我们真正的服务端请求地址“https://yourdomain.com/real/realSaveUserInfo”，网关在收到我们的服务请求时会自动帮我们转发到真正的后端服务。</a></li>
-</ul>
-<h3 id="6、API授权"><a href="#6、API授权" class="headerlink" title="6、API授权"></a>6、API授权</h3><p>创建好API之后，就可以对应用进行授权了，点击API的“授权”就可以在指定环境下授权某个APP可以访问该API了，如果你在调用API的过程中控制台打印了x-ca-message中包含了Unauthorized错误，你应该想到你的API还未对该APP进行授权访问。</p>
-<h3 id="7、API发布"><a href="#7、API发布" class="headerlink" title="7、API发布"></a>7、API发布</h3><p>API编辑完成之后就可以发布到指定环境上去了，发布之后就立马生效了。可以多次编辑然后发布到不同的环境下，如果你编辑完了忘记发布到指定环境下了，是不会生效的。在分组API列表下，直接点击API名字进入的是当前API最后一次编辑保存的状态，不一定跟发布的状态一直哦。点击API右边的线上、预发或测试后面的”运行中”可以看到在该环境下最后一次编辑发布后的状态哦。</p>
-<h2 id="二、签名规则"><a href="#二、签名规则" class="headerlink" title="二、签名规则"></a>二、签名规则</h2><p>网关会在请求的时候加上日期、时间戳、nonce、userAgent、Host、AppKey、version等参数值，如果是POST请求的话，需要对参数值进行urlEncode。如果有body值的话，需要对body值，将body中的内容MD5算法加密后再采用BASE64方法Encode成字符串，放入HTTP头中。最后再通过将httpMethod、headers、path、queryParam、formParam经过一系列的运算，合成一个字符串用hmacSha256算法双向加密进行签名。</p>
-<h2 id="四、环境的区分"><a href="#四、环境的区分" class="headerlink" title="四、环境的区分"></a>四、环境的区分</h2><p>在我们分组上绑定好了域名之后，我们不管是预发还是线上环境都可以通过这同一个域名进行访问，那网关是怎么帮我们区分环境的呢？这个时候就用到上面的环境变量管理了，我们通过在环境变量中定义一个变量在不同环境下不同的值达到区分环境的效果。在网络请求的时候，我们可以在头部指定<code>X-Ca-Stage</code>参数值来让网关帮我们转发到对应环境的后端服务上，对应的值分别是：线上（RELEASE）默认、预发（PRE）和测试（TEST）。</p>
-<h2 id="三、参数位置和emoji"><a href="#三、参数位置和emoji" class="headerlink" title="三、参数位置和emoji"></a>三、参数位置和emoji</h2><p>这里重点说一下参数位置下可选的Body选项，这个地方坑了我们蛮久。我们知道在我们客户端发起POST请求时，我们会在头部指定“Content-Type”为“application/x-www-form-urlencoded”，然后把请求的参数组装成”key1=value1&amp;key2=value2”的字符串，然后在编码成二进制，放在请求的Body里，以Form表单的形式提交的。所以呢，我们在定义API的参数时，应该把参数位置选择为Body选项。但是我们在很长一段时间里，创建API时或编辑API时，参数位置处下拉一直没有Body选项，我们就把参数定义成了Query类型的了。在使用时也没有啥问题，但是一旦当我们的参数值非常长时，比如一个json字符串，这个是就报错了“414 Request-URI Too Large”，这个时候呢，网关就不会再帮我们把请求转发到服务端了。排查了很久终于找到了罪魁祸首在这里等着呢，通过把参数位置改成Body就可以了。这个可能是阿里API网关前端页面上的一个bug，有时候根本选不到Body选项，这个时候你可以先把“请求Body（非Form表单数据，比如JSON字符串、文件二进制数据等）”选项给勾选上，然后再取消勾选，再下拉展开“参数位置”就可以看到Body选项了。（该文发布时是如此，我已经将该问题反馈给阿里API网关，可能后面会修复该bug。）</p>
-<p>另外一个问题是如果你的参数值中包含了emoji表情，需要对参数值进行urlEncode，服务端在收到请求时需要对参数值进行urlDecode。否则用的过程中会出现各种奇怪的问题。问了阿里网关的服务人员，他们的解释是，如果不进行urlEncode，参数在传到网关时可能会丢失。可以对所有Post请求的参数值统一urlEncode，服务端对收到的参数值统一进行urlDecode。</p>
-<h2 id="四、timestamp和nonce防重放攻击"><a href="#四、timestamp和nonce防重放攻击" class="headerlink" title="四、timestamp和nonce防重放攻击"></a>四、timestamp和nonce防重放攻击</h2><p>在使用网关时，timestamp和nonce这两个header参数值是可选的，如果加上这两个值，网关层会对请求进行校验，防止重放攻击。不过有个问题：在当前时间的前后15分钟的时间戳都是可以的，一旦超过15分钟就会请求失败，所以，如果用户修改了客户端的系统时间的话，API就会调不通了。这个校验有点严格，如果不知道这一点的话，用户反馈客户端不能用，而你这里测试又没有任何问题，那就泪奔了，哈哈。当然这个是可选的校验，如果不传这两个值的话，就不会校验，这个时候防重放攻击的工作就需要我们自己的服务端做了。</p>
-<h2 id="五、上传文件"><a href="#五、上传文件" class="headerlink" title="五、上传文件"></a>五、上传文件</h2><p>目前网关不支持multipart形式的上传，所以一般我们的上传API不太适合录入网关，阿里的说法是现在大家的做法普遍是先将文件上传到文件服务器，然后通过调用接口把文件地址等信息报错到服务器的方式，所以，目测以后也不大可能支持定义multipart形式的上传API。</p>
-<h2 id="六、QPS与流量控制策略"><a href="#六、QPS与流量控制策略" class="headerlink" title="六、QPS与流量控制策略"></a>六、QPS与流量控制策略</h2><p>每个 API 分组的默认流控上限是500QPS，如果你要调大QPS，需要提交工单并支付相应费用。另外网关有个“流量控制策略”的功能，它是针对API的，也就是说定好策略之后，选中对哪些API生效，这些API就会单独的受这个流量控制策略的控制。但是，需要注意的是，如果你要调大流量控制策略，也必须先调大API所在分组的QPS才会生效，否则流量控制策略可以创建但不会实际生效。</p>
-<h2 id="七、建议"><a href="#七、建议" class="headerlink" title="七、建议"></a>七、建议</h2><ul>
-<li>1、一个API分组对应一个我们真正的服务域名</li>
-</ul>
-<p>虽然我们可以在分组的环境管理中添加不同的环境变量来实现同一个API分组下可以定义不同服务域名的API，这样我们客户端在发起请求的时候，域名只需要配一个就可以了，非常方便。但是，一旦网关这一层瘫痪（尽管是小概率事件，但不排除），这个时候我们就心有余而力不足了，只能等网关尽快恢复了。如果我们一个分组对应一个我们真正的服务域名的话，一旦网关出问题，我们可以快速把该分组绑定的域名指向我们真正的该分组的服务上。</p>
-<ul>
-<li><p>2、POST请求一定要把参数位置选为Body</p>
-</li>
-<li><p>3、考虑到分组的QPS，每个分组内的API不应过多。</p>
-</li>
-<li><p>4、没有参数的API必须定义成GET方式的请求。</p>
-</li>
-<li><p>5、网关控制台定义的API名字最好跟后端实际使用的API名字保持一致，因为网关控制台的API搜索功能只能搜索定义的API名字，不能搜索后端真实的API名字。如果你定义的不一致，后期将很难维护。</p>
-</li>
-<li><p>6、API的参数一定要跟实际的保持一致，不能把实际可选参数定义成了必选参数，这种情况在请求时会直接被网关过滤掉。</p>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">阿里 API网关 网关 API GateWay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/09/阿里API网关使用总结/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1284,6 +1264,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">shell echo chmod</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
               </li>
              
               <li class="article-tag-list-item">

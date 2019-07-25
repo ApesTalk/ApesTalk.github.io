@@ -6,19 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://ApesTalk.github.com">
-  <title>Archives: 2018/12 | ApesTalk的博客</title>
+  <title>UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配 | ApesTalk的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
-<meta name="keywords" content="ApesTalk,简书Code_Ninja,Code_Ninja,Objective-C,OC,Swift,Shell,java,html,js,iOS,iOSer,Coder,Porgrammer,代码,编程,程序猿,程序,Developer,Git,Github,开发,开源,分享,博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ApesTalk的博客">
-<meta property="og:url" content="https://ApesTalk.github.com/archives/2018/12/index.html">
+  <meta name="description" content="在日常开发中经常遇到UIScrollView的自动布局问题，比如：1、在有文本框的页面，如果在viewDidLoad中唤起键盘，会发现一进入页面有个奇怪的动画效果；2、在有UITextField的页面，如果在viewDidLoad中设置text并立马唤起键盘，如果text刚好超出UITextField宽度一点点，会发现光标怎么都都移动不到最末尾处；3、在有UITableView或UICollec">
+<meta name="keywords" content="UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配">
+<meta property="og:url" content="https://ApesTalk.github.com/2019/07/25/UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配/index.html">
 <meta property="og:site_name" content="ApesTalk的博客">
-<meta property="og:description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
+<meta property="og:description" content="在日常开发中经常遇到UIScrollView的自动布局问题，比如：1、在有文本框的页面，如果在viewDidLoad中唤起键盘，会发现一进入页面有个奇怪的动画效果；2、在有UITextField的页面，如果在viewDidLoad中设置text并立马唤起键盘，如果text刚好超出UITextField宽度一点点，会发现光标怎么都都移动不到最末尾处；3、在有UITableView或UICollec">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://apestalk.github.com/assets/BlogImages/UIScrollView_perfect_match.jpg">
+<meta property="og:updated_time" content="2019-07-25T07:34:19.192Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ApesTalk的博客">
-<meta name="twitter:description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
+<meta name="twitter:title" content="UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配">
+<meta name="twitter:description" content="在日常开发中经常遇到UIScrollView的自动布局问题，比如：1、在有文本框的页面，如果在viewDidLoad中唤起键盘，会发现一进入页面有个奇怪的动画效果；2、在有UITextField的页面，如果在viewDidLoad中设置text并立马唤起键盘，如果text刚好超出UITextField宽度一点点，会发现光标怎么都都移动不到最末尾处；3、在有UITableView或UICollec">
+<meta name="twitter:image" content="https://apestalk.github.com/assets/BlogImages/UIScrollView_perfect_match.jpg">
   
   
     <link rel="icon" href="/assets/images/favicon.png">
@@ -152,98 +155,196 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/12/22/iOS总结-最近遇到的问题及解决办法/" class="archive-article-date">
-  	<time datetime="2018-12-22T12:10:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-22</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/12/22/iOS总结-最近遇到的问题及解决办法/">iOS总结-最近遇到的问题及解决办法</a>
+    <h1 class="article-title" itemprop="name">
+      UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/07/25/UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配/" class="archive-article-date">
+  	<time datetime="2019-07-25T08:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/assets/BlogImages/UIScrollView_perfect_match.jpg" alt></p>
+<p>在日常开发中经常遇到UIScrollView的自动布局问题，比如：<br>1、在有文本框的页面，如果在viewDidLoad中唤起键盘，会发现一进入页面有个奇怪的动画效果；<br>2、在有UITextField的页面，如果在viewDidLoad中设置text并立马唤起键盘，如果text刚好超出UITextField宽度一点点，会发现光标怎么都都移动不到最末尾处；<br>3、在有UITableView或UICollectionView的页面，reloadData后里面让其滚动到指定位置，结果却滚不动指定位置。<br>……</p>
+<p>这个时候，如果我们在唤起键盘或滚动之前调用如下代码来强制布局完成</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[self.view setNeedsLayout]</span><span class="comment">;</span></span><br><span class="line"><span class="section">[self.view layoutIfNeeded]</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p>就会发现这些问题都解决了，不得不感叹一下setNeedsLayout和layoutIfNeeded就像是专门为UIScrollView而生的一样。</p>
+<p>对于上面的第一种情况，是因为页面还没布局完成就唤起了键盘，键盘唤起时UITextFiled或UITextView内部会触发一个UIScrollView的布局从而形成动画效果。就像我们先更新UI的约束，然后执行以下代码来简单实现动画效果一样。</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="name">UIView</span> animateWithDuration:0.25 animations:^&#123;</span><br><span class="line">    [<span class="name">self.view</span> layoutIfNeeded]<span class="comment">;</span></span><br><span class="line">&#125;]<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于上面第二种情况，同样是UIScrollView的问题，因为UITextFiled在编辑状态下，内部有一个UIFieldEditor控件，它是UIScrollView的子类，可以左右滚动，在唤起键盘时，默认会将光标一定到文本的末尾，也就是要修改这个UIFieldEditor的contentOffset。但是当UIScrollView还没布局完成就尝试去修改它的contentOffset是无效的。</p>
+<p>viewDidLoad中设置text后立马唤起键盘，会看到此时的contentOffset: {0, 0}，这个时候因为状态和contentOffset不对（理论上光标应该在末尾的，但是contentOffset跟它的状态却不一致），所以尝试长按移动光标到末尾总是失败：</p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">UIFieldEditor:</span> <span class="attr">0x7fbceb20c000</span>; <span class="attr">frame</span> = <span class="string">(0</span> <span class="attr">0</span>; <span class="attr">318</span> <span class="attr">60</span>); <span class="attr">text</span> = <span class="string">'一二三四五六七八九十一二三四五六七八九十'</span>; <span class="attr">opaque</span> = <span class="string">NO;</span> <span class="attr">gestureRecognizers</span> = &lt;<span class="attr">NSArray:</span> <span class="attr">0x600002fa28e0</span>&gt;</span>; layer = <span class="tag">&lt;<span class="name">CALayer:</span> <span class="attr">0x600002041060</span>&gt;</span>; contentOffset: </span><span class="template-variable">&#123;0, 0&#125;</span><span class="xml">; contentSize: </span><span class="template-variable">&#123;335, 71&#125;</span><span class="xml">; adjustedContentInset: </span><span class="template-variable">&#123;0, 0, 0, 0&#125;</span><span class="xml">&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>viewDidLoad中设置text后，先强制布局完成，再唤起键盘，会看到此时的contentOffset: {37.333333333333336, 0}：</p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">UIFieldEditor:</span> <span class="attr">0x7f9a21117800</span>; <span class="attr">frame</span> = <span class="string">(0</span> <span class="attr">0</span>; <span class="attr">318</span> <span class="attr">60</span>); <span class="attr">text</span> = <span class="string">'一二三四五六七八九十一二三四五六七八九十'</span>; <span class="attr">opaque</span> = <span class="string">NO;</span> <span class="attr">gestureRecognizers</span> = &lt;<span class="attr">NSArray:</span> <span class="attr">0x600000aa5d70</span>&gt;</span>; layer = <span class="tag">&lt;<span class="name">CALayer:</span> <span class="attr">0x600000402b80</span>&gt;</span>; contentOffset: </span><span class="template-variable">&#123;37.333333333333336, 0&#125;</span><span class="xml">; contentSize: </span><span class="template-variable">&#123;395, 71&#125;</span><span class="xml">; adjustedContentInset: </span><span class="template-variable">&#123;0, 0, 0, 0&#125;</span><span class="xml">&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于前两种情况，我们还可以使用如下代码解决，将唤起键盘的操作放在下次循环中：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dispatch_after(0.1, </span><span class="keyword">dispatch_get_main_queue(), </span>^&#123;</span><br><span class="line">    [self.textField <span class="keyword">becomeFirstResponder];</span></span><br><span class="line"><span class="keyword">&#125;);</span></span><br></pre></td></tr></table></figure>
+
+<p>对于第三种情况，跟第二种情况类似的，UITableView和UICollectionView也是在未布局完成的情况下尝试让其滚动到指定位置也是无效的。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/images/alipay.png">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/images/wechat.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://ApesTalk.github.com/2019/07/25/UIScrollView与setNeedsLayout和layoutIfNeeded真是绝配/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/12/22/关于符号表（dSYM）的误解与事实/" class="archive-article-date">
-  	<time datetime="2018-12-22T11:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-22</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/07/23/Charles DNS Spoofing配置/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Charles DNS Spoofing配置</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/12/22/关于符号表（dSYM）的误解与事实/">关于符号表（dSYM）的误解与事实</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">iOS 符号表 dSYM uuid</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -266,8 +367,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
