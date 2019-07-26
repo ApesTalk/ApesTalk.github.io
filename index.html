@@ -27,7 +27,7 @@
   <style type="text/css">
   
     #container.show {
-      background: linear-gradient(200deg,#a0cfe4,#e8c37e);
+      background: linear-gradient(200deg,#252628,#323737);
     }
   </style>
   
@@ -51,7 +51,7 @@ var _hmt = _hmt || [];
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
     <div class="left-col" q-class="show:isShow">
       
-<div class="overlay" style="background: #4d4d4d"></div>
+<div class="overlay" style="background: #DC433B"></div>
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
@@ -102,7 +102,7 @@ var _hmt = _hmt || [];
     <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
       
 <nav id="mobile-nav">
-  	<div class="overlay js-overlay" style="background: #4d4d4d"></div>
+  	<div class="overlay js-overlay" style="background: #DC433B"></div>
 	<div class="btnctn js-mobile-btnctn">
   		<div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
 	</div>
@@ -180,6 +180,7 @@ var _hmt = _hmt || [];
 <figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[self.view setNeedsLayout]</span><span class="comment">;</span></span><br><span class="line"><span class="section">[self.view layoutIfNeeded]</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
 
 <p>就会发现这些问题都解决了，不得不感叹一下setNeedsLayout和layoutIfNeeded就像是专门为UIScrollView而生的一样。</p>
+<p>其中<code>setNeedsLayout</code>会将view当前的layout设置为无效的，并在下一个更新周期里去触发layout更新。 <code>layoutIfNeeded</code>强制立即进行layout，从当前view开始，此方法会遍历整个view层次(包括superviews)请求layout。因此，调用此方法会强制整个view层次布局。</p>
 <p>对于上面的第一种情况，是因为页面还没布局完成就唤起了键盘，键盘唤起时UITextFiled或UITextView内部会触发一个UIScrollView的布局从而形成动画效果。就像我们先更新UI的约束，然后执行以下代码来简单实现动画效果一样。</p>
 <figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="name">UIView</span> animateWithDuration:0.25 animations:^&#123;</span><br><span class="line">    [<span class="name">self.view</span> layoutIfNeeded]<span class="comment">;</span></span><br><span class="line">&#125;]<span class="comment">;</span></span><br></pre></td></tr></table></figure>
 
@@ -1255,10 +1256,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">UIWindow makeKeyAndVisible hidden=NO</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Charles hosts DNS spoofing xml 抓包 代理</a>
               </li>
              
@@ -1268,6 +1265,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">UIWindow makeKeyAndVisible hidden=NO</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1366,7 +1367,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">目前主力iOS开发，熟练掌握Objective-C，略会一点Swift、JavaScript、Python，谢谢大家。</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">目前主力iOS开发，熟练掌握Objective-C，略会一点Swift、JavaScript、Python，感谢大家的光临。</div>
   	  	
     	</section>
     
