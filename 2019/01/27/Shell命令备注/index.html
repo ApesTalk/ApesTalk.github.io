@@ -17,7 +17,7 @@
 <meta property="og:description" content="chmod命令（chmod 755到底是个什么鬼？）Linux/Unix 的文件调用权限分为三级 : 文件拥有者、群组、其他。利用 chmod 可以藉以控制文件如何被他人所调用。每个文件的权限呢，又分为读、写和执行。所以，可以用三位二进制来标识权限，当对应二进制位为0时表示没有对应的权限，当对应二进制位为1时表示有对应的权限。比如110，就表时可读可写不可执行。 那么对应三个用户分组，就需要三组">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://apestalk.github.com/assets/BlogImages/shell.png">
-<meta property="og:updated_time" content="2019-07-13T06:20:35.864Z">
+<meta property="og:updated_time" content="2019-07-31T04:14:04.052Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell命令备注">
 <meta name="twitter:description" content="chmod命令（chmod 755到底是个什么鬼？）Linux/Unix 的文件调用权限分为三级 : 文件拥有者、群组、其他。利用 chmod 可以藉以控制文件如何被他人所调用。每个文件的权限呢，又分为读、写和执行。所以，可以用三位二进制来标识权限，当对应二进制位为0时表示没有对应的权限，当对应二进制位为1时表示有对应的权限。比如110，就表时可读可写不可执行。 那么对应三个用户分组，就需要三组">
@@ -188,6 +188,7 @@ var _hmt = _hmt || [];
 <p>八进制转十进制：<code>printf %d $((8#17))</code>或 <code>echo &quot;obase=10;$((8#17))&quot;|bc</code><br>十进制转八进制：<code>echo &quot;obase=8;$((15))&quot;|bc</code></p>
 <p>十六进制转十进制：<code>printf %d 0xF 或 echo $((16#F))</code> 或 <code>echo &quot;obase=10;$((16#F))&quot;|bc</code><br>十进制转十六进制：<code>printf %x 15</code>或 <code>echo &quot;obase=16;15&quot;|bc</code></p>
 <p>八进制转十六进制：<code>printf %x $((8#17))</code>或 <code>echo &quot;obase=16;$((8#17))&quot;|bc</code><br>十六进制转八进制：<code>echo &quot;obase=8;$((16#F))&quot;|bc</code></p>
+<h2 id="查看命令所在位置-command-which-lt-command-gt"><a href="#查看命令所在位置-command-which-lt-command-gt" class="headerlink" title="查看命令所在位置 command which &lt;command&gt;"></a>查看命令所在位置 <code>command which &lt;command&gt;</code></h2><p>如<code>command which pod</code>查看pod命令所在位置。一般命令都放在<code>usr/local/bin</code>目录下。</p>
 
       
 
@@ -447,11 +448,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">shell echo chmod</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -471,19 +480,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">父亲 情感 个人</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">阿里 API网关 网关 API GateWay</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod Podfile pod-install pod-update</a>
               </li>
             
             <div class="clearfix"></div>

@@ -6,21 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://ApesTalk.github.com">
-  <title>CocoaPods使用备忘 | ApesTalk的博客</title>
+  <title>CocoaPods使用总结 | ApesTalk的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="使用CocoaPods也有很长一段时间了，最近几个月的时间里也主导了公司私有Pods的创建和使用。在此期间踩过了不少坑，在踩坑的过程中也收获了不少经验，更加熟练地掌握了CocoaPods的一些指令的使用。本篇作为这段时间收获的备忘。  一、CocoaPods简介CocoaPods是专门为iOS工程提供第三方依赖库的管理工具，通过CocoaPods，我们可以更方便地管理每个第三方库的版本，而且不需">
-<meta name="keywords" content="Xcode CocoaPods 私有Pod Podfile pod-install pod-update">
+<meta name="keywords" content="Xcode CocoaPods 私有Pod podfile pod-install pod-update">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CocoaPods使用备忘">
-<meta property="og:url" content="https://ApesTalk.github.com/2018/08/21/CocoaPods使用备忘/index.html">
+<meta property="og:title" content="CocoaPods使用总结">
+<meta property="og:url" content="https://ApesTalk.github.com/2018/08/21/CocoaPods使用总结/index.html">
 <meta property="og:site_name" content="ApesTalk的博客">
 <meta property="og:description" content="使用CocoaPods也有很长一段时间了，最近几个月的时间里也主导了公司私有Pods的创建和使用。在此期间踩过了不少坑，在踩坑的过程中也收获了不少经验，更加熟练地掌握了CocoaPods的一些指令的使用。本篇作为这段时间收获的备忘。  一、CocoaPods简介CocoaPods是专门为iOS工程提供第三方依赖库的管理工具，通过CocoaPods，我们可以更方便地管理每个第三方库的版本，而且不需">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://apestalk.github.com/assets/BlogImages/Xocde_project_format.png">
 <meta property="og:image" content="https://apestalk.github.com/assets/BlogImages/copyfromto.png">
-<meta property="og:updated_time" content="2019-07-19T02:44:02.865Z">
+<meta property="og:updated_time" content="2019-10-16T08:23:24.161Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CocoaPods使用备忘">
+<meta name="twitter:title" content="CocoaPods使用总结">
 <meta name="twitter:description" content="使用CocoaPods也有很长一段时间了，最近几个月的时间里也主导了公司私有Pods的创建和使用。在此期间踩过了不少坑，在踩坑的过程中也收获了不少经验，更加熟练地掌握了CocoaPods的一些指令的使用。本篇作为这段时间收获的备忘。  一、CocoaPods简介CocoaPods是专门为iOS工程提供第三方依赖库的管理工具，通过CocoaPods，我们可以更方便地管理每个第三方库的版本，而且不需">
 <meta name="twitter:image" content="https://apestalk.github.com/assets/BlogImages/Xocde_project_format.png">
   
@@ -156,19 +156,19 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-CocoaPods使用备忘" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-CocoaPods使用总结" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      CocoaPods使用备忘
+      CocoaPods使用总结
     </h1>
   
 
         
-        <a href="/2018/08/21/CocoaPods使用备忘/" class="archive-article-date">
+        <a href="/2018/08/21/CocoaPods使用总结/" class="archive-article-date">
   	<time datetime="2018-08-21T14:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-21</time>
 </a>
         
@@ -271,6 +271,10 @@ var _hmt = _hmt || [];
 <li><p>清除本地缓存 <code>pod cache clean XXX</code></p>
 </li>
 </ul>
+<h2 id="十四、基础MobileVLCKit时报错Lzma-library-error"><a href="#十四、基础MobileVLCKit时报错Lzma-library-error" class="headerlink" title="十四、基础MobileVLCKit时报错Lzma library error"></a>十四、基础MobileVLCKit时报错Lzma library error</h2><p>如果在验证pod，安装某个库时报Lzma库的错误：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ERROR | [iOS] unknown: Encountered an unknown error ([!] <span class="regexp">/usr/</span>bin<span class="regexp">/tar xf /</span>var<span class="regexp">/folders/</span>tf<span class="regexp">/jlbz0pq91m16571fgc7ywbk80000gn/</span>T<span class="regexp">/d20191016-38557-1l50cyi/</span>file.txz -C <span class="regexp">/var/</span>folders<span class="regexp">/tf/</span>jlbz0pq91m16571fgc7ywbk80000gn<span class="regexp">/T/</span>d20191016-<span class="number">38557</span>-<span class="number">1</span>l50cyi</span><br><span class="line"></span><br><span class="line">MobileVLCKit-binary<span class="regexp">/MobileVLCKit.framework/</span>MobileVLCKit: Lzma library error:  No progress is possible</span><br><span class="line">tar: Error <span class="keyword">exit</span> delayed from previous errors.</span><br></pre></td></tr></table></figure>
+
+<p>这属于pod依赖的这个库的压缩包解压失败了，Lzma library是用来解压用的，如果压缩包损坏了，会导致解压失败，从而报这个错误，此时需要检查压缩包是否正常。</p>
 
       
 
@@ -315,7 +319,7 @@ var _hmt = _hmt || [];
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Xcode CocoaPods 私有Pod Podfile pod-install pod-update</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
         		</li>
       		
 		</ul>
@@ -371,7 +375,7 @@ var _hmt = _hmt || [];
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://ApesTalk.github.com/2018/08/21/CocoaPods使用备忘/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://ApesTalk.github.com/2018/08/21/CocoaPods使用总结/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -525,11 +529,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">shell echo chmod</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -549,19 +561,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">父亲 情感 个人</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">阿里 API网关 网关 API GateWay</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod Podfile pod-install pod-update</a>
               </li>
             
             <div class="clearfix"></div>
