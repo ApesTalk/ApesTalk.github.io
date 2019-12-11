@@ -6,19 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://ApesTalk.github.com">
-  <title>Archives: 2018/8 | ApesTalk的博客</title>
+  <title>Shell脚本批量格式化文件名 | ApesTalk的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
-<meta name="keywords" content="ApesTalk,简书Code_Ninja,Code_Ninja,Objective-C,OC,Swift,Shell,java,html,js,iOS,iOSer,Coder,Porgrammer,代码,编程,程序猿,程序,Developer,Git,Github,开发,开源,分享,博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ApesTalk的博客">
-<meta property="og:url" content="https://ApesTalk.github.com/archives/2018/08/index.html">
+  <meta name="description" content="利用 Shell 批量把文件夹下的图片从时间戳格式的名字改成年月日时分秒格式的名字。  知识点： ls命令循环与筛选 Shell 变量的定义与使用 Shell 函数的定义、调用、参数的传递与获取、返回值的获取 Shell 中使用正则表达式 字符串的基本操作 条件表达式与关系表达式 date 命令转换时间戳 mv 命令  file.sh文件内容： 1234567891011121314151617">
+<meta name="keywords" content="Shell 批处理 格式化 重命名">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell脚本批量格式化文件名">
+<meta property="og:url" content="https://ApesTalk.github.com/2019/12/11/Shell脚本批量格式化文件名/index.html">
 <meta property="og:site_name" content="ApesTalk的博客">
-<meta property="og:description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
+<meta property="og:description" content="利用 Shell 批量把文件夹下的图片从时间戳格式的名字改成年月日时分秒格式的名字。  知识点： ls命令循环与筛选 Shell 变量的定义与使用 Shell 函数的定义、调用、参数的传递与获取、返回值的获取 Shell 中使用正则表达式 字符串的基本操作 条件表达式与关系表达式 date 命令转换时间戳 mv 命令  file.sh文件内容： 1234567891011121314151617">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-11T11:51:47.890Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ApesTalk的博客">
-<meta name="twitter:description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
+<meta name="twitter:title" content="Shell脚本批量格式化文件名">
+<meta name="twitter:description" content="利用 Shell 批量把文件夹下的图片从时间戳格式的名字改成年月日时分秒格式的名字。  知识点： ls命令循环与筛选 Shell 变量的定义与使用 Shell 函数的定义、调用、参数的传递与获取、返回值的获取 Shell 中使用正则表达式 字符串的基本操作 条件表达式与关系表达式 date 命令转换时间戳 mv 命令  file.sh文件内容： 1234567891011121314151617">
   
   
     <link rel="icon" href="/assets/images/favicon.png">
@@ -152,60 +153,193 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Shell脚本批量格式化文件名" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/08/21/CocoaPods使用总结/" class="archive-article-date">
-  	<time datetime="2018-08-21T14:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-21</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/21/CocoaPods使用总结/">CocoaPods使用总结</a>
+    <h1 class="article-title" itemprop="name">
+      Shell脚本批量格式化文件名
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/12/11/Shell脚本批量格式化文件名/" class="archive-article-date">
+  	<time datetime="2019-12-11T12:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>利用 Shell 批量把文件夹下的图片从时间戳格式的名字改成年月日时分秒格式的名字。</p>
+</blockquote>
+<h2 id="知识点："><a href="#知识点：" class="headerlink" title="知识点："></a>知识点：</h2><ul>
+<li>ls命令循环与筛选</li>
+<li>Shell 变量的定义与使用</li>
+<li>Shell 函数的定义、调用、参数的传递与获取、返回值的获取</li>
+<li>Shell 中使用正则表达式</li>
+<li>字符串的基本操作</li>
+<li>条件表达式与关系表达式</li>
+<li>date 命令转换时间戳</li>
+<li>mv 命令</li>
+</ul>
+<p>file.sh文件内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># for循环</span></span><br><span class="line"><span class="comment"># ls 筛选查询。-d：只列出目录条目  *匹配一个或多个字符</span></span><br><span class="line"><span class="comment"># 将秒级的时间戳转换成日期字符串 date -r 1548205689 '+%Y-%m-%d %H:%M:%S'</span></span><br><span class="line"><span class="comment"># 参考：</span></span><br><span class="line"><span class="comment"># 0 https://www.runoob.com/linux/linux-shell.html</span></span><br><span class="line"><span class="comment"># 1 https://blog.csdn.net/taiyang1987912/article/details/38929069</span></span><br><span class="line"><span class="comment"># 2 http://noahsnail.com/2016/11/12/2016-11-12-ls%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/</span></span><br><span class="line"><span class="comment"># 3 https://man.linuxde.net/shell-script/shell-7</span></span><br><span class="line"><span class="comment"># 4 http://niliu.me/articles/1450.html#more-1450</span></span><br><span class="line"><span class="comment"># 5 https://stackoverflow.com/questions/806906/how-do-i-test-if-a-variable-is-a-number-in-bash/806923</span></span><br><span class="line"><span class="comment"># 6 https://stackoverflow.com/questions/12187859/create-new-file-but-add-number-if-filename-already-exists-in-bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># shell函数的定义与使用</span></span><br><span class="line"><span class="function"><span class="title">isNumberStr</span></span>() &#123;</span><br><span class="line">    <span class="comment"># echo "第一个参数为 $1 !"</span></span><br><span class="line">    <span class="comment"># shell使用正则表达式验证是否数字</span></span><br><span class="line">    re=<span class="string">'^[0-9]+$'</span></span><br><span class="line">    <span class="keyword">if</span> ! [[ <span class="variable">$1</span> =~ <span class="variable">$re</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Error: <span class="variable">$1</span> is not a number."</span></span><br><span class="line">        <span class="built_in">return</span> 0</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="comment"># echo "Valid number."</span></span><br><span class="line">        <span class="built_in">return</span> 1</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># format 2018-02-01 01:01:01</span></span><br><span class="line"><span class="function"><span class="title">tryFormat</span></span>() &#123;</span><br><span class="line">    timestamp=<span class="variable">$1</span></span><br><span class="line">    suffix=<span class="variable">$2</span></span><br><span class="line">    index=<span class="variable">$3</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 调用函数</span></span><br><span class="line">    isNumberStr <span class="variable">$timestamp</span></span><br><span class="line">    <span class="comment"># 获取函数返回值</span></span><br><span class="line">    isNum=$?</span><br><span class="line">    <span class="comment"># 条件表达式要放在方括号之间，并且要有空格</span></span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$isNum</span> -eq 1 ]; <span class="keyword">then</span></span><br><span class="line">        len=<span class="variable">$&#123;#timestamp&#125;</span></span><br><span class="line">        msLen=13</span><br><span class="line">        sLen=10</span><br><span class="line">        <span class="keyword">if</span> [ <span class="variable">$len</span> -eq <span class="variable">$msLen</span> ]; <span class="keyword">then</span></span><br><span class="line">            timestamp=<span class="variable">$&#123;timestamp:0:10&#125;</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># shell表达式，注意是反引号``不是单引号''</span></span><br><span class="line">        <span class="comment"># 注意系统中文件名中不能包含冒号（:）等特殊符号，这里如果写成%H:%M:%S，写入的时候会自动把冒号变为/。</span></span><br><span class="line">        ds=`date -r <span class="variable">$timestamp</span> <span class="string">'+%Y-%m-%d %H-%M-%S'</span>`</span><br><span class="line">        regex=<span class="string">'[0-9]&#123;4&#125;-[0-9]&#123;2&#125;-[0-9]&#123;2&#125; [0-9]&#123;2&#125;-[0-9]&#123;2&#125;-[0-9]&#123;2&#125;'</span></span><br><span class="line">        <span class="keyword">if</span> [[ <span class="variable">$ds</span> =~ <span class="variable">$regex</span> ]]; <span class="keyword">then</span></span><br><span class="line">            <span class="comment"># echo "Is a timestamp"</span></span><br><span class="line">            <span class="comment"># 重命名</span></span><br><span class="line">            oldFile=<span class="variable">$1</span>.<span class="variable">$suffix</span></span><br><span class="line">            newFile=<span class="variable">$ds</span>.<span class="variable">$suffix</span></span><br><span class="line">            <span class="comment"># 因为新的文件名中有空格</span></span><br><span class="line">            <span class="comment"># mv操作加-i遇到同名的询问要不要覆盖</span></span><br><span class="line">            <span class="keyword">if</span> [[ -e <span class="string">"<span class="variable">$newFile</span>"</span> ]]; <span class="keyword">then</span></span><br><span class="line">                <span class="built_in">echo</span> <span class="string">"文件名重复了"</span></span><br><span class="line">                <span class="comment"># 文件名重复的时候这里直接在文件名后面加上当前index</span></span><br><span class="line">                newFile=<span class="variable">$ds</span>.<span class="variable">$index</span>.<span class="variable">$suffix</span></span><br><span class="line">            <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">"<span class="variable">$newFile</span>"</span></span><br><span class="line">            mv -i <span class="variable">$oldFile</span> <span class="string">"<span class="variable">$newFile</span>"</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">"<span class="variable">$timestamp</span> is not a valide timestamp"</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">index=0</span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> $( ls -d &#123;*.png,*.jpg,*.jpeg,*gif,*.PNG,*.JPG,*.JPEG,*GIF&#125; )</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">let</span> index++</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"file: <span class="variable">$file</span>"</span></span><br><span class="line">    <span class="comment"># 截取文件名 注意定义变量=前后不能有空格</span></span><br><span class="line">    <span class="comment"># $&#123;VAR%.* &#125;含义：从$VAR中删除位于 % 右侧的通配符左右匹配的字符串，通配符从右向左进行匹配。% 非贪婪 %% 贪婪。</span></span><br><span class="line">    fileName=<span class="variable">$&#123;file%.*&#125;</span></span><br><span class="line">    <span class="comment"># echo $fileName</span></span><br><span class="line">    <span class="comment"># 字符串长度</span></span><br><span class="line">    <span class="comment"># fileNameLen=$&#123;#fileName&#125;</span></span><br><span class="line">    <span class="comment"># echo "fileName length= $fileNameLen"</span></span><br><span class="line">    <span class="comment"># 子串</span></span><br><span class="line">    <span class="comment"># echo $&#123;fileName:0:3&#125;</span></span><br><span class="line">    <span class="comment"># $&#123;VAR#*.&#125; 含义：从 $VAR 中删除位于 # 右侧的通配符所匹配的字符串，通配符是左向右进行匹配。# 非贪婪 ## 贪婪。</span></span><br><span class="line">    suffix=<span class="variable">$&#123;file#*.&#125;</span></span><br><span class="line">    <span class="comment"># echo "suffix= $suffix"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 调用函数 传参</span></span><br><span class="line">    tryFormat <span class="variable">$fileName</span> <span class="variable">$suffix</span> <span class="variable">$index</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"---------------------------------------"</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p>使用方法：把该文件拷贝到要批量处理的图片文件夹下，然后在终端中执行该shell文件。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>感谢您的打赏！<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/images/alipay.png">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/images/wechat.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Shell 批处理 格式化 重命名</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://ApesTalk.github.com/2019/12/11/Shell脚本批量格式化文件名/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2019/11/01/关于Collection was mutated while being enumerated/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">关于Collection was mutated while being enumerated</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -228,8 +362,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

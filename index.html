@@ -154,6 +154,96 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Shell脚本批量格式化文件名" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/11/Shell脚本批量格式化文件名/">Shell脚本批量格式化文件名</a>
+    </h1>
+  
+
+        
+        <a href="/2019/12/11/Shell脚本批量格式化文件名/" class="archive-article-date">
+  	<time datetime="2019-12-11T12:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>利用 Shell 批量把文件夹下的图片从时间戳格式的名字改成年月日时分秒格式的名字。</p>
+</blockquote>
+<h2 id="知识点："><a href="#知识点：" class="headerlink" title="知识点："></a>知识点：</h2><ul>
+<li>ls命令循环与筛选</li>
+<li>Shell 变量的定义与使用</li>
+<li>Shell 函数的定义、调用、参数的传递与获取、返回值的获取</li>
+<li>Shell 中使用正则表达式</li>
+<li>字符串的基本操作</li>
+<li>条件表达式与关系表达式</li>
+<li>date 命令转换时间戳</li>
+<li>mv 命令</li>
+</ul>
+<p>file.sh文件内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># for循环</span></span><br><span class="line"><span class="comment"># ls 筛选查询。-d：只列出目录条目  *匹配一个或多个字符</span></span><br><span class="line"><span class="comment"># 将秒级的时间戳转换成日期字符串 date -r 1548205689 '+%Y-%m-%d %H:%M:%S'</span></span><br><span class="line"><span class="comment"># 参考：</span></span><br><span class="line"><span class="comment"># 0 https://www.runoob.com/linux/linux-shell.html</span></span><br><span class="line"><span class="comment"># 1 https://blog.csdn.net/taiyang1987912/article/details/38929069</span></span><br><span class="line"><span class="comment"># 2 http://noahsnail.com/2016/11/12/2016-11-12-ls%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D/</span></span><br><span class="line"><span class="comment"># 3 https://man.linuxde.net/shell-script/shell-7</span></span><br><span class="line"><span class="comment"># 4 http://niliu.me/articles/1450.html#more-1450</span></span><br><span class="line"><span class="comment"># 5 https://stackoverflow.com/questions/806906/how-do-i-test-if-a-variable-is-a-number-in-bash/806923</span></span><br><span class="line"><span class="comment"># 6 https://stackoverflow.com/questions/12187859/create-new-file-but-add-number-if-filename-already-exists-in-bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># shell函数的定义与使用</span></span><br><span class="line"><span class="function"><span class="title">isNumberStr</span></span>() &#123;</span><br><span class="line">    <span class="comment"># echo "第一个参数为 $1 !"</span></span><br><span class="line">    <span class="comment"># shell使用正则表达式验证是否数字</span></span><br><span class="line">    re=<span class="string">'^[0-9]+$'</span></span><br><span class="line">    <span class="keyword">if</span> ! [[ <span class="variable">$1</span> =~ <span class="variable">$re</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Error: <span class="variable">$1</span> is not a number."</span></span><br><span class="line">        <span class="built_in">return</span> 0</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="comment"># echo "Valid number."</span></span><br><span class="line">        <span class="built_in">return</span> 1</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># format 2018-02-01 01:01:01</span></span><br><span class="line"><span class="function"><span class="title">tryFormat</span></span>() &#123;</span><br><span class="line">    timestamp=<span class="variable">$1</span></span><br><span class="line">    suffix=<span class="variable">$2</span></span><br><span class="line">    index=<span class="variable">$3</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 调用函数</span></span><br><span class="line">    isNumberStr <span class="variable">$timestamp</span></span><br><span class="line">    <span class="comment"># 获取函数返回值</span></span><br><span class="line">    isNum=$?</span><br><span class="line">    <span class="comment"># 条件表达式要放在方括号之间，并且要有空格</span></span><br><span class="line">    <span class="keyword">if</span> [ <span class="variable">$isNum</span> -eq 1 ]; <span class="keyword">then</span></span><br><span class="line">        len=<span class="variable">$&#123;#timestamp&#125;</span></span><br><span class="line">        msLen=13</span><br><span class="line">        sLen=10</span><br><span class="line">        <span class="keyword">if</span> [ <span class="variable">$len</span> -eq <span class="variable">$msLen</span> ]; <span class="keyword">then</span></span><br><span class="line">            timestamp=<span class="variable">$&#123;timestamp:0:10&#125;</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># shell表达式，注意是反引号``不是单引号''</span></span><br><span class="line">        <span class="comment"># 注意系统中文件名中不能包含冒号（:）等特殊符号，这里如果写成%H:%M:%S，写入的时候会自动把冒号变为/。</span></span><br><span class="line">        ds=`date -r <span class="variable">$timestamp</span> <span class="string">'+%Y-%m-%d %H-%M-%S'</span>`</span><br><span class="line">        regex=<span class="string">'[0-9]&#123;4&#125;-[0-9]&#123;2&#125;-[0-9]&#123;2&#125; [0-9]&#123;2&#125;-[0-9]&#123;2&#125;-[0-9]&#123;2&#125;'</span></span><br><span class="line">        <span class="keyword">if</span> [[ <span class="variable">$ds</span> =~ <span class="variable">$regex</span> ]]; <span class="keyword">then</span></span><br><span class="line">            <span class="comment"># echo "Is a timestamp"</span></span><br><span class="line">            <span class="comment"># 重命名</span></span><br><span class="line">            oldFile=<span class="variable">$1</span>.<span class="variable">$suffix</span></span><br><span class="line">            newFile=<span class="variable">$ds</span>.<span class="variable">$suffix</span></span><br><span class="line">            <span class="comment"># 因为新的文件名中有空格</span></span><br><span class="line">            <span class="comment"># mv操作加-i遇到同名的询问要不要覆盖</span></span><br><span class="line">            <span class="keyword">if</span> [[ -e <span class="string">"<span class="variable">$newFile</span>"</span> ]]; <span class="keyword">then</span></span><br><span class="line">                <span class="built_in">echo</span> <span class="string">"文件名重复了"</span></span><br><span class="line">                <span class="comment"># 文件名重复的时候这里直接在文件名后面加上当前index</span></span><br><span class="line">                newFile=<span class="variable">$ds</span>.<span class="variable">$index</span>.<span class="variable">$suffix</span></span><br><span class="line">            <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">"<span class="variable">$newFile</span>"</span></span><br><span class="line">            mv -i <span class="variable">$oldFile</span> <span class="string">"<span class="variable">$newFile</span>"</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">"<span class="variable">$timestamp</span> is not a valide timestamp"</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">index=0</span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> $( ls -d &#123;*.png,*.jpg,*.jpeg,*gif,*.PNG,*.JPG,*.JPEG,*GIF&#125; )</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">let</span> index++</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"file: <span class="variable">$file</span>"</span></span><br><span class="line">    <span class="comment"># 截取文件名 注意定义变量=前后不能有空格</span></span><br><span class="line">    <span class="comment"># $&#123;VAR%.* &#125;含义：从$VAR中删除位于 % 右侧的通配符左右匹配的字符串，通配符从右向左进行匹配。% 非贪婪 %% 贪婪。</span></span><br><span class="line">    fileName=<span class="variable">$&#123;file%.*&#125;</span></span><br><span class="line">    <span class="comment"># echo $fileName</span></span><br><span class="line">    <span class="comment"># 字符串长度</span></span><br><span class="line">    <span class="comment"># fileNameLen=$&#123;#fileName&#125;</span></span><br><span class="line">    <span class="comment"># echo "fileName length= $fileNameLen"</span></span><br><span class="line">    <span class="comment"># 子串</span></span><br><span class="line">    <span class="comment"># echo $&#123;fileName:0:3&#125;</span></span><br><span class="line">    <span class="comment"># $&#123;VAR#*.&#125; 含义：从 $VAR 中删除位于 # 右侧的通配符所匹配的字符串，通配符是左向右进行匹配。# 非贪婪 ## 贪婪。</span></span><br><span class="line">    suffix=<span class="variable">$&#123;file#*.&#125;</span></span><br><span class="line">    <span class="comment"># echo "suffix= $suffix"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 调用函数 传参</span></span><br><span class="line">    tryFormat <span class="variable">$fileName</span> <span class="variable">$suffix</span> <span class="variable">$index</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"---------------------------------------"</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p>使用方法：把该文件拷贝到要批量处理的图片文件夹下，然后在终端中执行该shell文件。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Shell 批处理 格式化 重命名</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/12/11/Shell脚本批量格式化文件名/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-关于Collection was mutated while being enumerated" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1062,94 +1152,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-关于符号表（dSYM）的误解与事实" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/22/关于符号表（dSYM）的误解与事实/">关于符号表（dSYM）的误解与事实</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/22/关于符号表（dSYM）的误解与事实/" class="archive-article-date">
-  	<time datetime="2018-12-22T11:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/assets/BlogImages/misunderstand_truth.jpg" alt="misunderstand_truth"></p>
-<p>我们在iOS开发过程中一定会跟符号表（dSYM文件）打交道，它是我们不可或缺的定位bug的小帮手。我们都知道，每次编译都会生成一个dSYM文件，当我们的应用程序出现奔溃时，dSYM文件能帮我们定位到应用程序的代码奔溃到哪里了。</p>
-<p>最近在开发过程中遇到这样一个问题：我们的团队中有的成员用的是Xcode9，有的成员用的是Xcode10，Xcode10在打包时如果把Debug Information Format设置为DWARF with dSYM File，在打包时会导致电脑内存耗尽关机。所以在开发过程中，我们把配置都改成了DWARF。最后在用Xcode9打包的时候，忘记了修改这项配置，没有生成符号表上传到Bugly，所以线上的奔溃信息没法解析出来。这件事情引发我们的思考，面对这种情况，到底有没有什么补救措施呢？</p>
-<h2 id="dSYM文件简介"><a href="#dSYM文件简介" class="headerlink" title="dSYM文件简介"></a>dSYM文件简介</h2><p>符号表是内存地址与函数名、文件名、行号的映射表。符号表元素如下所示：</p>
-<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;起始地址&gt; &lt;结束地址&gt; &lt;函数&gt; <span class="meta">[&lt;文件名:行号&gt;]</span></span><br></pre></td></tr></table></figure>
-
-<p>iOS应用crash时也有堆栈，release版的应用，crash时的堆栈信息，全是二进制的地址信息。如果利用这些二进制的地址信息来定位问题是不可能的，因此我们需要将这些二进制的地址信息还原成源代码种的函数以及行号，这时候就需要符号表了。</p>
-<h2 id="误解与事实"><a href="#误解与事实" class="headerlink" title="误解与事实"></a>误解与事实</h2><p>我们都有这样一个共识：“每次打包都会生成一个新的dSYM并生成一个新的uuid，线上app也有一个uuid，只有这两个uuid匹配，才能成功解析二进制地址信息为源码。” 很惭愧，以前由于本人思维定式（估计很多人跟我一样吧，我发现网上很多文章也是这么讲的）认为每次打包都会生成一个全新的唯一的uuid，所以，如果打版时忘记勾选生成dSYM文件，将毫无补救办法。官方也没有任何关于这个uuid的生成规则的说明。</p>
-<p>网上的一些文章关于这一块讲的要么模棱两可，要么讲的是错误的：</p>
-<p>![lead young people astray](<a href="https://apestalk.github.io/assets/BlogImages/lead" target="_blank" rel="noopener">https://apestalk.github.io/assets/BlogImages/lead</a> young people astray.png)</p>
-<p>让我们再看看上面dSYM文件的介绍，它跟函数名、文件名和行号有关。<strong>简单点说就是同一份代码，编译之后的符号表文件的uuid是一样的。</strong> </p>
-<p>所以这个时候我们只需要找到上一次打包的那个时间点（代码相同），再重新archive一下，导出dSYM文件，这个dSYM文件的uuid跟之前打包生成的app的uuid是一致的。</p>
-<p>下面是有图有真相，同一份代码，不同时间点打的包的uuid是一样的：</p>
-<p><img src="/assets/BlogImages/dSYM-uuid.png" alt="dSYM-uuid"></p>
-<p>实践是检验真理的唯一标准。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">iOS 符号表 dSYM uuid</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/22/关于符号表（dSYM）的误解与事实/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1255,11 +1257,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">shell echo chmod</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">shell echo chmod</a>
+                <a href="javascript:void(0)" class="js-tag color3">Shell 批处理 格式化 重命名</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1267,11 +1273,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
+                <a href="javascript:void(0)" class="js-tag color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
+                <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
               </li>
              
               <li class="article-tag-list-item">
