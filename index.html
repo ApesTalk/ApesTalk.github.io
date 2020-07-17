@@ -154,6 +154,89 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Paging UICollectionView by smaller cells, not screen" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/14/Paging UICollectionView by smaller cells, not screen/">Paging UICollectionView by smaller cells, not screen</a>
+    </h1>
+  
+
+        
+        <a href="/2020/07/14/Paging UICollectionView by smaller cells, not screen/" class="archive-article-date">
+  	<time datetime="2020-07-14T01:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一个使用UICollectionView实现非全屏cell的paging效果，就像AppStore游戏tab顶部banner和支付宝财富tab的财富直通车banner一样的效果（主要是非全屏cell的情况下实现不管是慢速拖拽还是快速拖拽都每次只轮播一个cell）。</p>
+<p>借助UICollectionView的pagingenabled属性，我们能快速做出漂亮的滑动翻页paging效果，可以满足我们引导页、图片预览、banner等等轮播需求。但当我们的cell宽度不是占满整个UICollectionView的时候，比如我们经常遇到一屏要展示三个cell的效果，而且还要实现一次滑动一个cell的效果。这时候，我们不得不实现<code>- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset</code>方法或者自定义UICollectionViewFlowLayout实现<code>- (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset withScrollingVelocity:(CGPoint)velocity</code>通过矫正其偏移量来将距离UICollectionView中心点最近的cell居中显示。</p>
+<p>但是，很显然，单纯这样处理一下，在慢慢拖拽滑动的情况下不会有问题，在快速滑动时会跨cell，也就是一个假的paging效果，如下图所示：</p>
+<p><img src="/assets/BlogImages/paging_by_more_one_cell.gif" alt="会跨cell的paging效果"></p>
+<p>如果我们仔细看AppStore的游戏tab顶部banner或者支付宝财富tab的财富直通车banner的paging效果，会发现它们才是真正的paging效果，不管你怎么快速滑动，它每次就是只滑动一个cell，非常的完美。那他们是怎么实现的，为毛我们处理不了这种细节问题？？？再看看我们目前遇到的问题，只要我们限制不让其每次滑动跨cell就行了，不多解释了，关键代码如下：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//paging by cell | paging with one cell at a time</span></span><br><span class="line">- (<span class="keyword">void</span>)scrollViewWillBeginDragging:(<span class="built_in">UIScrollView</span> *)scrollView</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">UICollectionViewFlowLayout</span> *layout = (<span class="built_in">UICollectionViewFlowLayout</span>*)<span class="keyword">self</span>.collectionView.collectionViewLayout;</span><br><span class="line">    <span class="built_in">CGFloat</span> cellWidth = [<span class="built_in">UIScreen</span> mainScreen].bounds.size.width - layout.sectionInset.left - layout.sectionInset.right;</span><br><span class="line">    <span class="built_in">CGFloat</span> cellPadding = layout.minimumLineSpacing;</span><br><span class="line">    <span class="keyword">self</span>.currentPage = (scrollView.contentOffset.x - cellWidth / <span class="number">2</span>) / (cellWidth + cellPadding) + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)scrollViewWillEndDragging:(<span class="built_in">UIScrollView</span> *)scrollView withVelocity:(<span class="built_in">CGPoint</span>)velocity targetContentOffset:(<span class="keyword">inout</span> <span class="built_in">CGPoint</span> *)targetContentOffset</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">UICollectionViewFlowLayout</span> *layout = (<span class="built_in">UICollectionViewFlowLayout</span>*)<span class="keyword">self</span>.collectionView.collectionViewLayout;</span><br><span class="line">    <span class="built_in">CGFloat</span> cellWidth = [<span class="built_in">UIScreen</span> mainScreen].bounds.size.width - layout.sectionInset.left - layout.sectionInset.right;</span><br><span class="line">    <span class="built_in">CGFloat</span> cellPadding = layout.minimumLineSpacing;</span><br><span class="line">    <span class="built_in">NSInteger</span> page = (scrollView.contentOffset.x - cellWidth / <span class="number">2</span>) / (cellWidth + cellPadding) + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (velocity.x &gt; <span class="number">0</span>) page++;</span><br><span class="line">    <span class="keyword">if</span> (velocity.x &lt; <span class="number">0</span>) page--;</span><br><span class="line">    page = MAX(page, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//!!!!:此处注掉：会导致快速滑动会跨越多个cell</span></span><br><span class="line">    <span class="built_in">NSInteger</span> prePage = <span class="keyword">self</span>.currentPage - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(prePage &gt; <span class="number">0</span> &amp;&amp; page &lt; prePage)&#123;</span><br><span class="line">        page = <span class="keyword">self</span>.currentPage - <span class="number">1</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (page &gt; <span class="keyword">self</span>.currentPage + <span class="number">1</span>)&#123;</span><br><span class="line">        page = <span class="keyword">self</span>.currentPage + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">self</span>.currentPage = page;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">CGFloat</span> newOffset = page * (cellWidth + cellPadding);</span><br><span class="line">    targetContentOffset-&gt;x = newOffset;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最终效果如下：</p>
+<p><img src="/assets/BlogImages/paging_by_one_cell.gif" alt="不跨cell的paging效果"></p>
+<p>这是demo源码:<a href="https://github.com/ApesTalk/ATPagingByCell" target="_blank" rel="noopener">ATPagingByCell</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">UICollectionView Paging  by  cell 轮播 翻页 AppStore Alipay 支付宝 banner</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/07/14/Paging UICollectionView by smaller cells, not screen/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Shell脚本批量格式化文件名" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1061,97 +1144,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-iOS总结-最近遇到的问题及解决办法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/22/iOS总结-最近遇到的问题及解决办法/">iOS总结-最近遇到的问题及解决办法</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/22/iOS总结-最近遇到的问题及解决办法/" class="archive-article-date">
-  	<time datetime="2018-12-22T12:10:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在Bugly上发现线上APP存在不少崩溃问题，经过分析和定位，解决了几个比较棘手的问题，总结如下。</p>
-<h2 id="多线程问题"><a href="#多线程问题" class="headerlink" title="多线程问题"></a>多线程问题</h2><p>我们在APP中封装了一个记录业务日志的单例对象，主要代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">+ (instancetype)shareManager</span><br><span class="line">&#123;</span><br><span class="line">    static ATLogManager *manager = nil;</span><br><span class="line">    static dispatch_once_t onceToken;</span><br><span class="line">    dispatch_once(&amp;onceToken, ^&#123;</span><br><span class="line">        manager = [[self alloc]init];</span><br><span class="line">    &#125;);</span><br><span class="line">    return manager;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (FMDatabaseQueue *)logDBQueen</span><br><span class="line">&#123;</span><br><span class="line">    if(!_logDBQueen)&#123;</span><br><span class="line">        NSLog(@&quot;创建_logDBQueen&quot;);</span><br><span class="line">        NSString *docsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];</span><br><span class="line">        NSString *logPath = [docsDir stringByAppendingPathComponent:@&quot;ATLogs&quot;];</span><br><span class="line">        NSFileManager *fm =[NSFileManager defaultManager];  </span><br><span class="line">        NSError *error;</span><br><span class="line">        if (![fm fileExistsAtPath:logPath]) &#123;</span><br><span class="line">            [fm createDirectoryAtPath:logPath withIntermediateDirectories:NO attributes:nil error:&amp;error];</span><br><span class="line">            //禁止iCloud备份</span><br><span class="line">            NSURL *downloadsUrl = [NSURL fileURLWithPath:logPath];</span><br><span class="line">            NSDictionary *dic = [downloadsUrl resourceValuesForKeys:@[NSURLIsExcludedFromBackupKey] error:nil];</span><br><span class="line">            if(!dic || ![[dic objectForKey:NSURLIsExcludedFromBackupKey] boolValue])&#123;</span><br><span class="line">                [downloadsUrl setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:nil];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        NSString *dbPath = [logPath stringByAppendingPathComponent:@&quot;ATLog.sqlite&quot;];</span><br><span class="line">        _logDBQueen = [FMDatabaseQueue databaseQueueWithPath:dbPath];</span><br><span class="line">    &#125;</span><br><span class="line">    return _logDBQueen;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (BOOL)insertLogTableWithType:(NSString * )columnType moreHit:(NSString *)moreHit</span><br><span class="line">&#123;</span><br><span class="line">    ATLogManager *manager = [ATLogManager shareManager];</span><br><span class="line">    [manager createTable:kFindSelectColumnDate];</span><br><span class="line"></span><br><span class="line">    //insert code</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>之前在用的时候都是在主线程中同步调用相关方法进行记录的，自从上个版本把部分触发比较频繁的记录改成异步的调用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(dispatch_get_global_queue(0, 0), ^&#123;</span><br><span class="line">    [ATLogManager insertLogTableWithType:@&quot;2&quot; moreHit:@&quot;1&quot;];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>之后发现线上出现了比较多的崩溃，崩溃在了<code>[FMDatabaseQueue inDatabase:]</code>方法中。</p>
-<p><img src="/assets/BlogImages/fmdb_crash_issue.png" alt="fmdb_crash_issue"></p>
-<p>起初以为是FMDatabaseQueue的问题或者我们用的FMDB的版本较低的问题。但是FMDatabaseQueue本身是线程安全的，在多线程中使用同一个FMDatabaseQueue对象是没有问题的。FMDB这个第三方库，这么多用户，用了这么多年，应该是不会存在这种问题的。程序崩溃在这里，而且是SEGV_ACCERR类型的崩溃，只能是在FMDatabaseQueue使用过程中被释放了造成的。</p>
-<p>在我们封装的记录业务日志的单例对象中，有一个FMDatabaseQueue对象是采用懒加载的方式创建的，经过一番排查，发现这个FMDatabaseQueue对象竟然被创建了多次。这下子就豁然开朗了，在多线程并发的情况下，第一次创建的FMDatabaseQueue对象正在执行相关代码时，第二次紧接着调用了懒加载的方法创建了一个新的FMDatabaseQueue对象把第一个创建的给覆盖掉了，这时第一次创建的FMDatabaseQueue对象就被释放了，这个时候就存在很多不安全的隐患了，比如我们这里就是导致访问了一个不合法的内存地址。</p>
-<p>解决办法就是把懒加载的方法给移除，单例创建时就把对应的FMDatabaseQueue对象给创建了，保证FMDatabaseQueue只会创建一个。</p>
-<p>这个事情给我了一个比较大的教训，在使用单例的时候，一定要小心通过懒加载方式创建的属性，在多线程下一定要注意懒加载方法被调用多次。在单例的初始化方法中最好将它的属性都一并给初始化了，这样能有效保障线程安全。</p>
-<h2 id="preferredMaxLayoutWidth"><a href="#preferredMaxLayoutWidth" class="headerlink" title="preferredMaxLayoutWidth"></a>preferredMaxLayoutWidth</h2><p>在iOS10.2上某个页面总是点击进去就闪退，经过排查发现在计算某个UITableViewCell的高度时出现的crash，cell本身没有任何特别的，如果把cell上多行的UILabel给注释掉，就没有问题了。最后在UITableView-FDTemplateLayoutCell的<a href="https://github.com/forkingdog/UITableView-FDTemplateLayoutCell/issues/278" target="_blank" rel="noopener">issue278</a>找到了答案：多行UILabel如果不设置preferredMaxLayoutWidth，走到fittingHeight = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;会在iOS10.2的机器上卡死奔溃，应该属于系统问题。</p>
-<h2 id="block"><a href="#block" class="headerlink" title="block"></a>block</h2><p>开发过程有个在多线程中处理数据时出现了数组越界的问题，经检查发现是我们犯了一个关于block的低级错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//不加__block打印i=0（捕获后外部的修改不影响内部使用）；加__block打印i=1（外部的修改对block内部生效）</span><br><span class="line">for(__block NSInteger i = 0; i &lt; 1; i++)&#123;</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(0, 0), ^&#123;</span><br><span class="line">        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            NSLog(@&quot;i=%ld&quot;,i);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="UIWebSelectSinglePicker的crash问题"><a href="#UIWebSelectSinglePicker的crash问题" class="headerlink" title="UIWebSelectSinglePicker的crash问题"></a>UIWebSelectSinglePicker的crash问题</h2><p>另一个数组越界问题，但是查看奔溃堆栈信息，发现内容是包含UIWebSelectSinglePicker、UIPickerView、UIPickerTableView等关键字，据此猜测是我们项目中嵌入的H5页面调用系统的选择视图引起的崩溃。查资料发现，已经有人遇到这种情况了，重现步骤：H5唤起系统的UIPickerView，没有数据源的情况下，上下滑动一下再点击确定选择。详情可参考这篇文章：<a href="https://juejin.im/post/5b14cf376fb9a01e831463d6" target="_blank" rel="noopener">UIWebSelectSinglePicker的crash问题</a>。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/22/iOS总结-最近遇到的问题及解决办法/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1166,7 +1158,7 @@ var _hmt = _hmt || [];
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 ApesTalk
+    		&copy; 2020 ApesTalk
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1257,11 +1249,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">shell echo chmod</a>
+                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
+                <a href="javascript:void(0)" class="js-tag color2">UICollectionView Paging  by  cell 轮播 翻页 AppStore Alipay 支付宝 banner</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">shell echo chmod</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1273,11 +1269,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
+                <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
+                <a href="javascript:void(0)" class="js-tag color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
               </li>
              
               <li class="article-tag-list-item">

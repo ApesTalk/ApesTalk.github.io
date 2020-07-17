@@ -6,19 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://ApesTalk.github.com">
-  <title>Archives: 2019/1 | ApesTalk的博客</title>
+  <title>Paging UICollectionView by smaller cells, not screen | ApesTalk的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
-<meta name="keywords" content="ApesTalk,简书Code_Ninja,Code_Ninja,Objective-C,OC,Swift,Shell,java,html,js,iOS,iOSer,Coder,Porgrammer,代码,编程,程序猿,程序,Developer,Git,Github,开发,开源,分享,博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ApesTalk的博客">
-<meta property="og:url" content="https://ApesTalk.github.com/archives/2019/01/index.html">
+  <meta name="description" content="一个使用UICollectionView实现非全屏cell的paging效果，就像AppStore游戏tab顶部banner和支付宝财富tab的财富直通车banner一样的效果（主要是非全屏cell的情况下实现不管是慢速拖拽还是快速拖拽都每次只轮播一个cell）。 借助UICollectionView的pagingenabled属性，我们能快速做出漂亮的滑动翻页paging效果，可以满足我们引导页">
+<meta name="keywords" content="UICollectionView Paging  by  cell 轮播 翻页 AppStore Alipay 支付宝 banner">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Paging UICollectionView by smaller cells, not screen">
+<meta property="og:url" content="https://ApesTalk.github.com/2020/07/14/Paging UICollectionView by smaller cells, not screen/index.html">
 <meta property="og:site_name" content="ApesTalk的博客">
-<meta property="og:description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
+<meta property="og:description" content="一个使用UICollectionView实现非全屏cell的paging效果，就像AppStore游戏tab顶部banner和支付宝财富tab的财富直通车banner一样的效果（主要是非全屏cell的情况下实现不管是慢速拖拽还是快速拖拽都每次只轮播一个cell）。 借助UICollectionView的pagingenabled属性，我们能快速做出漂亮的滑动翻页paging效果，可以满足我们引导页">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://apestalk.github.com/assets/BlogImages/paging_by_more_one_cell.gif">
+<meta property="og:image" content="https://apestalk.github.com/assets/BlogImages/paging_by_one_cell.gif">
+<meta property="og:updated_time" content="2020-07-14T00:32:17.105Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ApesTalk的博客">
-<meta name="twitter:description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
+<meta name="twitter:title" content="Paging UICollectionView by smaller cells, not screen">
+<meta name="twitter:description" content="一个使用UICollectionView实现非全屏cell的paging效果，就像AppStore游戏tab顶部banner和支付宝财富tab的财富直通车banner一样的效果（主要是非全屏cell的情况下实现不管是慢速拖拽还是快速拖拽都每次只轮播一个cell）。 借助UICollectionView的pagingenabled属性，我们能快速做出漂亮的滑动翻页paging效果，可以满足我们引导页">
+<meta name="twitter:image" content="https://apestalk.github.com/assets/BlogImages/paging_by_more_one_cell.gif">
   
   
     <link rel="icon" href="/assets/images/favicon.png">
@@ -152,136 +156,186 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Paging UICollectionView by smaller cells, not screen" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Paging UICollectionView by smaller cells, not screen
+    </h1>
+  
+
+        
+        <a href="/2020/07/14/Paging UICollectionView by smaller cells, not screen/" class="archive-article-date">
+  	<time datetime="2020-07-14T01:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-14</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一个使用UICollectionView实现非全屏cell的paging效果，就像AppStore游戏tab顶部banner和支付宝财富tab的财富直通车banner一样的效果（主要是非全屏cell的情况下实现不管是慢速拖拽还是快速拖拽都每次只轮播一个cell）。</p>
+<p>借助UICollectionView的pagingenabled属性，我们能快速做出漂亮的滑动翻页paging效果，可以满足我们引导页、图片预览、banner等等轮播需求。但当我们的cell宽度不是占满整个UICollectionView的时候，比如我们经常遇到一屏要展示三个cell的效果，而且还要实现一次滑动一个cell的效果。这时候，我们不得不实现<code>- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset</code>方法或者自定义UICollectionViewFlowLayout实现<code>- (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset withScrollingVelocity:(CGPoint)velocity</code>通过矫正其偏移量来将距离UICollectionView中心点最近的cell居中显示。</p>
+<p>但是，很显然，单纯这样处理一下，在慢慢拖拽滑动的情况下不会有问题，在快速滑动时会跨cell，也就是一个假的paging效果，如下图所示：</p>
+<p><img src="/assets/BlogImages/paging_by_more_one_cell.gif" alt="会跨cell的paging效果"></p>
+<p>如果我们仔细看AppStore的游戏tab顶部banner或者支付宝财富tab的财富直通车banner的paging效果，会发现它们才是真正的paging效果，不管你怎么快速滑动，它每次就是只滑动一个cell，非常的完美。那他们是怎么实现的，为毛我们处理不了这种细节问题？？？再看看我们目前遇到的问题，只要我们限制不让其每次滑动跨cell就行了，不多解释了，关键代码如下：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//paging by cell | paging with one cell at a time</span></span><br><span class="line">- (<span class="keyword">void</span>)scrollViewWillBeginDragging:(<span class="built_in">UIScrollView</span> *)scrollView</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">UICollectionViewFlowLayout</span> *layout = (<span class="built_in">UICollectionViewFlowLayout</span>*)<span class="keyword">self</span>.collectionView.collectionViewLayout;</span><br><span class="line">    <span class="built_in">CGFloat</span> cellWidth = [<span class="built_in">UIScreen</span> mainScreen].bounds.size.width - layout.sectionInset.left - layout.sectionInset.right;</span><br><span class="line">    <span class="built_in">CGFloat</span> cellPadding = layout.minimumLineSpacing;</span><br><span class="line">    <span class="keyword">self</span>.currentPage = (scrollView.contentOffset.x - cellWidth / <span class="number">2</span>) / (cellWidth + cellPadding) + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)scrollViewWillEndDragging:(<span class="built_in">UIScrollView</span> *)scrollView withVelocity:(<span class="built_in">CGPoint</span>)velocity targetContentOffset:(<span class="keyword">inout</span> <span class="built_in">CGPoint</span> *)targetContentOffset</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">UICollectionViewFlowLayout</span> *layout = (<span class="built_in">UICollectionViewFlowLayout</span>*)<span class="keyword">self</span>.collectionView.collectionViewLayout;</span><br><span class="line">    <span class="built_in">CGFloat</span> cellWidth = [<span class="built_in">UIScreen</span> mainScreen].bounds.size.width - layout.sectionInset.left - layout.sectionInset.right;</span><br><span class="line">    <span class="built_in">CGFloat</span> cellPadding = layout.minimumLineSpacing;</span><br><span class="line">    <span class="built_in">NSInteger</span> page = (scrollView.contentOffset.x - cellWidth / <span class="number">2</span>) / (cellWidth + cellPadding) + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (velocity.x &gt; <span class="number">0</span>) page++;</span><br><span class="line">    <span class="keyword">if</span> (velocity.x &lt; <span class="number">0</span>) page--;</span><br><span class="line">    page = MAX(page, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//!!!!:此处注掉：会导致快速滑动会跨越多个cell</span></span><br><span class="line">    <span class="built_in">NSInteger</span> prePage = <span class="keyword">self</span>.currentPage - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(prePage &gt; <span class="number">0</span> &amp;&amp; page &lt; prePage)&#123;</span><br><span class="line">        page = <span class="keyword">self</span>.currentPage - <span class="number">1</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (page &gt; <span class="keyword">self</span>.currentPage + <span class="number">1</span>)&#123;</span><br><span class="line">        page = <span class="keyword">self</span>.currentPage + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">self</span>.currentPage = page;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">CGFloat</span> newOffset = page * (cellWidth + cellPadding);</span><br><span class="line">    targetContentOffset-&gt;x = newOffset;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最终效果如下：</p>
+<p><img src="/assets/BlogImages/paging_by_one_cell.gif" alt="不跨cell的paging效果"></p>
+<p>这是demo源码:<a href="https://github.com/ApesTalk/ATPagingByCell" target="_blank" rel="noopener">ATPagingByCell</a></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>感谢您的打赏！<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/images/alipay.png">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/images/wechat.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/01/27/Anyway，我被UIWindow打脸了/" class="archive-article-date">
-  	<time datetime="2019-01-27T11:40:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/01/27/Anyway，我被UIWindow打脸了/">Anyway，我被UIWindow打脸了</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">UIWindow makeKeyAndVisible hidden=NO</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">UICollectionView Paging  by  cell 轮播 翻页 AppStore Alipay 支付宝 banner</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://ApesTalk.github.com/2020/07/14/Paging UICollectionView by smaller cells, not screen/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/01/27/Shell命令备注/" class="archive-article-date">
-  	<time datetime="2019-01-27T09:57:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-27</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/12/11/Shell脚本批量格式化文件名/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Shell脚本批量格式化文件名</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/01/27/Shell命令备注/">Shell命令备注</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">shell echo chmod</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/01/10/也谈使用NSUserDefaults处理默认值/" class="archive-article-date">
-  	<time datetime="2019-01-10T10:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/01/10/也谈使用NSUserDefaults处理默认值/">也谈使用NSUserDefaults处理默认值</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">iOS NSUserDefaults UserAgent registerDefaults</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -304,8 +358,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
