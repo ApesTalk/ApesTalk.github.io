@@ -154,6 +154,135 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-也谈使用NSUserDefaults处理默认值" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/10/也谈使用NSUserDefaults处理默认值/">也谈使用NSUserDefaults处理默认值</a>
+    </h1>
+  
+
+        
+        <a href="/2019/01/10/也谈使用NSUserDefaults处理默认值/" class="archive-article-date">
+  	<time datetime="2019-01-10T10:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/assets/BlogImages/buildings-clouds-dusk.jpg" alt="欢迎关注支持"></p>
+<blockquote>
+<p>在Cocoa中，NSUserDefaults类的API用于存储和获取用户偏好设置。最近在了解设置webview的UserAgent时第一次用到了NSUserDefaults的<code>registerDefaults:</code>方法，顺带了解一下该方法。</p>
+</blockquote>
+<h2 id="始终使用objectForKey-方法"><a href="#始终使用objectForKey-方法" class="headerlink" title="始终使用objectForKey:方法"></a>始终使用<code>objectForKey:</code>方法</h2><p>我一直建议大家使用<code>objectForKey:</code>方法来获取值，而不是直接使用诸如<code>boolForKey:</code>、<code>integerForKey:</code>、<code>stringForKey:</code>之类的方法。因为通过<code>-[NSUserDefaults objectForKey:]</code>方法来获取值并加上类型判断，可以增强我们程序的健壮性。看下面的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BOOL showTutorial = [[NSUserDefaults standardUserDefaults] boolForKey:@&quot;ShowTutorial&quot;];</span><br></pre></td></tr></table></figure>
+
+<p>此时你没有办法判断到底存的值是NO还是没有存过值，如果想做类型区分就很难了，换成下面这样就好区分好理解了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NSNumber *showTutorial = [[NSUserDefaults standardUserDefaults] objectForKey:@&quot;ShowTutorial&quot;];</span><br><span class="line">BOOL shouldShowTutorial = NO;</span><br><span class="line">if(!showTutorial)&#123;</span><br><span class="line">//no set yet, put some Extra logic</span><br><span class="line">    shouldShowTutorial = YES;</span><br><span class="line">&#125;else&#123;</span><br><span class="line">    shouldShowTutorial = [showTutorial boolValue];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="关于registerDefaults-方法"><a href="#关于registerDefaults-方法" class="headerlink" title="关于registerDefaults:方法"></a>关于<code>registerDefaults:</code>方法</h2><p><code>registerDefaults:</code>方法可以注册一个包含APP偏好设置默认值的字典，设置之后，在APP中通过<code>objectForKey:</code>方法获取值时，如果之前没有保存过值，则返回通过<code>registerDefaults:</code>方法注册的默认值。你必须记住的一点是：<strong><code>registerDefaults:</code>方法注册的默认值不会存储到硬盘，只在程序生命周期中有效，所以，你必须每次在程序启动时调用该方法去配置，通常在<code>application:didFinishLaunchingWithOptions:</code>方法中配置。</strong>  </p>
+<p>例子胜千言：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];</span><br><span class="line"></span><br><span class="line">//重新启动，之前通过registerDefaults设置的值不存在，说明没有做永久存储。</span><br><span class="line">NSDictionary *rep = [ud dictionaryRepresentation];</span><br><span class="line">NSLog(@&quot;rep=%@&quot;, rep);    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[ud removeObjectForKey:@&quot;name&quot;];</span><br><span class="line">[ud setObject:@&quot;Apes&quot; forKey:@&quot;name&quot;];</span><br><span class="line">[ud registerDefaults:@&#123;@&quot;Apes Talk&quot;: @&quot;male&quot;&#125;];</span><br><span class="line">NSLog(@&quot;name=%@&quot;,[ud objectForKey:@&quot;name&quot;]);//Apes</span><br><span class="line">[ud removeObjectForKey:@&quot;name&quot;];</span><br><span class="line">NSLog(@&quot;name=%@&quot;,[ud objectForKey:@&quot;name&quot;]);//ApesTalk</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[ud removeObjectForKey:@&quot;twiceKey&quot;];</span><br><span class="line">[ud registerDefaults:@&#123;@&quot;twiceKey&quot;: @&quot;Apes&quot;&#125;];</span><br><span class="line">[ud registerDefaults:@&#123;@&quot;twiceKey&quot;: @&quot;ApesTalk&quot;&#125;];</span><br><span class="line">NSLog(@&quot;twiceKey=%@&quot;, [ud objectForKey:@&quot;twiceKey&quot;]);//ApesTalk</span><br><span class="line">[ud synchronize];</span><br><span class="line"></span><br><span class="line">rep = [ud dictionaryRepresentation];</span><br><span class="line">NSLog(@&quot;rep=%@&quot;, rep);</span><br></pre></td></tr></table></figure>
+
+<p>一个常见的使用<code>registerDefaults:</code>方法的例子是设置webview的userAgent，客户端通过在userAgent中加入特殊标识，HTML页面通过这个标识来判断该页面是在APP中加载的还是在浏览器中加载的，以此可以做一些定制化的功能。这里以UIWebView为例，WKWebView在iOS9之后有一个新的设置userAgent的属性customUserAgent。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//获取webview的默认userAgent</span><br><span class="line">UIWebView *tmpWebView = [[UIWebView alloc] initWithFrame:CGRectZero];</span><br><span class="line">NSString *oldAgent = [tmpWebView stringByEvaluatingJavaScriptFromString:@&quot;navigator.userAgent&quot;];</span><br><span class="line">//这里以简单的在旧的userAgent后面新增特殊标志为例</span><br><span class="line">NSString * newAgent = [oldAgent stringByAppendingString:@&quot; isInApp&quot;];</span><br><span class="line">//注册</span><br><span class="line">NSDictionary * dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:newAgent, @&quot;UserAgent&quot;, nil];</span><br><span class="line">[[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];</span><br><span class="line">[[NSUserDefaults standardUserDefaults] synchronize];</span><br></pre></td></tr></table></figure>
+
+<p>这个配置是怎么生效的呢？为什么通过NSUserDefaults设置的默认值为什么会影响到webview？webview在加载的时候是怎么读取userAgent的值的呢？</p>
+<p>实际上，NSUserDefaults有个域domain（由不同级别的层次组成）的概念，每当你获取key对应的value时，NSUserDefaults会在这个域下由上到下查找对应的key，返回第一个找到的值，有点像响应链。域可以持久化存储在硬盘中或只是存储在内存中。</p>
+<p>最重要的一个域是应用程序域（application domain），这里存储着调用<code>set...ForKey:</code>保存的APP设置信息。相对的，通过调用<code>registerDefaults:</code>方法保存的信息存储在低优先级的内存中的registration domain中，作为在应用程序域中找不到的任何值的一个后备（fallback）。</p>
+<p>还有一个全局的域，存储系统范围的设置。特定语言的域存储地区偏好，如每个地区的月名称或日期格式。</p>
+<p>最后但并非不重要的是，苹果使用相同的技术使我们能够通过命令行参数覆盖用户默认值。每个Cocoa应用程序自动检查命令行参数的键/值对，并将这些添加到适当命名的参数域（argument domain）下。由于参数域（argument domain）的优先级最高，我们可以使用它来临时覆盖任何偏好值。</p>
+<p>看到这里我们再回过头想想设置UserAgent的问题，实际上，我们通过高优先级的参数域（argument domain）来临时修改了APP的偏好设置。然后我们可以大胆的猜测一下，UIWebView在加载的时候内部会自动从APP的偏好设置中读取UserAgent的值，所以我们设置的UserAgent才会生效。</p>
+<p>完整的NSUserDefaults的域搜索顺序如下：</p>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>State</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NSArgumentDomain</td>
+<td>volatile</td>
+</tr>
+<tr>
+<td>Application</td>
+<td>volatile</td>
+</tr>
+<tr>
+<td>NSGlobalDomain</td>
+<td>persistent</td>
+</tr>
+<tr>
+<td>Languages</td>
+<td>persistent</td>
+</tr>
+<tr>
+<td>NSRegistrationDomain</td>
+<td>volatile</td>
+</tr>
+</tbody></table>
+<p>另外，通过Settings.bunlde设置的偏好设置信息也需要在程序启动时通过<code>registerDefaults:</code>方法注册才有效的。Settings.bunlde是个有意思的话题，不过目前使用该技术的APP较少，感兴趣的朋友可以看下这篇文章：<a href="https://blog.devzeng.com/blog/ios-settings-bundle.html" target="_blank" rel="noopener">iOS开发中Settings.bundle的使用</a>。</p>
+<p>参考：</p>
+<p><a href="https://oleb.net/blog/2014/02/nsuserdefaults-handling-default-values/" target="_blank" rel="noopener">Handling Default Values With NSUserDefaults</a></p>
+<p><a href="https://blog.devzeng.com/blog/ios-settings-bundle.html" target="_blank" rel="noopener">iOS开发中Settings.bundle的使用</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">iOS NSUserDefaults UserAgent registerDefaults</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/01/10/也谈使用NSUserDefaults处理默认值/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-iOS总结-最近遇到的问题及解决办法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -828,7 +957,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">UICollectionView Paging  by  cell 轮播 翻页 AppStore Alipay 支付宝 banner</a>
+                <a href="javascript:void(0)" class="js-tag color1">UICollectionViewCompositionalLayout UICollectionView layout section group item Paging  by  cell 轮播 翻页 AppStore</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -836,15 +965,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">UICollectionView Paging  by  cell 轮播 翻页 AppStore Alipay 支付宝 banner</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Shell 批处理 格式化 重命名</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
+                <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
+                <a href="javascript:void(0)" class="js-tag color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
               </li>
              
               <li class="article-tag-list-item">
