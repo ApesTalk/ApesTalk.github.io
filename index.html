@@ -154,6 +154,185 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-main函数之前系统都干了什么？为什么？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/15/main函数之前系统都干了什么？为什么？/">main函数之前系统都干了什么？为什么？</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/15/main函数之前系统都干了什么？为什么？/" class="archive-article-date">
+  	<time datetime="2020-08-15T10:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/assets/BlogImages/loader.jpg" alt="loader"></p>
+<p>把程序运行起来就是加载并运行可执行文件（Mach-O）的一个过程，程序运行起来之前，也就是mian函数之前系统为我们干了哪些工作呢？这方面早已不是秘密，但我这个人就是“贱”，只有自己动手亲自实践亲眼所见，才会心服口服印象深刻。真可谓“纸上得来终觉浅，绝知此事要躬行”。</p>
+<p>Mach-O 文件格式如下图所示，它由 Header、Load commands 以及 Data 三部分组成。</p>
+<p><img src="/assets/BlogImages/mach-o.png" alt="Mach-O"></p>
+<p>既然是看执行文件信息，就得借助工具：otool (object file display tool)。这是otool支持的功能列表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">-f print the fat headers</span><br><span class="line">-a print the archive header</span><br><span class="line">-h print the mach header</span><br><span class="line">-l print the <span class="keyword">load</span> commands</span><br><span class="line">-L print <span class="keyword">shared</span> libraries used</span><br><span class="line">-D print <span class="keyword">shared</span> <span class="keyword">library</span> <span class="keyword">id</span> <span class="keyword">name</span></span><br><span class="line">-t print the <span class="built_in">text</span> <span class="keyword">section</span> (disassemble <span class="keyword">with</span> -v)</span><br><span class="line">-x print <span class="keyword">all</span> <span class="built_in">text</span> sections (disassemble <span class="keyword">with</span> -v)</span><br><span class="line">-p &lt;routine <span class="keyword">name</span>&gt;  <span class="keyword">start</span> dissassemble <span class="keyword">from</span> routine <span class="keyword">name</span></span><br><span class="line">-s &lt;segname&gt; &lt;sectname&gt; print <span class="keyword">contents</span> <span class="keyword">of</span> <span class="keyword">section</span></span><br><span class="line">-d print the <span class="keyword">data</span> <span class="keyword">section</span></span><br><span class="line">-o print the Objective-C <span class="keyword">segment</span></span><br><span class="line">-r print the relocation entries</span><br><span class="line">-S print the <span class="keyword">table</span> <span class="keyword">of</span> <span class="keyword">contents</span> <span class="keyword">of</span> a <span class="keyword">library</span> (obsolete)</span><br><span class="line">-T print the <span class="keyword">table</span> <span class="keyword">of</span> <span class="keyword">contents</span> <span class="keyword">of</span> a dynamic <span class="keyword">shared</span> <span class="keyword">library</span> (obsolete)</span><br><span class="line">-M print the <span class="keyword">module</span> <span class="keyword">table</span> <span class="keyword">of</span> a dynamic <span class="keyword">shared</span> <span class="keyword">library</span> (obsolete)</span><br><span class="line">-R print the <span class="keyword">reference</span> <span class="keyword">table</span> <span class="keyword">of</span> a dynamic <span class="keyword">shared</span> <span class="keyword">library</span> (obsolete)</span><br><span class="line">-I print the indirect symbol <span class="keyword">table</span></span><br><span class="line">-H print the two-<span class="keyword">level</span> hints <span class="keyword">table</span> (obsolete)</span><br><span class="line">-G print the <span class="keyword">data</span> <span class="keyword">in</span> code <span class="keyword">table</span></span><br><span class="line">-v print verbosely (symbolically) <span class="keyword">when</span> possible</span><br><span class="line">-V print disassembled operands symbolically</span><br><span class="line">-c print argument strings <span class="keyword">of</span> a core <span class="keyword">file</span></span><br><span class="line">-X print <span class="keyword">no</span> <span class="keyword">leading</span> addresses <span class="keyword">or</span> headers</span><br><span class="line">-m don<span class="string">'t use archive(member) syntax</span></span><br><span class="line"><span class="string">-B force Thumb disassembly (ARM objects only)</span></span><br><span class="line"><span class="string">-q use llvm'</span>s disassembler (the <span class="keyword">default</span>)</span><br><span class="line">-Q <span class="keyword">use</span> otool(<span class="number">1</span>)<span class="string">'s disassembler</span></span><br><span class="line"><span class="string">-mcpu=arg use `arg'</span> <span class="keyword">as</span> the cpu <span class="keyword">for</span> disassembly</span><br><span class="line">-j print opcode <span class="keyword">bytes</span></span><br><span class="line">-P print the info plist <span class="keyword">section</span> <span class="keyword">as</span> strings</span><br><span class="line">-C print linker optimization hints</span><br><span class="line"><span class="comment">--version print the version of /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/otool</span></span><br></pre></td></tr></table></figure>
+
+<p>先cd到我们.app文件所在目录。首先尝试 <code>otool -l</code> 指令来看下程序运行起来都执行了哪些加载命令（load command）:</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br></pre></td><td class="code"><pre><span class="line">//这里只看指令名字</span><br><span class="line"></span><br><span class="line">$ otool -l AskMoreOC</span><br><span class="line"></span><br><span class="line">AskMoreOC:</span><br><span class="line">//Header：记录文件类型、支持的CPU类型以及加载命令的个数、大小等。</span><br><span class="line">Mach header</span><br><span class="line">      magic cputype cpusubtype  caps    filetype ncmds sizeofcmds      flags</span><br><span class="line"> <span class="number">0xfeedfacf</span> <span class="number">16777223</span>          <span class="number">3</span>  <span class="number">0x00</span>           <span class="number">2</span>    <span class="number">22</span>       <span class="number">3344</span> <span class="number">0x00200085</span></span><br><span class="line"></span><br><span class="line">//Load <span class="keyword">command</span>：向操作系统描述如何解析文件。</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">0</span></span><br><span class="line">     <span class="comment"> //将相应的segment映射到虚拟地址空间中</span></span><br><span class="line">     <span class="comment"> //这里是将段__PAGEZERO隐射到虚拟地址0x0中</span></span><br><span class="line">      cmd LC_SEGMENT_64</span><br><span class="line"> <span class="comment"> //命令大小</span></span><br><span class="line">  cmdsize <span class="number">72</span></span><br><span class="line"> <span class="comment"> //被加载的段名</span></span><br><span class="line">  segname __PAGEZERO</span><br><span class="line"> <span class="comment"> //段所在虚拟地址空间</span></span><br><span class="line">   vmaddr <span class="number">0x0000000000000000</span></span><br><span class="line"> <span class="comment"> //段所占虚拟地址空间大小</span></span><br><span class="line">   vmsize <span class="number">0x0000000100000000</span></span><br><span class="line"> <span class="comment"> //段在文件中的偏移</span></span><br><span class="line">  fileoff <span class="number">0</span></span><br><span class="line"> <span class="comment"> //段在文件中的大小</span></span><br><span class="line"> filesize <span class="number">0</span></span><br><span class="line"><span class="comment"> //与段对应的最大操作权限</span></span><br><span class="line">  maxprot <span class="number">0x00000000</span></span><br><span class="line"> <span class="comment"> //段的初始操作权限</span></span><br><span class="line"> initprot <span class="number">0x00000000</span></span><br><span class="line"> <span class="comment"> //段包含的section个数</span></span><br><span class="line">   nsects <span class="number">0</span></span><br><span class="line">    flags <span class="number">0x0</span></span><br><span class="line">Load <span class="keyword">command</span> <span class="title">1</span></span><br><span class="line">      cmd LC_SEGMENT_64</span><br><span class="line">  cmdsize <span class="number">872</span></span><br><span class="line">  segname __TEXT</span><br><span class="line">......</span><br><span class="line">//__TEXT段包含<span class="number">5</span>个Section</span><br><span class="line">Section</span><br><span class="line">//__text包含程序的机器码</span><br><span class="line">  sectname __text</span><br><span class="line">   segname __TEXT</span><br><span class="line">Section</span><br><span class="line">//__stubs和__stub_helper帮助DYLD绑定符号</span><br><span class="line">  sectname __stubs</span><br><span class="line">   segname __TEXT</span><br><span class="line"> reserved1 <span class="number">0</span> (index <span class="keyword">into</span> indirect symbol table)</span><br><span class="line">Section</span><br><span class="line">  sectname __stub_helper</span><br><span class="line">   segname __TEXT</span><br><span class="line">Section</span><br><span class="line">//__cstring包含文件中的常量字符串</span><br><span class="line">  sectname __cstring</span><br><span class="line">   segname __TEXT</span><br><span class="line">Section</span><br><span class="line">//类名</span><br><span class="line">  sectname __objc_classname</span><br><span class="line">   segname __TEXT</span><br><span class="line">Section</span><br><span class="line">//方法名</span><br><span class="line">  sectname __objc_methname</span><br><span class="line">   segname __TEXT</span><br><span class="line">Section</span><br><span class="line">//方法签名</span><br><span class="line">  sectname __objc_methtype</span><br><span class="line">   segname __TEXT</span><br><span class="line">Section</span><br><span class="line">  sectname __ustring</span><br><span class="line">   segname __TEXT</span><br><span class="line">Section</span><br><span class="line">  sectname __entitlements</span><br><span class="line">   segname __TEXT</span><br><span class="line">Section</span><br><span class="line">//__unwind_info确定异常发生时栈所对应的信息</span><br><span class="line">//包括栈指针、返回地址、寄存器信息等</span><br><span class="line">  sectname __unwind_info</span><br><span class="line">   segname __TEXT</span><br><span class="line"></span><br><span class="line">//Data段</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">2</span></span><br><span class="line">      cmd LC_SEGMENT_64</span><br><span class="line">  segname __DATA_CONST</span><br><span class="line">Section</span><br><span class="line">  sectname __got</span><br><span class="line">   segname __DATA_CONST</span><br><span class="line"> reserved1 <span class="number">16</span> (index <span class="keyword">into</span> indirect symbol table)</span><br><span class="line"> reserved2 <span class="number">0</span></span><br><span class="line">Section</span><br><span class="line">  sectname __const</span><br><span class="line">   segname __DATA_CONST</span><br><span class="line">Section</span><br><span class="line">  sectname __cfstring</span><br><span class="line">   segname __DATA_CONST</span><br><span class="line">Section</span><br><span class="line">  sectname __objc_classlist</span><br><span class="line">   segname __DATA_CONST</span><br><span class="line">Section</span><br><span class="line">  sectname __objc_nlclslist</span><br><span class="line">   segname __DATA_CONST</span><br><span class="line">Section</span><br><span class="line">  sectname __objc_catlist</span><br><span class="line">   segname __DATA_CONST</span><br><span class="line">Section</span><br><span class="line">  sectname __objc_nlcatlist</span><br><span class="line">   segname __DATA_CONST</span><br><span class="line">Section</span><br><span class="line">  sectname __objc_protolist</span><br><span class="line">   segname __DATA_CONST</span><br><span class="line">Section</span><br><span class="line">  sectname __objc_imageinfo</span><br><span class="line">   segname __DATA_CONST</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">3</span></span><br><span class="line">      cmd LC_SEGMENT_64</span><br><span class="line">  cmdsize <span class="number">792</span></span><br><span class="line">  segname __DATA</span><br><span class="line">Section</span><br><span class="line">  sectname __la_symbol_ptr</span><br><span class="line">   segname __DATA</span><br><span class="line"> reserved1 <span class="number">22</span> (index <span class="keyword">into</span> indirect symbol table)</span><br><span class="line">Section</span><br><span class="line">  sectname __objc_const</span><br><span class="line">   segname __DATA</span><br><span class="line">Section</span><br><span class="line">  sectname __objc_selrefs</span><br><span class="line">   segname __DATA</span><br><span class="line">Section</span><br><span class="line">  sectname __objc_classrefs</span><br><span class="line">   segname __DATA</span><br><span class="line">Section</span><br><span class="line">  sectname __objc_superrefs</span><br><span class="line">   segname __DATA</span><br><span class="line">Section</span><br><span class="line">  sectname __objc_ivar</span><br><span class="line">   segname __DATA</span><br><span class="line">Section</span><br><span class="line">  sectname __objc_data</span><br><span class="line">   segname __DATA</span><br><span class="line">Section</span><br><span class="line">  sectname __data</span><br><span class="line">   segname __DATA</span><br><span class="line">Section</span><br><span class="line">  sectname __bss</span><br><span class="line">   segname __DATA</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">4</span></span><br><span class="line">    cmd LC_SEGMENT_64</span><br><span class="line"> <span class="comment"> //将与动态链接相关的信息映射到虚拟地址空间</span></span><br><span class="line">  segname __LINKEDIT</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">5</span></span><br><span class="line">//记录了有关链接的重要信息</span><br><span class="line">    cmd LC_DYLD_INFO_ONLY</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">6</span></span><br><span class="line">//程序的符号表以及字符串表的偏移量及大小</span><br><span class="line">     cmd LC_SYMTAB</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">7</span></span><br><span class="line">//包括动态链接过程中所需要的信息</span><br><span class="line">    cmd LC_DYSYMTAB</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">8</span></span><br><span class="line">//指定动态链接器的地址</span><br><span class="line">    cmd LC_LOAD_DYLINKER</span><br><span class="line">        name /usr/lib/dyld (<span class="built_in">offset</span> <span class="number">12</span>)</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">9</span></span><br><span class="line">//静态链接器为其生成的文件所提供的唯一标识符</span><br><span class="line">     cmd LC_UUID</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">10</span></span><br><span class="line">       cmd LC_BUILD_VERSION</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">11</span></span><br><span class="line">      cmd LC_SOURCE_VERSION</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">12</span></span><br><span class="line">//指定main函数的地址</span><br><span class="line">      cmd LC_MAIN</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">13</span></span><br><span class="line">//记录了程序所需要的动态库的相关信息</span><br><span class="line">      cmd LC_LOAD_DYLIB</span><br><span class="line">         name /System/Library/Frameworks/Foundation.framework/Foundation (<span class="built_in">offset</span> <span class="number">24</span>)</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">14</span></span><br><span class="line">      cmd LC_LOAD_DYLIB</span><br><span class="line">     <span class="comment"> //objc和runtime</span></span><br><span class="line">         name /usr/lib/libobjc.A.dylib (<span class="built_in">offset</span> <span class="number">24</span>)</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">15</span></span><br><span class="line">      cmd LC_LOAD_DYLIB</span><br><span class="line">     <span class="comment"> //系统级别库</span></span><br><span class="line">         name /usr/lib/libSystem.B.dylib (<span class="built_in">offset</span> <span class="number">24</span>)</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">16</span></span><br><span class="line">      cmd LC_LOAD_DYLIB</span><br><span class="line">         name /System/Library/Frameworks/CoreFoundation.framework/CoreFoundation (<span class="built_in">offset</span> <span class="number">24</span>)</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">17</span></span><br><span class="line">      cmd LC_LOAD_DYLIB</span><br><span class="line">         name /System/Library/Frameworks/UIKit.framework/UIKit (<span class="built_in">offset</span> <span class="number">24</span>)</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">18</span></span><br><span class="line">//动态库被拷贝到app的Frameworks目录下</span><br><span class="line">      cmd LC_RPATH</span><br><span class="line">         path @executable_path/Frameworks (<span class="built_in">offset</span> <span class="number">12</span>)</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">19</span></span><br><span class="line">//记录文件中每个函数的起始地址</span><br><span class="line">      cmd LC_FUNCTION_STARTS</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">20</span></span><br><span class="line">//记录那些写在程序二进制执行指令中的数据</span><br><span class="line">      cmd LC_DATA_IN_CODE</span><br><span class="line">Load <span class="keyword">command</span> <span class="title">21</span></span><br><span class="line">//代码签名</span><br><span class="line">      cmd LC_CODE_SIGNATURE</span><br></pre></td></tr></table></figure>
+
+<p>上面的加载指令中可以看到系统进行了动态库的链接。</p>
+<p>然后尝试 <code>otool -L</code> 指令来看下程序运行起来都加载了哪些动态库：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ otool -L AskMoreOC</span><br><span class="line">AskMoreOC:</span><br><span class="line">    /System/Library/Frameworks/Foundation.framework/Foundation (compatibility <span class="built_in">version</span> <span class="number">300.0</span><span class="number">.0</span>, current <span class="built_in">version</span> <span class="number">1676.104</span><span class="number">.0</span>)</span><br><span class="line">    /usr/lib/libobjc.A.dylib (compatibility <span class="built_in">version</span> <span class="number">1.0</span><span class="number">.0</span>, current <span class="built_in">version</span> <span class="number">228.0</span><span class="number">.0</span>)</span><br><span class="line">    /usr/lib/libSystem.B.dylib (compatibility <span class="built_in">version</span> <span class="number">1.0</span><span class="number">.0</span>, current <span class="built_in">version</span> <span class="number">1281.100</span><span class="number">.1</span>)</span><br><span class="line">    /System/Library/Frameworks/CoreFoundation.framework/CoreFoundation (compatibility <span class="built_in">version</span> <span class="number">150.0</span><span class="number">.0</span>, current <span class="built_in">version</span> <span class="number">1676.104</span><span class="number">.0</span>)</span><br><span class="line">    /System/Library/Frameworks/UIKit.framework/UIKit (compatibility <span class="built_in">version</span> <span class="number">1.0</span><span class="number">.0</span>, current <span class="built_in">version</span> <span class="number">61000.0</span><span class="number">.0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>可见跟上面的 <code>otool -l</code> 指令一样，告诉我们链接了程序需要的Foundation、libobjc.A.dylib、libSystem.B.dylib、CoreFoundation和UIKit动态库。其中libobjc.A.dylib是包含objc和runtime的。</p>
+<p>在Xcode中设置符号 <code>_objc_init</code> (runtime入口函数)断点，看到调用栈中有ImageLoader、libSystem_initializer、libdispatch_init等身影。</p>
+<p>我们再看+load方法调用顺序，配置一个父类、子类、父类的Category、子类的Category，都实现+load方法，证实调用顺序是：父类 -&gt; 子类 -&gt; 父类Category -&gt; 子类Category。</p>
+<p>综上，程序mian函数之前的大概流程：<br>1.读取Mach-O文件，找到动态链接器 dyld（the dynamic link editor)的路径。<br>2.dyld将动态链接库递归加载到内存中。<br>3.ImageLoader加载我们的类，方法、符号等到内存中。<br>4.runtime调用map_imaegs做解析，load_images调用call_load_methods方法遍历所有被加载的类，按继承层级从父类到子类依次调用+load方法和其Category中的+load方法。<br>5.dyld返回main函数地址，main函数被调用。</p>
+<p>那main函数之前系统为什么要做这些工作呢？<br>一方面系统做了初始化运行环境，链接动态链接库，是因为动态链接库不需要打包到APP中，减少APP体积，还方便动态替换，所以在程序启动之前需要系统去链接需要的动态链接库加载，这样程序启动起来才能正常使用。另一方面+load方法是runtime调起的，它是Objective-C为我们提供的一种接口，方便在加载的时候做一些提前准备工作。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">main otool dyld +load command section</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/15/main函数之前系统都干了什么？为什么？/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-main函数的参数argc和argv是什么？为什么？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/14/main函数的参数argc和argv是什么？为什么？/">main函数的参数argc和argv是什么？为什么？</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/14/main函数的参数argc和argv是什么？为什么？/" class="archive-article-date">
+  	<time datetime="2020-08-14T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/assets/BlogImages/main_argc_argv.png" alt="main"></p>
+<p>在我刚读大学那会，其他专业的同学都会去考计算机二级，有次一位其他专业的同学向我求教“main函数的argc和argv我们用不到呀，这俩参数是啥意思呢？” 问的我一愣，我们老师也没有教呀，而且书本上好像也没有。通过字面意思我只能告诉他argv是参数数组，argc是参数个数，具体有啥用我也说不上来。实际上我的回答是经不起进一步追问的，argc是argv的长度吗？如果是这样的话，那么既然有了参数数组了，为毛要多传一个参数个数？</p>
+<p>实际上，argc和argv是命令行传递给main函数的参数，其中：</p>
+<p>argv是一个包含多个字符串的数组，其中包含执行文件名和所附带的参数。argv[0]是可执行文件地址（在iOS中它就是.app中可执行文件地址）。</p>
+<p>argc是argv的长度，也就是参数个数+1。</p>
+<p>既然是这样，那为什么还“多此一举”地传个argc呢？主要是因为C99标准规定了这么做，而且传递一个argc可以方便提高后续流程效率（O(1)和O(n)的时间复杂度）。</p>
+<p>在我们iOS中，正常程序运行起来，argc是1，argv[0]是我们.app文件下可执行文件路径。我们怎么验证多参数的场景呢？我们可以通过终端命令 xcrun simctl 来启动我们的app并加上参数即可，比如我这里执行：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl launch D3ED4FE2<span class="number">-9821</span><span class="number">-4</span>CE4<span class="number">-93</span>FA<span class="number">-85</span>B57BFC53B3 com.github.ApesTalk.AskMoreOC I love iOS</span><br></pre></td></tr></table></figure>
+
+<p>顺带复习下 xcrun simctl 安装和运行APP指令：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl <span class="built_in">list</span> <span class="comment">//查看模拟器列表 可得到deviceId</span></span><br><span class="line">xcrun simctl install device_id app_path <span class="comment">//安装app</span></span><br><span class="line">xcrun simctl launch device_id app_bundle_id <span class="comment">//运行app</span></span><br></pre></td></tr></table></figure>
+
+<p>程序中提前写好把参数打印出来的代码逻辑，看到如下结果：</p>
+<p><img src="/assets/BlogImages/argcv.png" alt="参数"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">main argv argc</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/14/main函数的参数argc和argv是什么？为什么？/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-初探UICollectionViewCompositionalLayout" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -972,183 +1151,6 @@ var _hmt = _hmt || [];
 
 
   
-    <article id="post-Anyway，我被UIWindow打脸了" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/27/Anyway，我被UIWindow打脸了/">Anyway，我被UIWindow打脸了</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/27/Anyway，我被UIWindow打脸了/" class="archive-article-date">
-  	<time datetime="2019-01-27T11:40:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/assets/BlogImages/window.png" alt></p>
-<blockquote>
-<p>需求好轮回，bug绕过谁。</p>
-</blockquote>
-<p>近日捕获一bug，经排查定位后发现，该bug属于通过<code>[UIApplication sharedApplication].keyWindow.rootViewController</code>方法拿到了错误的控制器，导致后面执行的代码异常。下面请听我细细为你讲述该bug的前世今生。</p>
-<p>因为是线上bug，奔溃在了广告业务加载完了之后，考虑到会影响大量用户，内心甚是恐慌。因为奔溃的地方是最近才改的代码，所以起初我一直在最近的两个业务需求里排查问题，因为最近另外一个需求也添加了一个window。事实上，我被狠狠的打脸了，脸好疼。。。</p>
-<p><img src="/assets/BlogImages/ohshit.jpg" alt></p>
-<p>经过测试和分析，最近新增的这个window并不会导致这个问题。确定启动的时候也没有类似UIAlertView这种弹窗会弹出来，那为什么通过<code>[UIApplication sharedApplication].keyWindow</code>拿到了错误的window呢？不找到问题点实在是难以饶恕自己啊！</p>
-<p>到后来，再看线上更新最近这个版本的用户很多，但是这个崩溃只有一例，再加上确认不是因为启动时和其他业务互相影响导致的启动就崩的严重bug。我的内心稍微平复了一些，没那么慌了，能够静下心来理性地分析问题了。</p>
-<p>回归到问题源头，首先，我们知道当我们调用UIWindow的<code>makeKeyAndVisible</code>时，系统会调用它的<code>hidden = NO</code>让它显示出来，另外会帮我们把它加入<code>[UIApplication sharedApplication].windows</code>数组中。当我们调用<code>[UIApplication sharedApplication].keyWindow</code>时，系统给我们返回一个最近调用了<code>makeKeyAndVisible</code>方法的window。一般正常情况下我们一个APP只有一个window，通过<code>[UIApplication sharedApplication].keyWindow</code>拿我们的主window是没有问题的，只有当我们程序中出现多个window的时候才可能会出现问题。那么第二个问题来了，什么时候回出现多个window呢，也就是<code>[UIApplication sharedApplication].windows</code>数组长度不为1，那必须是显式或隐式地调用了window的<code>makeKeyAndVisible</code>方法才会出现这种情况。</p>
-<p>然后，我在项目中搜<code>makeKeyAndVisible</code>方法，找到了一个很早之前的业务需求处用到了一个window并调用了<code>makeKeyAndVisible</code>方法，当时是为了解决其他问题。实在是没有想到会是跟这里的业务相互影响了。一把辛酸泪啊，突然想说一句“不是你的代码没有bug，而是你的bug需要点时间。”</p>
-<p>另外需要注意的是，项目中有历史遗留的<code>UIAlertView</code>和<code>UIActionSheet</code>的，要尽快把它们改掉了，因为随着业务的不断增长，在有这些弹窗的时候如果去调用<code>[UIApplication sharedApplication].keyWindow</code>拿到的会是一个<code>_UIAlertControllerShimPresenterWindow</code>，它的rootViewController是一个<code>UIApplicationRotationFollowingController</code>。很明显，在它们弹出来的时候，系统会新建一个UIWindow，并且为了在不管当前视图层级结构是怎样的，都将弹窗置为最上层让用户能看到，所以不得不调用了window的<code>makeKeyAndVisible</code>方法。这是一个隐患，我猜测苹果新推出<code>UIAlertController</code>来替代<code>UIAlertView</code>和<code>UIActionSheet</code>有这方面的考量。</p>
-<p>所以，这里有三个建议：</p>
-<p>1、建议是尽快把项目中的<code>UIAlertView</code>和<code>UIActionSheet</code>换成<code>UIAlertController</code>。</p>
-<p>2、在拿主window的时候通过<code>[UIApplication sharedApplication].delegate.window</code>方式拿。</p>
-<p>3、在使用除主UIWindow外的其他window时，如果你只是想把它展示出来，直接调用<code>window.hidden = NO</code>即可，如果没有强制要将该window置为最上层，就不要去调用<code>makeKeyAndVisible</code>。</p>
-<p>这次被UIWinow打脸呢，有点意外，幸好没有酿成重大必陷bug。这件事又给我了一个大教训，那就是遇事不要慌张，不要一上来就凭借自己的经验随便下结论，一定要静下心来理性地思考，先仔细分析bug，先摸清bug的来龙去脉，再顺藤摸瓜就很简单了。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">UIWindow makeKeyAndVisible hidden=NO</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/27/Anyway，我被UIWindow打脸了/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Shell命令备注" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/27/Shell命令备注/">Shell命令备注</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/27/Shell命令备注/" class="archive-article-date">
-  	<time datetime="2019-01-27T09:57:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/assets/BlogImages/shell.png" alt></p>
-<h2 id="chmod命令（chmod-755到底是个什么鬼？）"><a href="#chmod命令（chmod-755到底是个什么鬼？）" class="headerlink" title="chmod命令（chmod 755到底是个什么鬼？）"></a>chmod命令（chmod 755到底是个什么鬼？）</h2><p>Linux/Unix 的文件调用权限分为三级 : 文件拥有者、群组、其他。利用 chmod 可以藉以控制文件如何被他人所调用。<br>每个文件的权限呢，又分为读、写和执行。所以，可以用三位二进制来标识权限，当对应二进制位为0时表示没有对应的权限，当对应二进制位为1时表示有对应的权限。比如110，就表时可读可写不可执行。</p>
-<p>那么对应三个用户分组，就需要三组这样的三位二进制来标识权限了。比如111 101 101（rwxr-xr-x），分别（每三位）表示User、Group、及Other的权限。</p>
-<p>对应的，r=4，w=2，x=1<br>若要rwx属性则4+2+1=7；<br>若要rw-属性则4+2=6；<br>若要r-x属性则4+1=5。</p>
-<p>所以755就是11110101（rwxr-xr-x）也就是说文件拥有者有读写和执行的权限，群组和其他用户拥有读和执行的权限。</p>
-<h2 id="Shell命令实现各种进制转换"><a href="#Shell命令实现各种进制转换" class="headerlink" title="Shell命令实现各种进制转换"></a>Shell命令实现各种进制转换</h2><p>在终端中可以通过printf和echo命令加上表达式即可轻松实现各种进制数之间的互转。我们知道，八进制用o标识，十进制用d标识，十六进制用x标识。</p>
-<p>公式1：<code>printf %&lt;目标进制标识&gt; $((原进制标识#原进制数))</code><br>公式2：<code>echo &quot;obase=目标进制;$((原进制#原进制数))”|bc</code> 实际上只需掌握这个公式即可！</p>
-<p>二进制转十进制：<code>printf %d $((2#1111))</code>           或<code>echo &quot;obase=10;$((2#1111))&quot;|bc</code><br>十进制转二进制：<code>echo &quot;obase=2;15&quot;|bc</code> 或 <code>echo &quot;obase=2;$((10#15))&quot;|bc</code></p>
-<p>二进制转八进制：<code>printf %o $((2#1111))</code>  或   <code>echo &quot;obase=8;$((2#1111))&quot;|bc</code><br>八进制转二进制：<code>echo &quot;obase=2;$((8#17))&quot;|bc</code></p>
-<p>二进制转十六进制：<code>printf %x $((2#1111))</code> 或  <code>echo &quot;obase=16;$((2#1111))&quot;|bc</code><br>十六进制转二进制：<code>echo &quot;obase=2;$((16#F))&quot;|bc</code></p>
-<p>八进制转十进制：<code>printf %d $((8#17))</code>或 <code>echo &quot;obase=10;$((8#17))&quot;|bc</code><br>十进制转八进制：<code>echo &quot;obase=8;$((15))&quot;|bc</code></p>
-<p>十六进制转十进制：<code>printf %d 0xF 或 echo $((16#F))</code> 或 <code>echo &quot;obase=10;$((16#F))&quot;|bc</code><br>十进制转十六进制：<code>printf %x 15</code>或 <code>echo &quot;obase=16;15&quot;|bc</code></p>
-<p>八进制转十六进制：<code>printf %x $((8#17))</code>或 <code>echo &quot;obase=16;$((8#17))&quot;|bc</code><br>十六进制转八进制：<code>echo &quot;obase=8;$((16#F))&quot;|bc</code></p>
-<h2 id="查看命令所在位置-command-which-lt-command-gt"><a href="#查看命令所在位置-command-which-lt-command-gt" class="headerlink" title="查看命令所在位置 command which &lt;command&gt;"></a>查看命令所在位置 <code>command which &lt;command&gt;</code></h2><p>如<code>command which pod</code>查看pod命令所在位置。一般命令都放在<code>usr/local/bin</code>目录下。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">shell echo chmod</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/27/Shell命令备注/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1254,11 +1256,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
+                <a href="javascript:void(0)" class="js-tag color2">UICollectionView Paging  by  cell 轮播 翻页 AppStore Alipay 支付宝 banner</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">UICollectionView Paging  by  cell 轮播 翻页 AppStore Alipay 支付宝 banner</a>
+                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1266,11 +1268,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Shell 批处理 格式化 重命名</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
+                <a href="javascript:void(0)" class="js-tag color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1278,7 +1284,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
+                <a href="javascript:void(0)" class="js-tag color3">main otool dyld +load command section</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">main argv argc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1302,11 +1312,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里 API网关 网关 API GateWay</a>
+                <a href="javascript:void(0)" class="js-tag color4">父亲 情感 个人</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">父亲 情感 个人</a>
+                <a href="javascript:void(0)" class="js-tag color4">阿里 API网关 网关 API GateWay</a>
               </li>
             
             <div class="clearfix"></div>

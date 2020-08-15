@@ -6,22 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://ApesTalk.github.com">
-  <title>iOS总结-最近遇到的问题及解决办法 | ApesTalk的博客</title>
+  <title>Archives: 2020/8 | ApesTalk的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近在Bugly上发现线上APP存在不少崩溃问题，经过分析和定位，解决了几个比较棘手的问题，总结如下。 多线程问题我们在APP中封装了一个记录业务日志的单例对象，主要代码如下： 12345678910111213141516171819202122232425262728293031323334353637383940+ (instancetype)shareManager&amp;#123;    st">
-<meta name="keywords" content="iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker">
-<meta property="og:type" content="article">
-<meta property="og:title" content="iOS总结-最近遇到的问题及解决办法">
-<meta property="og:url" content="https://ApesTalk.github.com/2018/12/22/iOS总结-最近遇到的问题及解决办法/index.html">
+  <meta name="description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
+<meta name="keywords" content="ApesTalk,简书Code_Ninja,Code_Ninja,Objective-C,OC,Swift,Shell,java,html,js,iOS,iOSer,Coder,Porgrammer,代码,编程,程序猿,程序,Developer,Git,Github,开发,开源,分享,博客">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ApesTalk的博客">
+<meta property="og:url" content="https://ApesTalk.github.com/archives/2020/08/index.html">
 <meta property="og:site_name" content="ApesTalk的博客">
-<meta property="og:description" content="最近在Bugly上发现线上APP存在不少崩溃问题，经过分析和定位，解决了几个比较棘手的问题，总结如下。 多线程问题我们在APP中封装了一个记录业务日志的单例对象，主要代码如下： 12345678910111213141516171819202122232425262728293031323334353637383940+ (instancetype)shareManager&amp;#123;    st">
+<meta property="og:description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://apestalk.github.com/assets/BlogImages/fmdb_crash_issue.png">
-<meta property="og:updated_time" content="2019-07-13T06:29:27.618Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS总结-最近遇到的问题及解决办法">
-<meta name="twitter:description" content="最近在Bugly上发现线上APP存在不少崩溃问题，经过分析和定位，解决了几个比较棘手的问题，总结如下。 多线程问题我们在APP中封装了一个记录业务日志的单例对象，主要代码如下： 12345678910111213141516171819202122232425262728293031323334353637383940+ (instancetype)shareManager&amp;#123;    st">
-<meta name="twitter:image" content="https://apestalk.github.com/assets/BlogImages/fmdb_crash_issue.png">
+<meta name="twitter:title" content="ApesTalk的博客">
+<meta name="twitter:description" content="ApesTalk |ApesTalk‘s Blog | 简书Code_Ninja | iOS |">
   
   
     <link rel="icon" href="/assets/images/favicon.png">
@@ -155,203 +152,98 @@ var _hmt = _hmt || [];
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-iOS总结-最近遇到的问题及解决办法" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      iOS总结-最近遇到的问题及解决办法
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2020" class="archive-year">2020</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2020/08/15/main函数之前系统都干了什么？为什么？/" class="archive-article-date">
+  	<time datetime="2020-08-15T10:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-15</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2020/08/15/main函数之前系统都干了什么？为什么？/">main函数之前系统都干了什么？为什么？</a>
     </h1>
   
 
-        
-        <a href="/2018/12/22/iOS总结-最近遇到的问题及解决办法/" class="archive-article-date">
-  	<time datetime="2018-12-22T12:10:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在Bugly上发现线上APP存在不少崩溃问题，经过分析和定位，解决了几个比较棘手的问题，总结如下。</p>
-<h2 id="多线程问题"><a href="#多线程问题" class="headerlink" title="多线程问题"></a>多线程问题</h2><p>我们在APP中封装了一个记录业务日志的单例对象，主要代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">+ (instancetype)shareManager</span><br><span class="line">&#123;</span><br><span class="line">    static ATLogManager *manager = nil;</span><br><span class="line">    static dispatch_once_t onceToken;</span><br><span class="line">    dispatch_once(&amp;onceToken, ^&#123;</span><br><span class="line">        manager = [[self alloc]init];</span><br><span class="line">    &#125;);</span><br><span class="line">    return manager;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (FMDatabaseQueue *)logDBQueen</span><br><span class="line">&#123;</span><br><span class="line">    if(!_logDBQueen)&#123;</span><br><span class="line">        NSLog(@&quot;创建_logDBQueen&quot;);</span><br><span class="line">        NSString *docsDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];</span><br><span class="line">        NSString *logPath = [docsDir stringByAppendingPathComponent:@&quot;ATLogs&quot;];</span><br><span class="line">        NSFileManager *fm =[NSFileManager defaultManager];  </span><br><span class="line">        NSError *error;</span><br><span class="line">        if (![fm fileExistsAtPath:logPath]) &#123;</span><br><span class="line">            [fm createDirectoryAtPath:logPath withIntermediateDirectories:NO attributes:nil error:&amp;error];</span><br><span class="line">            //禁止iCloud备份</span><br><span class="line">            NSURL *downloadsUrl = [NSURL fileURLWithPath:logPath];</span><br><span class="line">            NSDictionary *dic = [downloadsUrl resourceValuesForKeys:@[NSURLIsExcludedFromBackupKey] error:nil];</span><br><span class="line">            if(!dic || ![[dic objectForKey:NSURLIsExcludedFromBackupKey] boolValue])&#123;</span><br><span class="line">                [downloadsUrl setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:nil];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        NSString *dbPath = [logPath stringByAppendingPathComponent:@&quot;ATLog.sqlite&quot;];</span><br><span class="line">        _logDBQueen = [FMDatabaseQueue databaseQueueWithPath:dbPath];</span><br><span class="line">    &#125;</span><br><span class="line">    return _logDBQueen;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (BOOL)insertLogTableWithType:(NSString * )columnType moreHit:(NSString *)moreHit</span><br><span class="line">&#123;</span><br><span class="line">    ATLogManager *manager = [ATLogManager shareManager];</span><br><span class="line">    [manager createTable:kFindSelectColumnDate];</span><br><span class="line"></span><br><span class="line">    //insert code</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>之前在用的时候都是在主线程中同步调用相关方法进行记录的，自从上个版本把部分触发比较频繁的记录改成异步的调用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(dispatch_get_global_queue(0, 0), ^&#123;</span><br><span class="line">    [ATLogManager insertLogTableWithType:@&quot;2&quot; moreHit:@&quot;1&quot;];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>之后发现线上出现了比较多的崩溃，崩溃在了<code>[FMDatabaseQueue inDatabase:]</code>方法中。</p>
-<p><img src="/assets/BlogImages/fmdb_crash_issue.png" alt="fmdb_crash_issue"></p>
-<p>起初以为是FMDatabaseQueue的问题或者我们用的FMDB的版本较低的问题。但是FMDatabaseQueue本身是线程安全的，在多线程中使用同一个FMDatabaseQueue对象是没有问题的。FMDB这个第三方库，这么多用户，用了这么多年，应该是不会存在这种问题的。程序崩溃在这里，而且是SEGV_ACCERR类型的崩溃，只能是在FMDatabaseQueue使用过程中被释放了造成的。</p>
-<p>在我们封装的记录业务日志的单例对象中，有一个FMDatabaseQueue对象是采用懒加载的方式创建的，经过一番排查，发现这个FMDatabaseQueue对象竟然被创建了多次。这下子就豁然开朗了，在多线程并发的情况下，第一次创建的FMDatabaseQueue对象正在执行相关代码时，第二次紧接着调用了懒加载的方法创建了一个新的FMDatabaseQueue对象把第一个创建的给覆盖掉了，这时第一次创建的FMDatabaseQueue对象就被释放了，这个时候就存在很多不安全的隐患了，比如我们这里就是导致访问了一个不合法的内存地址。</p>
-<p>解决办法就是把懒加载的方法给移除，单例创建时就把对应的FMDatabaseQueue对象给创建了，保证FMDatabaseQueue只会创建一个。</p>
-<p>这个事情给我了一个比较大的教训，在使用单例的时候，一定要小心通过懒加载方式创建的属性，在多线程下一定要注意懒加载方法被调用多次。在单例的初始化方法中最好将它的属性都一并给初始化了，这样能有效保障线程安全。</p>
-<h2 id="preferredMaxLayoutWidth"><a href="#preferredMaxLayoutWidth" class="headerlink" title="preferredMaxLayoutWidth"></a>preferredMaxLayoutWidth</h2><p>在iOS10.2上某个页面总是点击进去就闪退，经过排查发现在计算某个UITableViewCell的高度时出现的crash，cell本身没有任何特别的，如果把cell上多行的UILabel给注释掉，就没有问题了。最后在UITableView-FDTemplateLayoutCell的<a href="https://github.com/forkingdog/UITableView-FDTemplateLayoutCell/issues/278" target="_blank" rel="noopener">issue278</a>找到了答案：多行UILabel如果不设置preferredMaxLayoutWidth，走到fittingHeight = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;会在iOS10.2的机器上卡死奔溃，应该属于系统问题。</p>
-<h2 id="block"><a href="#block" class="headerlink" title="block"></a>block</h2><p>开发过程有个在多线程中处理数据时出现了数组越界的问题，经检查发现是我们犯了一个关于block的低级错误：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//不加__block打印i=0（捕获后外部的修改不影响内部使用）；加__block打印i=1（外部的修改对block内部生效）</span><br><span class="line">for(__block NSInteger i = 0; i &lt; 1; i++)&#123;</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(0, 0), ^&#123;</span><br><span class="line">        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            NSLog(@&quot;i=%ld&quot;,i);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="UIWebSelectSinglePicker的crash问题"><a href="#UIWebSelectSinglePicker的crash问题" class="headerlink" title="UIWebSelectSinglePicker的crash问题"></a>UIWebSelectSinglePicker的crash问题</h2><p>另一个数组越界问题，但是查看奔溃堆栈信息，发现内容是包含UIWebSelectSinglePicker、UIPickerView、UIPickerTableView等关键字，据此猜测是我们项目中嵌入的H5页面调用系统的选择视图引起的崩溃。查资料发现，已经有人遇到这种情况了，重现步骤：H5唤起系统的UIPickerView，没有数据源的情况下，上下滑动一下再点击确定选择。详情可参考这篇文章：<a href="https://juejin.im/post/5b14cf376fb9a01e831463d6" target="_blank" rel="noopener">UIWebSelectSinglePicker的crash问题</a>。</p>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>感谢您的打赏！<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/images/alipay.png">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/images/wechat.png">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">main otool dyld +load command section</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://ApesTalk.github.com/2018/12/22/iOS总结-最近遇到的问题及解决办法/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
   
-<nav id="article-nav">
-  
-    <a href="/2019/01/10/也谈使用NSUserDefaults处理默认值/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          也谈使用NSUserDefaults处理默认值
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2018/12/22/关于符号表（dSYM）的误解与事实/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">关于符号表（dSYM）的误解与事实</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2020/08/14/main函数的参数argc和argv是什么？为什么？/" class="archive-article-date">
+  	<time datetime="2020-08-14T14:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-14</time>
+</a>
         </div>
-        
-        
-    </div>
-</aside>
-
-
-
+    	 
   
-  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2020/08/14/main函数的参数argc和argv是什么？为什么？/">main函数的参数argc和argv是什么？为什么？</a>
+    </h1>
   
 
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">main argv argc</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+          
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+  
+    </div></section>
   
 
-  
-
-  
+    
 
 
           </div>
@@ -374,8 +266,8 @@ var _hmt = _hmt || [];
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

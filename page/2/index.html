@@ -154,6 +154,183 @@ var _hmt = _hmt || [];
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Anyway，我被UIWindow打脸了" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/27/Anyway，我被UIWindow打脸了/">Anyway，我被UIWindow打脸了</a>
+    </h1>
+  
+
+        
+        <a href="/2019/01/27/Anyway，我被UIWindow打脸了/" class="archive-article-date">
+  	<time datetime="2019-01-27T11:40:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/assets/BlogImages/window.png" alt></p>
+<blockquote>
+<p>需求好轮回，bug绕过谁。</p>
+</blockquote>
+<p>近日捕获一bug，经排查定位后发现，该bug属于通过<code>[UIApplication sharedApplication].keyWindow.rootViewController</code>方法拿到了错误的控制器，导致后面执行的代码异常。下面请听我细细为你讲述该bug的前世今生。</p>
+<p>因为是线上bug，奔溃在了广告业务加载完了之后，考虑到会影响大量用户，内心甚是恐慌。因为奔溃的地方是最近才改的代码，所以起初我一直在最近的两个业务需求里排查问题，因为最近另外一个需求也添加了一个window。事实上，我被狠狠的打脸了，脸好疼。。。</p>
+<p><img src="/assets/BlogImages/ohshit.jpg" alt></p>
+<p>经过测试和分析，最近新增的这个window并不会导致这个问题。确定启动的时候也没有类似UIAlertView这种弹窗会弹出来，那为什么通过<code>[UIApplication sharedApplication].keyWindow</code>拿到了错误的window呢？不找到问题点实在是难以饶恕自己啊！</p>
+<p>到后来，再看线上更新最近这个版本的用户很多，但是这个崩溃只有一例，再加上确认不是因为启动时和其他业务互相影响导致的启动就崩的严重bug。我的内心稍微平复了一些，没那么慌了，能够静下心来理性地分析问题了。</p>
+<p>回归到问题源头，首先，我们知道当我们调用UIWindow的<code>makeKeyAndVisible</code>时，系统会调用它的<code>hidden = NO</code>让它显示出来，另外会帮我们把它加入<code>[UIApplication sharedApplication].windows</code>数组中。当我们调用<code>[UIApplication sharedApplication].keyWindow</code>时，系统给我们返回一个最近调用了<code>makeKeyAndVisible</code>方法的window。一般正常情况下我们一个APP只有一个window，通过<code>[UIApplication sharedApplication].keyWindow</code>拿我们的主window是没有问题的，只有当我们程序中出现多个window的时候才可能会出现问题。那么第二个问题来了，什么时候回出现多个window呢，也就是<code>[UIApplication sharedApplication].windows</code>数组长度不为1，那必须是显式或隐式地调用了window的<code>makeKeyAndVisible</code>方法才会出现这种情况。</p>
+<p>然后，我在项目中搜<code>makeKeyAndVisible</code>方法，找到了一个很早之前的业务需求处用到了一个window并调用了<code>makeKeyAndVisible</code>方法，当时是为了解决其他问题。实在是没有想到会是跟这里的业务相互影响了。一把辛酸泪啊，突然想说一句“不是你的代码没有bug，而是你的bug需要点时间。”</p>
+<p>另外需要注意的是，项目中有历史遗留的<code>UIAlertView</code>和<code>UIActionSheet</code>的，要尽快把它们改掉了，因为随着业务的不断增长，在有这些弹窗的时候如果去调用<code>[UIApplication sharedApplication].keyWindow</code>拿到的会是一个<code>_UIAlertControllerShimPresenterWindow</code>，它的rootViewController是一个<code>UIApplicationRotationFollowingController</code>。很明显，在它们弹出来的时候，系统会新建一个UIWindow，并且为了在不管当前视图层级结构是怎样的，都将弹窗置为最上层让用户能看到，所以不得不调用了window的<code>makeKeyAndVisible</code>方法。这是一个隐患，我猜测苹果新推出<code>UIAlertController</code>来替代<code>UIAlertView</code>和<code>UIActionSheet</code>有这方面的考量。</p>
+<p>所以，这里有三个建议：</p>
+<p>1、建议是尽快把项目中的<code>UIAlertView</code>和<code>UIActionSheet</code>换成<code>UIAlertController</code>。</p>
+<p>2、在拿主window的时候通过<code>[UIApplication sharedApplication].delegate.window</code>方式拿。</p>
+<p>3、在使用除主UIWindow外的其他window时，如果你只是想把它展示出来，直接调用<code>window.hidden = NO</code>即可，如果没有强制要将该window置为最上层，就不要去调用<code>makeKeyAndVisible</code>。</p>
+<p>这次被UIWinow打脸呢，有点意外，幸好没有酿成重大必陷bug。这件事又给我了一个大教训，那就是遇事不要慌张，不要一上来就凭借自己的经验随便下结论，一定要静下心来理性地思考，先仔细分析bug，先摸清bug的来龙去脉，再顺藤摸瓜就很简单了。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">UIWindow makeKeyAndVisible hidden=NO</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/01/27/Anyway，我被UIWindow打脸了/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Shell命令备注" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/27/Shell命令备注/">Shell命令备注</a>
+    </h1>
+  
+
+        
+        <a href="/2019/01/27/Shell命令备注/" class="archive-article-date">
+  	<time datetime="2019-01-27T09:57:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/assets/BlogImages/shell.png" alt></p>
+<h2 id="chmod命令（chmod-755到底是个什么鬼？）"><a href="#chmod命令（chmod-755到底是个什么鬼？）" class="headerlink" title="chmod命令（chmod 755到底是个什么鬼？）"></a>chmod命令（chmod 755到底是个什么鬼？）</h2><p>Linux/Unix 的文件调用权限分为三级 : 文件拥有者、群组、其他。利用 chmod 可以藉以控制文件如何被他人所调用。<br>每个文件的权限呢，又分为读、写和执行。所以，可以用三位二进制来标识权限，当对应二进制位为0时表示没有对应的权限，当对应二进制位为1时表示有对应的权限。比如110，就表时可读可写不可执行。</p>
+<p>那么对应三个用户分组，就需要三组这样的三位二进制来标识权限了。比如111 101 101（rwxr-xr-x），分别（每三位）表示User、Group、及Other的权限。</p>
+<p>对应的，r=4，w=2，x=1<br>若要rwx属性则4+2+1=7；<br>若要rw-属性则4+2=6；<br>若要r-x属性则4+1=5。</p>
+<p>所以755就是11110101（rwxr-xr-x）也就是说文件拥有者有读写和执行的权限，群组和其他用户拥有读和执行的权限。</p>
+<h2 id="Shell命令实现各种进制转换"><a href="#Shell命令实现各种进制转换" class="headerlink" title="Shell命令实现各种进制转换"></a>Shell命令实现各种进制转换</h2><p>在终端中可以通过printf和echo命令加上表达式即可轻松实现各种进制数之间的互转。我们知道，八进制用o标识，十进制用d标识，十六进制用x标识。</p>
+<p>公式1：<code>printf %&lt;目标进制标识&gt; $((原进制标识#原进制数))</code><br>公式2：<code>echo &quot;obase=目标进制;$((原进制#原进制数))”|bc</code> 实际上只需掌握这个公式即可！</p>
+<p>二进制转十进制：<code>printf %d $((2#1111))</code>           或<code>echo &quot;obase=10;$((2#1111))&quot;|bc</code><br>十进制转二进制：<code>echo &quot;obase=2;15&quot;|bc</code> 或 <code>echo &quot;obase=2;$((10#15))&quot;|bc</code></p>
+<p>二进制转八进制：<code>printf %o $((2#1111))</code>  或   <code>echo &quot;obase=8;$((2#1111))&quot;|bc</code><br>八进制转二进制：<code>echo &quot;obase=2;$((8#17))&quot;|bc</code></p>
+<p>二进制转十六进制：<code>printf %x $((2#1111))</code> 或  <code>echo &quot;obase=16;$((2#1111))&quot;|bc</code><br>十六进制转二进制：<code>echo &quot;obase=2;$((16#F))&quot;|bc</code></p>
+<p>八进制转十进制：<code>printf %d $((8#17))</code>或 <code>echo &quot;obase=10;$((8#17))&quot;|bc</code><br>十进制转八进制：<code>echo &quot;obase=8;$((15))&quot;|bc</code></p>
+<p>十六进制转十进制：<code>printf %d 0xF 或 echo $((16#F))</code> 或 <code>echo &quot;obase=10;$((16#F))&quot;|bc</code><br>十进制转十六进制：<code>printf %x 15</code>或 <code>echo &quot;obase=16;15&quot;|bc</code></p>
+<p>八进制转十六进制：<code>printf %x $((8#17))</code>或 <code>echo &quot;obase=16;$((8#17))&quot;|bc</code><br>十六进制转八进制：<code>echo &quot;obase=8;$((16#F))&quot;|bc</code></p>
+<h2 id="查看命令所在位置-command-which-lt-command-gt"><a href="#查看命令所在位置-command-which-lt-command-gt" class="headerlink" title="查看命令所在位置 command which &lt;command&gt;"></a>查看命令所在位置 <code>command which &lt;command&gt;</code></h2><p>如<code>command which pod</code>查看pod命令所在位置。一般命令都放在<code>usr/local/bin</code>目录下。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">shell echo chmod</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/01/27/Shell命令备注/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-也谈使用NSUserDefaults处理默认值" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -795,6 +972,10 @@ var _hmt = _hmt || [];
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ERROR | [iOS] unknown: Encountered an unknown error ([!] <span class="regexp">/usr/</span>bin<span class="regexp">/tar xf /</span>var<span class="regexp">/folders/</span>tf<span class="regexp">/jlbz0pq91m16571fgc7ywbk80000gn/</span>T<span class="regexp">/d20191016-38557-1l50cyi/</span>file.txz -C <span class="regexp">/var/</span>folders<span class="regexp">/tf/</span>jlbz0pq91m16571fgc7ywbk80000gn<span class="regexp">/T/</span>d20191016-<span class="number">38557</span>-<span class="number">1</span>l50cyi</span><br><span class="line"></span><br><span class="line">MobileVLCKit-binary<span class="regexp">/MobileVLCKit.framework/</span>MobileVLCKit: Lzma library error:  No progress is possible</span><br><span class="line">tar: Error <span class="keyword">exit</span> delayed from previous errors.</span><br></pre></td></tr></table></figure>
 
 <p>这属于pod依赖的这个库的压缩包解压失败了，Lzma library是用来解压用的，如果压缩包损坏了，会导致解压失败，从而报这个错误，此时需要检查压缩包是否正常。</p>
+<h2 id="十五、本地多个Ruby环境导致pod执行失败"><a href="#十五、本地多个Ruby环境导致pod执行失败" class="headerlink" title="十五、本地多个Ruby环境导致pod执行失败"></a>十五、本地多个Ruby环境导致pod执行失败</h2><p>如果执行任意pod指令都失败，失败信息像下面这样：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Ignoring ffi<span class="number">-1.13</span><span class="number">.1</span> because its extensions are not built. <span class="string">try:</span> gem pristine ffi —version <span class="number">1.13</span><span class="number">.1</span></span><br><span class="line">Ignoring gem-wrappers<span class="number">-1.4</span><span class="number">.0</span> because its extensions are not builts. <span class="string">Try:</span> gem pristine gem-wrappers —version <span class="number">1.4</span><span class="number">.0</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line"><span class="symbol">    23:</span> from <span class="regexp">/USR/</span>LOCAL<span class="regexp">/BIN/</span><span class="string">pod:</span><span class="number">23</span>:<span class="keyword">in</span> `&lt;main&gt;`</span><br><span class="line"><span class="symbol">    22:</span> from <span class="regexp">/USR/</span>LOCAL<span class="regexp">/BIN/</span><span class="string">pod:</span><span class="number">23</span>:<span class="keyword">in</span> `load`</span><br><span class="line"><span class="symbol">    21:</span> from <span class="regexp">/Users/</span>username<span class="regexp">/.rvm/</span>rubies<span class="regexp">/ruby-2.6.0/</span>lib<span class="regexp">/ruby/</span>gems<span class="regexp">/2.6.0/</span>gems<span class="regexp">/cocoapods-1.9.3/</span>bin/<span class="string">pod:</span><span class="number">36</span>:<span class="keyword">in</span> `&lt;top (required)&gt;`</span><br><span class="line"><span class="symbol">    20:</span> from <span class="regexp">/System/</span>Library<span class="regexp">/Frameworks/</span>Ruby.frameworks<span class="regexp">/Versions/</span><span class="number">2.6</span><span class="regexp">/usr/</span>lib<span class="regexp">/ruby/</span><span class="number">2.6</span><span class="number">.0</span><span class="regexp">/rubygems/</span>core_ext/kernel_require.<span class="string">rb:</span><span class="number">54</span>:<span class="keyword">in</span> `require`</span><br></pre></td></tr></table></figure>
+
+<p>如果是这样子的话，根据错误提示说明是本地有多个Ruby环境导致的，应该是中途什么时候看了一些教程安装了rvm然后又装了个Ruby，删除rvm目录下的Ruby即可。</p>
 
       
 
@@ -953,11 +1134,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
+                <a href="javascript:void(0)" class="js-tag color2">UICollectionView Paging  by  cell 轮播 翻页 AppStore Alipay 支付宝 banner</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">UICollectionView Paging  by  cell 轮播 翻页 AppStore Alipay 支付宝 banner</a>
+                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -965,11 +1146,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Shell 批处理 格式化 重命名</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
+                <a href="javascript:void(0)" class="js-tag color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -977,7 +1162,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
+                <a href="javascript:void(0)" class="js-tag color3">main otool dyld +load command section</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">main argv argc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1001,11 +1190,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">阿里 API网关 网关 API GateWay</a>
+                <a href="javascript:void(0)" class="js-tag color4">父亲 情感 个人</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">父亲 情感 个人</a>
+                <a href="javascript:void(0)" class="js-tag color4">阿里 API网关 网关 API GateWay</a>
               </li>
             
             <div class="clearfix"></div>
