@@ -18,7 +18,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://apestalk.github.com/assets/BlogImages/main_argc_argv.png">
 <meta property="og:image" content="https://apestalk.github.com/assets/BlogImages/argcv.png">
-<meta property="og:updated_time" content="2020-08-15T14:42:00.454Z">
+<meta property="og:updated_time" content="2020-08-28T15:22:31.575Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="main函数的参数argc和argv是什么？为什么？">
 <meta name="twitter:description" content="在我刚读大学那会，其他专业的同学都会去考计算机二级，有次一位其他专业的同学向我求教“main函数的argc和argv我们用不到呀，这俩参数是啥意思呢？” 问的我一愣，我们老师也没有教呀，而且书本上好像也没有。通过字面意思我只能告诉他argv是参数数组，argc是参数个数，具体有啥用我也说不上来。实际上我的回答是经不起进一步追问的，argc是argv的长度吗？如果是这样的话，那么既然有了参数数组了">
@@ -182,6 +182,7 @@ var _hmt = _hmt || [];
 <p>argv是一个包含多个字符串的数组，其中包含执行文件名和所附带的参数。argv[0]是可执行文件地址（在iOS中它就是.app中可执行文件地址）。</p>
 <p>argc是argv的长度，也就是参数个数+1。</p>
 <p>既然是这样，那为什么还“多此一举”地传个argc呢？主要是因为C99标准规定了这么做，而且传递一个argc可以方便提高后续流程效率（O(1)和O(n)的时间复杂度）。</p>
+<p>补充：在C语言中，当一个数组arr作为参数传递给其他函数时，它就变成了一个普通指针（也就是数组首地址），丢失了数组的信息，函数内部只通过这个首地址是拿不到数组的长度的。因此需要外部先计算好长度再传递给函数。</p>
 <p>在我们iOS中，正常程序运行起来，argc是1，argv[0]是我们.app文件下可执行文件路径。我们怎么验证多参数的场景呢？我们可以通过终端命令 xcrun simctl 来启动我们的app并加上参数即可，比如我这里执行：</p>
 <figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun simctl launch D3ED4FE2<span class="number">-9821</span><span class="number">-4</span>CE4<span class="number">-93</span>FA<span class="number">-85</span>B57BFC53B3 com.github.ApesTalk.AskMoreOC I love iOS</span><br></pre></td></tr></table></figure>
 
@@ -449,11 +450,39 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">UICollectionView Paging  by  cell 轮播 翻页 AppStore Alipay 支付宝 banner</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Xcode CocoaPods 私有Pod podfile pod-install pod-update</a>
+                <a href="javascript:void(0)" class="js-tag color4">runtime category ivar  class_addIvar objc_allocateClassPair  objc_registerClassPair</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">runtime Associated</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">runtime</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">runtime swizzling</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">runtime messging objc_msgSend</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">runtime messging objc_msgForward</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">runtime isa 类 元类 metaclass objc_class objc_object</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -461,19 +490,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Shell 批处理 格式化 重命名</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
+                <a href="javascript:void(0)" class="js-tag color4">UIScrollView autolayout setNeedsLayout layoutIfNeeded 强制布局 页面错乱</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">clang import headermap hmap</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">iOS bug crash fmdb 多线程 preferredMaxLayoutWidth block UIWebSelectSinglePicker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -497,11 +526,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hexo yilia 备忘录</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">UICollectionViewCompositionalLayout UICollectionView layout section group item Paging  by  cell 轮播 翻页 AppStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo yilia 备忘录</a>
+                <a href="javascript:void(0)" class="js-tag color1">block EXC_BAD_ACCESS 0x10</a>
               </li>
              
               <li class="article-tag-list-item">
